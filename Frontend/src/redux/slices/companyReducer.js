@@ -4,22 +4,23 @@ export const companySlice = createSlice({
     name: "company",
     initialState: {
         loading: false,
-        error: false
+        error: null
     },
     reducers: {
-        loginStart: (state, action) => {
+        signupStart: (state, action) => {
             state.loading = true;
-            state.error = false
+            state.error = null
         },
-        loginSuccess: (state, action) => {
+        signupSuccess: (state, action) => {
             state.loading = false
+            state.error =null
         },
-        loginError: (state, action) => {
+        signupError: (state, action) => {
             state.loading = false
-            state.error =false
+            state.error =action.payload
         }
 
     }
 })
-export const {loginStart,loginError,loginSuccess}=companySlice.actions
+export const {signupStart,signupError,signupSuccess}=companySlice.actions
 export default  companySlice.reducer;
