@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
 
 const ComapnySignup = () => {
-  
   return (
     <div className="w-full h-screen bg-gray-700 flex items-center justify-center">
       <form>
