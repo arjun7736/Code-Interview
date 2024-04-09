@@ -9,6 +9,20 @@ import {
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  const companyDataJSON = localStorage.getItem("company_token");
+  const interviewerDataJSON = localStorage.getItem("interviewer_token");
+  const intervieweeDataJSON = localStorage.getItem("interviewee_token");
+  const adminDataJSON = localStorage.getItem("admin_token");
+  let userExist = false;
+  if (
+    companyDataJSON ||
+    intervieweeDataJSON ||
+    interviewerDataJSON ||
+    adminDataJSON
+  ) {
+    userExist = true;
+  }
+
   return (
     <div className="h-20 w-full bg-slate-200  flex items-center justify-between">
       <div className="container h-full w-56 bg-slate-400 mx-10"></div>
@@ -20,19 +34,33 @@ const Navbar = () => {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-           <Link to="/interviewee-login"><Button className="my-3 bg-slate-600 hover:bg-slate-800 w-full">Login As Interviewee</Button></Link> 
+            <Link to="/interviewee-login">
+              <Button className="my-3 bg-slate-600 hover:bg-slate-800 w-full">
+                Login As Interviewee
+              </Button>
+            </Link>
             <div className="flex items-cente justify-center">
-            <DialogDescription > OR </DialogDescription>
+              <DialogDescription> OR </DialogDescription>
             </div>
           </DialogHeader>
-            <div className="flex items-center justify-between">
-          <Link to="/interviewer-login"> <Button className="bg-slate-600 hover:bg-slate-800">Login As Interviewer</Button></Link> 
-          <Link to="/company-login"> <Button className="bg-slate-600 hover:bg-slate-800">Login As Company</Button></Link> 
-            </div>
+          <div className="flex items-center justify-between">
+            <Link to="/interviewer-login">
+              {" "}
+              <Button className="bg-slate-600 hover:bg-slate-800">
+                Login As Interviewer
+              </Button>
+            </Link>
+            <Link to="/company-login">
+              {" "}
+              <Button className="bg-slate-600 hover:bg-slate-800">
+                Login As Company
+              </Button>
+            </Link>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
   );
 };
 
-export default Navbar;
+export default Navbar; 

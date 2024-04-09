@@ -4,7 +4,8 @@ export const companySlice = createSlice({
     name: "company",
     initialState: {
         loading: false,
-        error: null
+        error: null,
+        userData: null
     },
     reducers: {
         signupStart: (state, action) => {
@@ -13,14 +14,32 @@ export const companySlice = createSlice({
         },
         signupSuccess: (state, action) => {
             state.loading = false
-            state.error =null
+            state.error = null
         },
         signupError: (state, action) => {
             state.loading = false
-            state.error =action.payload
+            state.error = action.payload
+        },
+        loginStart: (state, action) => {
+            state.loading = true
+            state.error = null
+            state.userData = null
+        },
+        loginSuccess: (state, action) => {
+            state.loading = false
+            state.error = null
+            state.userData = action.payload
+        },
+        loginError: (state, action) => {
+            state.loading = false
+            state.error = action.payload
+            state.userData = null
+        },
+        clearError: (state, action) => {
+            state.error = null;
         }
 
     }
 })
-export const {signupStart,signupError,signupSuccess}=companySlice.actions
-export default  companySlice.reducer;
+export const { signupStart, signupError, signupSuccess,loginStart,loginError,loginSuccess,clearError } = companySlice.actions
+export default companySlice.reducer;

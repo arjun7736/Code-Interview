@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ScaleLoader } from "react-spinners";
 import {
+  clearError,
   signupError,
   signupStart,
   signupSuccess,
@@ -19,11 +20,11 @@ const ComapnySignup = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
     try {
       dispatch(signupStart());
-      axios
+     await axios
         .post("/api/auth/company-signup", formData)
         .then((data) => {
           dispatch(signupSuccess());
@@ -79,7 +80,7 @@ const ComapnySignup = () => {
           <Button className="w-36 mt-3" type="submit" disabled={loading}>
            {loading?<ScaleLoader color="white" />: "SignUp"}
           </Button>
-          <Link to="/company-login">
+          <Link to="/company-login" onClick={()=>dispatch(clearError())}>
             <h1 className="ml-32 text-blue-100 cursor-pointer mb-2">
               Already Have an Account ?
             </h1>
