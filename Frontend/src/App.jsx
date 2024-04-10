@@ -13,6 +13,8 @@ import CompanyNavbar from "./components/company/CompanyNavbar";
 import ViewerNavbar from "./components/interviewee/ViewerNavbar";
 import VieweeNavbar from "./components/interviewer/VieweeNavbar";
 import InterviewerHome from "./Pages/interviewerPages/InterviewerHome";
+import IntervieweeHome from "./Pages/interweiveePages/IntervieweeHome";
+import { Toaster } from "./components/ui/sonner";
 
 function App() {
   return (
@@ -39,17 +41,12 @@ function App() {
             <Route index element={<InterviewerHome />} />
           </Route>
           <Route path="/interviewee" element={<VieweeNavbar />}>
-            
+            <Route index element={<IntervieweeHome/>}/>
           </Route>
-          {/* <Route path="/company-login" element={<CompanyLogin />} />
-          <Route path="/company-signup" element={<ComapnySignup />} />
-          <Route path="/interviewer-login" element={<InterviewerLogin />} />
-          <Route path="/interviewee-login" element={<IntervieweeLogin />} />
-          <Route path="/interviewee-signup" element={<IntervieweeSignup />} />
           <Route path="/otp" element={<OTP/>}/>
-          <Route path="/company-home" element={<CompanyHome/>}/> */}
         </Routes>
       </BrowserRouter>
+      <Toaster className="bg-black"/>
     </>
   );
 }

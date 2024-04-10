@@ -26,7 +26,7 @@ const CompanyLogin = () => {
           dispatch(loginSuccess(data.data))
           const CompanyData = JSON.stringify(data.data);
           localStorage.setItem('company_token', CompanyData);
-          navigate("/company-home")
+          navigate("/company")
         })
         .catch((error) => {
           dispatch(loginError(error.response.data.message))
@@ -64,7 +64,7 @@ const CompanyLogin = () => {
             <Button className="w-36 mt-5" type="submit" disabled={loading}>
               {loading?<ScaleLoader color="white" />: "Login"}
             </Button>
-            <Link to="/company-signup" onClick={()=>dispatch(clearError())}>
+            <Link to="/company/signup" onClick={()=>dispatch(clearError())}>
               <h1 className="ml-32 text-blue-100 cursor-pointer mb-2">
                 Don't Have an Account ?
               </h1>

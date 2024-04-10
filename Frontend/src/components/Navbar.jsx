@@ -34,7 +34,7 @@ const Navbar = () => {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <Link to="/interviewee-login">
+            <Link to="/interviewee/login">
               <Button className="my-3 bg-slate-600 hover:bg-slate-800 w-full">
                 Login As Interviewee
               </Button>
@@ -44,13 +44,13 @@ const Navbar = () => {
             </div>
           </DialogHeader>
           <div className="flex items-center justify-between">
-            <Link to="/interviewer-login">
+            <Link to="/interviewer/login">
               {" "}
               <Button className="bg-slate-600 hover:bg-slate-800">
                 Login As Interviewer
               </Button>
             </Link>
-            <Link to="/company-login">
+            <Link to="/company/login">
               {" "}
               <Button className="bg-slate-600 hover:bg-slate-800">
                 Login As Company

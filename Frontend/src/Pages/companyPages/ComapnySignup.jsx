@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ScaleLoader } from "react-spinners";
 import {
@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 
 const ComapnySignup = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const { error, loading } = useSelector((state) => state.company);
@@ -20,14 +21,17 @@ const ComapnySignup = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit =async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       dispatch(signupStart());
-     await axios
+      await axios
         .post("/api/auth/company-signup", formData)
         .then((data) => {
           dispatch(signupSuccess());
+          const CompanyData = JSON.stringify(data);
+          localStorage.setItem("Data", CompanyData);
+          navigate("/otp");
         })
         .catch((error) => {
           dispatch(signupError(error.response.data.message));
@@ -76,11 +80,11 @@ const ComapnySignup = () => {
             id="confirmpassword"
             onChange={handleChange}
           />
-          <p className="text-red-500 font-serif">{error?error:''}</p>
+          <p className="text-red-500 font-serif">{error ? error : ""}</p>
           <Button className="w-36 mt-3" type="submit" disabled={loading}>
-           {loading?<ScaleLoader color="white" />: "SignUp"}
+            {loading ? <ScaleLoader color="white" /> : "SignUp"}
           </Button>
-          <Link to="/company-login" onClick={()=>dispatch(clearError())}>
+          <Link to="/company/login" onClick={() => dispatch(clearError())}>
             <h1 className="ml-32 text-blue-100 cursor-pointer mb-2">
               Already Have an Account ?
             </h1>
