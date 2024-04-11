@@ -5,6 +5,7 @@ export interface IInterviewee extends Document{
     password:string;
     name:string;
     profile_picture:string;
+    isBlocked:boolean
 }
 const intervieweeSchema = new Schema({
     email:{
@@ -20,6 +21,9 @@ const intervieweeSchema = new Schema({
     },
     profile_picture:{
         type:String
+    },
+    isBlocked:{
+        type:Boolean
     }
 })
 

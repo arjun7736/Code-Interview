@@ -83,6 +83,8 @@ export const companyLogin = async (
     );
     if (!isValidPassword) return next(errorHandler(401, "Wrong Credentails"));
 
+    if (company.isBlocked) return next(errorHandler(403, "Account is Blocked"));
+
     const secret: string | undefined = process.env.JWT_SECRET;
     if (secret) {
       const token = jwt.sign({ _id: company._id, userType: "company" }, secret);
@@ -125,6 +127,9 @@ export const interviewerLogin = async (
 
     if (isValiedPassword)
       return next(errorHandler(401, "invalied  Credentials"));
+
+    if (interviewer.isBlocked)
+      return next(errorHandler(403, "Account is Blocked"));
 
     const secret: string | undefined = process.env.JWT_SECRET;
 
@@ -211,6 +216,9 @@ export const intervieweeLogin = async (
 
     if (!isValiedPassword) return next(errorHandler(401, "Wrong Credentials"));
 
+    if (Interviewee.isBlocked)
+      return next(errorHandler(403, "Account is Blocked"));
+
     const secret: string | undefined = process.env.JWT_SECRET;
 
     if (secret) {
@@ -235,29 +243,34 @@ export const intervieweeSignup = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<any> => {
+): Promise<void> => {
   try {
-    const { name, email, password,confirmpassword } = req.body;
-    if(!name||!email||!password) return next(errorHandler(400,"Missing Fields"))
-    
-    if(password!=confirmpassword) return next(errorHandler(400,'Passwords do not match'))
-    
-    if(!isEmail(email)) return next(errorHandler(400,"Invalid Email Format"))
-    
-    if(!isStrongPassword(password)) return next(errorHandler(400,"Weak Password"))
+    const { name, email, password, confirmpassword } = req.body;
+    if (!name || !email || !password)
+      return next(errorHandler(400, "Missing Fields"));
 
-    const exist:IInterviewee|null= await IntervieweeDB.findOne({email:email})
-    if(exist) return next(errorHandler(409,"User already Exist "))
-  
-    const HashedPassword:string =await bcrypt.hash(password,10)
-    const OTP:number =Math.floor(100000+Math.random()*900000) 
-    sentOTP(email,OTP)
+    if (password != confirmpassword)
+      return next(errorHandler(400, "Passwords do not match"));
+
+    if (!isEmail(email)) return next(errorHandler(400, "Invalid Email Format"));
+
+    if (!isStrongPassword(password))
+      return next(errorHandler(400, "Weak Password"));
+
+    const exist: IInterviewee | null = await IntervieweeDB.findOne({
+      email: email,
+    });
+    if (exist) return next(errorHandler(409, "User already Exist "));
+
+    const HashedPassword: string = await bcrypt.hash(password, 10);
+    const OTP: number = Math.floor(1000 + Math.random() * 900000);
+    sentOTP(email, OTP);
     await OTPDB.create({
       name,
-      password:HashedPassword,
+      password: HashedPassword,
       email,
-      otp:OTP
-    })
+      otp: OTP,
+    });
   } catch (error) {
     next(error);
   }

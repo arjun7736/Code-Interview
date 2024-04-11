@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import authRoute from "./routes/authRoute";
 import adminRoute from "./routes/adminRoute";
-
+import companyRoute from "./routes/companyRoute"
 
 
 
@@ -24,7 +24,7 @@ app.use(cookieParser());
 
 app.use("/api/auth",authRoute)
 app.use("/api/admin",adminRoute)
-
+app.use("/api/company",companyRoute)
 
 
 

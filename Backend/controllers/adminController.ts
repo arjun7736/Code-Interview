@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import CompanyDB, { ICompany } from "../models/companyModel";
 import InterviewerDB, { IInterviewer } from "../models/interviewerModel";
+import IntervieweeDB, { IInterviewee } from "../models/intervieweeModel";
 
 //<=..................get Company Deatils..................=>//
 export const getComapnyData = async (
@@ -29,6 +30,34 @@ export const getInterviewersData = async (
     next(error);
   }
 };
+//<=.................Get Interviewee data...........=>//
+export const getItervieweeData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const Interviewees: IInterviewee[] | null = await IntervieweeDB.find();
+    res.json(Interviewees);
+  } catch (error) {
+    next(error);
+  }
+};
+
+//<=.................Delete an Interviewee...........=>//
+export const deleteInterviewee = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const {id}=req.body
+    await IntervieweeDB.findByIdAndDelete(id)
+    res.json({message:"Deleted SuccessFully"})
+  } catch (error) {
+    next(error);
+  }
+};
 
 //<=.................Delete an Interviewer...........=>//
 export const deleteInterviewer = async (
@@ -44,18 +73,26 @@ export const deleteInterviewer = async (
     next(error);
   }
 };
+//<=.................Delete an Company...........=>//
 
-//<=..............Delete Company..............=>//
-// export const deleteCompany = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ): Promise<void> => {
-//   try {
-//     const { id } = req.body;
-//     const comapny: ICompany[] | null = await CompanyDB.findOne({ _id: id });
+//<=.................Block an Interviewer...........=>//
+export const blockInterviewer=async(req:Request,res:Response,next:NextFunction):Promise<void>=>{
+  try {
+    const {id}=req.body
+   const blocked:IInterviewer|null = await InterviewerDB.findOneAndUpdate({_id:id},{$set:{isBlocked:true}},{new:true})
+   res.json(blocked)
+  } catch (error) {
+    next(error)
+  }
+}
 
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+//<=.................Block an Interviewee...........=>//
+export const blockInterviewee =async(req:Request,res:Response,next:NextFunction):Promise<void>=>{
+  try {
+    const {id}= req.body
+    const blocked:IInterviewee | null =await IntervieweeDB.findOneAndUpdate({_id:id},{$set:{isBlocked:true}},{new:true})
+    res.json(blocked)
+  } catch (error) {
+    next(error)
+  }
+}
