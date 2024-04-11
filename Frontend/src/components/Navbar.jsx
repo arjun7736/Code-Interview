@@ -1,66 +1,44 @@
-import { Button } from "@/components/ui/button";
+import React from "react";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Link } from "react-router-dom";
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+} from "@nextui-org/react";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
+} from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
 
-const Navbar = () => {
-  const companyDataJSON = localStorage.getItem("company_token");
-  const interviewerDataJSON = localStorage.getItem("interviewer_token");
-  const intervieweeDataJSON = localStorage.getItem("interviewee_token");
-  const adminDataJSON = localStorage.getItem("admin_token");
-  let userExist = false;
-  if (
-    companyDataJSON ||
-    intervieweeDataJSON ||
-    interviewerDataJSON ||
-    adminDataJSON
-  ) {
-    userExist = true;
-  }
-
+export default function NavBar() {
+  const naviagte = useNavigate();
   return (
-    <div className="h-20 w-full bg-slate-200  flex items-center justify-between">
-      <div className="container h-full w-56 bg-slate-400 mx-10"></div>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="bg-transparent hover:bg-transparent mx-10 text-black">
-            Login/SignUp
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <Link to="/interviewee/login">
-              <Button className="my-3 bg-slate-600 hover:bg-slate-800 w-full">
-                Login As Interviewee
-              </Button>
-            </Link>
-            <div className="flex items-cente justify-center">
-              <DialogDescription> OR </DialogDescription>
-            </div>
-          </DialogHeader>
-          <div className="flex items-center justify-between">
-            <Link to="/interviewer/login">
-              {" "}
-              <Button className="bg-slate-600 hover:bg-slate-800">
-                Login As Interviewer
-              </Button>
-            </Link>
-            <Link to="/company/login">
-              {" "}
-              <Button className="bg-slate-600 hover:bg-slate-800">
-                Login As Company
-              </Button>
-            </Link>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </div>
+    <>
+      <Navbar>
+        <NavbarBrand>
+          <p className="font-bold text-inherit">Code-Interview</p>
+        </NavbarBrand>
+        <NavbarContent justify="end">
+          <NavbarItem>
+            <Dropdown>
+              <DropdownTrigger>
+                <Button color="primary" variant="bordered">
+                  Login
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Static Actions">
+                <DropdownItem key="new" onClick={()=>naviagte("/interviewee/login")}>Interviewee Login</DropdownItem>
+                <DropdownItem key="copy"onClick={()=>naviagte("/company/login")}>Comapany Login</DropdownItem>
+                <DropdownItem key="edit"onClick={()=>naviagte("/interviewer/login")}>Interviewer Login</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </NavbarItem>
+        </NavbarContent>
+      </Navbar>
+    </>
   );
-};
-
-export default Navbar; 
+}
