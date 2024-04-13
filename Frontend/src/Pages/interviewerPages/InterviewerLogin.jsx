@@ -7,7 +7,7 @@ const InterviewerLogin = () => {
       <div className="w-full h-screen flex bg-gray-700 items-center justify-center ">
         <form>
           <div className=" container flex flex-col items-center gap-5 bg-transparent shadow-2xl rounded-lg">
-            <h1 className="font-extrabold text-lg mt-10 text-white ">
+            <h1 className="font-extrabold text-2xl mt-10 text-white font-serif">
               Interviewer Login
             </h1>
             <Input className="w-72 mt-2" placeholder="Enter Your Email" />

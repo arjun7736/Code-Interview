@@ -4,7 +4,8 @@ export const adminSlice = createSlice({
     name: "admin",
     initialState: {
         loading: false,
-        error: false
+        adminData:null,
+        error: null
     },
     reducers: {
         loginStart: (state, action) => {
