@@ -7,9 +7,14 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "@/google/authentication";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
-import { loginError, loginStart, loginSuccess } from "@/redux/slices/intervieweeSlice";
+import {
+  loginError,
+  loginStart,
+  loginSuccess,
+} from "@/redux/slices/intervieweeSlice";
 import { ScaleLoader } from "react-spinners";
-import axios from "axios"
+import axios from "axios";
+
 const IntervieweeLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,20 +37,20 @@ const IntervieweeLogin = () => {
     });
   };
 
-  const handleSubmit =  (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginStart())
+    dispatch(loginStart());
     try {
-       axios
+      axios
         .post("/api/auth/interviewee-login", formData)
         .then((data) => {
-          dispatch(loginSuccess(data.data))
+          dispatch(loginSuccess(data.data));
           const IntervieweeData = JSON.stringify(data.data);
-          localStorage.setItem('interviewee_token', IntervieweeData);
-          navigate("/interviewee")
+          localStorage.setItem("interviewee_token", IntervieweeData);
+          navigate("/interviewee");
         })
         .catch((error) => {
-          dispatch(loginError(error.response.data.message))
+          dispatch(loginError(error.response.data.message));
         });
     } catch (error) {
       console.log(error);
@@ -76,7 +81,11 @@ const IntervieweeLogin = () => {
               label="Password"
               placeholder="Enter Your Password"
             />
-            <Button className="w-28 mt-5" type="submit" disabled={loading}>{loading?<ScaleLoader color="white" />: "Login"}</Button>
+            <p className="text-red-500 font-serif">{error ? error : ""}</p>
+
+            <Button className="w-28 mt-5" type="submit" disabled={loading}>
+              {loading ? <ScaleLoader color="white" /> : "Login"}
+            </Button>
             <h1
               className=" ml-32 text-blue-100 cursor-pointer "
               onClick={() => navigate("/forgotPassword")}

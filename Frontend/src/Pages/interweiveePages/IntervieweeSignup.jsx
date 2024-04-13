@@ -8,12 +8,16 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "@/google/authentication";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
-import { signupError, signupStart, signupSuccess } from "@/redux/slices/intervieweeSlice";
+import {
+  signupError,
+  signupStart,
+  signupSuccess,
+} from "@/redux/slices/intervieweeSlice";
 import { ScaleLoader } from "react-spinners";
 
 const IntervieweeSignup = () => {
- const dispatch = useDispatch()
-const {error,loading}=useSelector((state)=>state.interviewee)
+  const dispatch = useDispatch();
+  const { error, loading } = useSelector((state) => state.interviewee);
   const [formData, setformData] = useState({});
 
   const navigate = useNavigate();
@@ -31,19 +35,19 @@ const {error,loading}=useSelector((state)=>state.interviewee)
   };
 
   const handleClick = async (e) => {
-    dispatch(signupStart())
+    dispatch(signupStart());
     e.preventDefault();
     await axios
       .post("/api/auth/interviewee-signup", formData)
       .then((data) => {
-        dispatch(signupSuccess(data.data))
+        dispatch(signupSuccess(data.data));
         const IntervieweeData = JSON.stringify(data.data);
-        localStorage.setItem('interviewee_token', IntervieweeData);
-        toast("OTP Sent to the Registered E-mail")
-        navigate('/otp')
+        localStorage.setItem("interviewee_token", IntervieweeData);
+        toast("OTP Sent to the Registered E-mail");
+        navigate("/otp");
       })
       .catch((error) => {
-        dispatch(signupError(error.response.data.message))
+        dispatch(signupError(error.response.data.message));
       });
   };
   return (
@@ -82,8 +86,10 @@ const {error,loading}=useSelector((state)=>state.interviewee)
               label="Confirm Paasword"
               placeholder="Confirm Password"
             />
+            <p className="text-red-500 font-serif">{error ? error : ""}</p>
+
             <Button className="w-24 mt-5" type="submit" disabled={loading}>
-            {loading?<ScaleLoader color="white" />: "Signup"}
+              {loading ? <ScaleLoader color="white" /> : "Signup"}
             </Button>
             <div className="bg-black h-0.5 min-w-full"></div>
             <Button className="mb-5" onClick={handleGoogle}>
