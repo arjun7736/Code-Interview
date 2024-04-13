@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Input } from "@nextui-org/react";
 import React, { useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ScaleLoader } from "react-spinners";
 import { useDispatch, useSelector } from "react-redux";
-import { clearError, loginError, loginStart, loginSuccess } from "@/redux/slices/companyReducer";
+import { clearError, loginError, loginStart, loginSuccess } from "@/redux/slices/companySlice";
 
 
 const CompanyLogin = () => {
@@ -45,10 +45,11 @@ const CompanyLogin = () => {
               Company Login
             </h1>
             <Input
-              onChange={handleChange}
               className="w-72 mt-2"
               placeholder="Enter Your Email"
               type ="email"
+              label="Email"
+              onChange={handleChange}
               name="email"
               id="email"
             />
@@ -57,6 +58,7 @@ const CompanyLogin = () => {
               className="w-72 mt-2"
               placeholder="Enter Your Password"
               type ="password"
+              label="Password"
               name="password"
               id="password"
             />

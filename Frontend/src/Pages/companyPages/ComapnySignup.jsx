@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Input } from "@nextui-org/react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +9,7 @@ import {
   signupError,
   signupStart,
   signupSuccess,
-} from "@/redux/slices/companyReducer";
+} from "@/redux/slices/companySlice";
 import axios from "axios";
 
 const ComapnySignup = () => {
@@ -29,8 +29,8 @@ const ComapnySignup = () => {
         .post("/api/auth/company-signup", formData)
         .then((data) => {
           dispatch(signupSuccess());
-          const CompanyData = JSON.stringify(data);
-          localStorage.setItem("Data", CompanyData);
+          const CompanyData = JSON.stringify(data.data);
+          localStorage.setItem("company_token", CompanyData);
           navigate("/otp");
         })
         .catch((error) => {
@@ -54,6 +54,7 @@ const ComapnySignup = () => {
             type="text"
             name="name"
             id="name"
+            label="Company Name"
             onChange={handleChange}
           />
           <Input
@@ -62,6 +63,7 @@ const ComapnySignup = () => {
             type="email"
             name="email"
             id="email"
+            label="E-mail"
             onChange={handleChange}
           />
           <Input
@@ -70,6 +72,7 @@ const ComapnySignup = () => {
             type="password"
             name="password"
             id="password"
+            label="Password"
             onChange={handleChange}
           />
           <Input
@@ -78,6 +81,7 @@ const ComapnySignup = () => {
             type="password"
             name="confirmpassword"
             id="confirmpassword"
+            label="Confirm Password"
             onChange={handleChange}
           />
           <p className="text-red-500 font-serif">{error ? error : ""}</p>

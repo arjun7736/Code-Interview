@@ -5,6 +5,7 @@ export interface IOtp extends Document {
   password: string;
   otp: number;
   name?: string;
+  createdAt: Date; 
 }
 const OTPSchema = new Schema({
   email: {
@@ -21,6 +22,11 @@ const OTPSchema = new Schema({
   },
   name:{
     type:String
+  },
+  createdAt: {
+    type:Date,
+    default:Date.now(),
+    expires:300
   }
 });
 

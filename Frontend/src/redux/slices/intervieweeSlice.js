@@ -10,11 +10,12 @@ export const intervieweeSlice = createSlice({
     reducers: {
         loginStart: (state, action) => {
             state.loading = true;
-            state.error = false
+            state.error = false;
+            state.intervieweeData =null
         },
         loginSuccess: (state, action) => {
             state.loading = false
-            state.intervieweeData =null
+            state.intervieweeData =action.payload
             state.error = null
         },
         loginError: (state, action) => {
