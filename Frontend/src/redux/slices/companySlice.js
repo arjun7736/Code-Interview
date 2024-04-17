@@ -5,7 +5,8 @@ export const companySlice = createSlice({
     initialState: {
         loading: false,
         error: null,
-        userData: null
+        userData: null,
+        interviewers:null
     },
     reducers: {
         signupStart: (state, action) => {
@@ -37,9 +38,20 @@ export const companySlice = createSlice({
         },
         clearError: (state, action) => {
             state.error = null;
+        },
+        interviewersListStart:(state,action)=>{
+            state.loading =true
+            state.interviewers =null
+        },
+        interviewersListSuccess:(state,action)=>{
+            state.loading =false
+            state.interviewers =action.payload
+        },
+        interviewersListError:(state,action)=>{
+            state.loading=false
+            state.error =action.payload
         }
-
     }
 })
-export const { signupStart, signupError, signupSuccess,loginStart,loginError,loginSuccess,clearError } = companySlice.actions
+export const { signupStart, signupError, signupSuccess,loginStart,loginError,loginSuccess,clearError,interviewersListStart,interviewersListSuccess,interviewersListError } = companySlice.actions
 export default companySlice.reducer;

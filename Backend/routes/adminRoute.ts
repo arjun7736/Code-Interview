@@ -1,12 +1,16 @@
 import express from "express"
-import { deleteInterviewer, getComapnyData, getInterviewersData } from "../controllers/adminController";
+import {  blockCompany, blockInterviewee, blockInterviewer, getComapnyData, getInterviewersData, getItervieweeData, unBlockCompany, unBlockInterviewee, unBlockInterviewer } from "../controllers/adminController";
 const router = express.Router();
 
 router.get("/company-data",getComapnyData)
 router.get("/interviewer-data",getInterviewersData)
-router.delete("/interviewer-delete",deleteInterviewer)
-
-
+router.get("/interviewee-data",getItervieweeData)
+router.post("/company-block",blockCompany)
+router.post("/interviewer-block",blockInterviewer)
+router.post("/interviewee-block",blockInterviewee)
+router.post("/company-unblock",unBlockCompany)
+router.post("/interviewer-unblock",unBlockInterviewer)
+router.post("/interviewee-unblock",unBlockInterviewee)
 
 
 

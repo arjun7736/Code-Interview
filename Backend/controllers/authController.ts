@@ -57,7 +57,7 @@ export const companySignup = async (
       email,
     });
 
-    res.json({ email, userType: "Company" });
+    res.json({ email, userType: "company" });
   } catch (error) {
     console.log(error);
     return next(error);
@@ -89,12 +89,13 @@ export const companyLogin = async (
     if (secret) {
       const token = jwt.sign({ _id: company._id, userType: "company" }, secret);
       const expire = new Date(Date.now() + 3600000);
-      // remove password
 
+      const companyWithoutPassword = { ...company.toObject() };
+      delete companyWithoutPassword.password;
       res
         .cookie("company_token", token, { httpOnly: true, expires: expire })
         .status(200)
-        .json(company);
+        .json(companyWithoutPassword);
     }
   } catch (error) {
     return next(error);
@@ -118,7 +119,7 @@ export const interviewerLogin = async (
       email,
     });
 
-    if (!interviewer) return next(errorHandler(404, "User Not Found"));
+    if (!interviewer) return next(errorHandler(404, "Account Not Found"));
 
     const isValiedPassword: boolean = await bcrypt.compare(
       password,
@@ -140,11 +141,14 @@ export const interviewerLogin = async (
       );
 
       const expire = new Date(Date.now() + 3600000);
-      // remove password
+
+      const interviewerWithoutPassword = { ...interviewer.toObject() };
+      delete interviewerWithoutPassword.password;
+
       res
         .cookie("interviewer_token", token, { httpOnly: true, expires: expire })
         .status(200)
-        .json(interviewer);
+        .json(interviewerWithoutPassword);
     }
   } catch (error) {
     next(error);
@@ -181,11 +185,14 @@ export const adminLogin = async (
     if (secret) {
       const token = jwt.sign({ _id: admin._id, userType: "admin" }, secret);
       const expire = new Date(Date.now() + 3600000);
-      // remove password
+
+      const adminWithoutPassword = { ...admin.toObject() };
+      delete adminWithoutPassword.password;
+
       res
         .cookie("admin_token", token, { httpOnly: true, expires: expire })
         .status(200)
-        .json(admin);
+        .json(adminWithoutPassword);
     }
   } catch (error) {
     next(error);
@@ -199,7 +206,6 @@ export const intervieweeLogin = async (
 ): Promise<void> => {
   try {
     const { email, password } = req.body;
-
     if (!email || !password)
       return next(errorHandler(400, "Email and Password are required"));
 
@@ -229,10 +235,13 @@ export const intervieweeLogin = async (
 
       const expire = new Date(Date.now() + 3600000);
 
+      const IntervieweeWithoutPassword = { ...Interviewee.toObject() };
+      delete IntervieweeWithoutPassword.password;
+
       res
         .cookie("interviewee_token", token, { httpOnly: true, expires: expire })
         .status(200)
-        .json(Interviewee);
+        .json(IntervieweeWithoutPassword);
     }
   } catch (error) {
     next(error);
@@ -246,6 +255,7 @@ export const intervieweeSignup = async (
 ): Promise<void> => {
   try {
     const { name, email, password, confirmpassword } = req.body;
+
     if (!name || !email || !password)
       return next(errorHandler(400, "Missing Fields"));
 
@@ -271,6 +281,7 @@ export const intervieweeSignup = async (
       email,
       otp: OTP,
     });
+    res.json({ email, userType: "interviewee" });
   } catch (error) {
     next(error);
   }
@@ -289,31 +300,36 @@ export const verifyOTP = async (
     if (!otp) return next(errorHandler(400, "Enter OTP"));
 
     data = await OTPDB.findOne({ email: email, otp: otp });
-
     switch (userType) {
-      case "Company":
+      case "company":
         await CompanyDB.create({
           email: data?.email,
           password: data?.password,
           name: data?.name,
+          isBlocked:false
         });
+        await OTPDB.deleteOne({ _id: data?._id });
         break;
-      case "Interviewer":
+      case "interviewer":
         await InterviewerDB.create({
           email: data?.email,
           password: data?.password,
           name: data?.name,
+          company:data?.company,
+          isBlocked:false
         });
+        await OTPDB.deleteOne({ _id: data?._id });
         break;
-      case "Interviewee":
+      case "interviewee":
         await IntervieweeDB.create({
           email: data?.email,
           password: data?.password,
           name: data?.name,
+          isBlocked:false
         });
+        await OTPDB.deleteOne({ _id: data?._id });
         break;
     }
-
     res.json({ message: "OTP Verified Successfully" });
   } catch (error) {
     next(error);
@@ -338,4 +354,68 @@ export const logout = (req: Request, res: Response): void => {
   res
     .status(200)
     .json({ message: "Logged out successfully!", user: tokenCookieName });
+};
+
+//<=...............................Forgot Password OTP........................=>//
+export const forgotPasswordOTP = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { email, role } = req.body;
+    let IsUserExist = null;
+    if (role === "company") {
+      IsUserExist = await CompanyDB.findOne({ email: email });
+    } else {
+      IsUserExist = await IntervieweeDB.findOne({ email: email });
+    }
+    if (!IsUserExist) return next(errorHandler(404, "No user Fount"));
+
+    const OTP: number = Math.floor(100000 + Math.random() * 900000);
+    sentOTP(email, OTP);
+    await OTPDB.create({ email: email, otp: OTP });
+    res.json({ message: "OTP sent successfully ", email, role });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//<=...............................Forgot Password OTP........................=>//
+export const verifyForgotPasswordOTP = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { email, otp, role } = req.body;
+    let user: IOtp | null = await OTPDB.findOne({ email: email, otp: otp });
+    if (!user) return next(errorHandler(400, "Invalied OTP"));
+    res.json({ email, role, messsage: "OTP Verified" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//<=...............................creating New password........................=>//
+export const createNewPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { email, password, confirmpassword, role } = req.body;
+    if (password !== confirmpassword)
+      return next(errorHandler(400, "Passwords do not match"));
+    let user: ICompany | IInterviewee | null = null;
+    const hPass=await bcrypt.hash(password,10)
+    if (role === "company") {
+      user = await CompanyDB.findOneAndUpdate({email:email},{password:hPass},{new:true});
+    }else{
+      user =await IntervieweeDB.findOneAndUpdate({email:email},{password:hPass},{new:true})
+    }
+    res.json(role);
+  } catch (error) {
+    next(error);
+  }
 };

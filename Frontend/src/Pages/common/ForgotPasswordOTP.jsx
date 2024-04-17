@@ -12,44 +12,34 @@ import { useNavigate } from "react-router-dom";
 import { otpVerificationError, otpVerificationStart, otpVerified } from "@/redux/slices/tempSlice";
 import { toast } from "sonner";
 
-const OTP = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+const ForgotPasswordOTP = () => {
+    const { error, loading } = useSelector((state) => state.temp);
 
-  const interviewerData = localStorage.getItem("interviewer_token");
-  const intervieweeData = localStorage.getItem("interviewee_token");
-  const companyData = localStorage.getItem("company_token");
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [otp, setotp] = useState("");
+   
+    const interviewerData = localStorage.getItem("forgotPassword_token");
+    let data = JSON.parse(interviewerData);
 
-  const { error, loading } = useSelector((state) => state.temp);
-  const [otp, setotp] = useState("");
-  let data = null;
-  if (interviewerData) {
-    data = JSON.parse(interviewerData);
-  } else if (intervieweeData) {
-    data = JSON.parse(intervieweeData)
-  } else {
-    data = JSON.parse(companyData);
-  }
-  const handleSubmit = async (e) => {
-    dispatch(otpVerificationStart())
-    e.preventDefault();
-    await axios
-      .post("/api/auth/verify-otp", {otp,...data})
-      .then((value) => {
-        dispatch(otpVerified())
-        if (data.userType === "interviewer") {
-          navigate(-1);
-        } else {
-          navigate(`/${data.userType}/login`);
-        }
-        localStorage.removeItem(`${data.userType}_token`);
-        toast("OTP Verified Successfully")
-      })
-      .catch((error) => {
-        dispatch(otpVerificationError(error.response.data.message))
-        console.log(error);
-      });
-  };
+    const handleSubmit = async (e) => {
+        dispatch(otpVerificationStart())
+        e.preventDefault();
+        await axios
+          .post("/api/auth/verify-forgotPassword-otp", {otp,...data})
+          .then((data) => {
+            dispatch(otpVerified())
+            toast("OTP Verified Successfully")
+            navigate("/changePassword")
+          })
+          .catch((error) => {
+            dispatch(otpVerificationError(error.response.data.message))
+            console.log(error);
+          });
+      };
+
+
+
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center bg-gray-700">
       <h1 className="text-white my-3 font-bold">One-Time Password</h1>
@@ -82,7 +72,7 @@ const OTP = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default OTP;
+export default ForgotPasswordOTP

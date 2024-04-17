@@ -1,39 +1,58 @@
-import React from 'react'
-import {Outlet} from 'react-router-dom' 
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar} from "@nextui-org/react";
+import React from "react";
 
+import {
+  Activity,
+  ArrowUpRight,
+  CircleUser,
+  CreditCard,
+  DollarSign,
+  Menu,
+  Package2,
+  Search,
+  Sheet,
+  Users,
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { SheetContent, SheetTrigger } from "../ui/sheet";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+
+  const handleLogout = () => {
+    // Handle logout logic here
+  };
 function CompanyNavbar() {
   return (
-    <> 
-    <Navbar>
-      <NavbarBrand>
-        <p className="font-bold text-inherit">Code-Interview</p>
-      </NavbarBrand>
-      <NavbarContent as="div" justify="end">
-        <Dropdown placement="bottom-end">
-          <DropdownTrigger>
-            <Avatar
-              isBordered
-              as="button"
-              className="transition-transform"
-              color="secondary"
-              name="Jason Hughes"
-              size="sm"
-              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-            />
-          </DropdownTrigger>
-          <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Profile</p>
-            </DropdownItem>
-            <DropdownItem key="logout" color="danger">
-              Log Out
-            </DropdownItem>
+    <>
+      <nav className="flex justify-between items-center bg-gray-800 text-white p-3">
+        <div>
+          <Link to="/">
+            <p className="h-8 w-auto">Code-Interview</p>
+          </Link>
+        </div>
+        <div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" size="icon" className="rounded-full">
+                <CircleUser className="h-5 w-5" />
+                <span className="sr-only">Toggle user menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Profile</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Logout</DropdownMenuItem>
+            </DropdownMenuContent>
           </DropdownMenu>
-        </Dropdown>
-      </NavbarContent>
-    </Navbar>
-    <Outlet/>
+        </div>
+      </nav>
     </>
     
   )

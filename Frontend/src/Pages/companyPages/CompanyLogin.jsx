@@ -62,8 +62,9 @@ const CompanyLogin = () => {
               name="password"
               id="password"
             />
+            <p className="ml-32 text-blue-100 cursor-pointer" onClick={()=>navigate("/forgotPassword")}>Forgot Password ?</p>
             <p className="text-red-500 font-serif">{error?error:''}</p>
-            <Button className="w-36 mt-5" type="submit" disabled={loading}>
+            <Button className="w-36 mt-2" type="submit" disabled={loading}>
               {loading?<ScaleLoader color="white" />: "Login"}
             </Button>
             <Link to="/company/signup" onClick={()=>dispatch(clearError())}>

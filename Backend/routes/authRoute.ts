@@ -1,4 +1,4 @@
-import {adminLogin, companyLogin, companySignup,  intervieweeLogin,  intervieweeSignup,  interviewerLogin, logout, verifyOTP} from "../controllers/authController"
+import {adminLogin, companyLogin, companySignup,  createNewPassword,  forgotPasswordOTP,  intervieweeLogin,  intervieweeSignup,  interviewerLogin, logout, verifyForgotPasswordOTP, verifyOTP} from "../controllers/authController"
 import  express  from "express"
 import { verifyToken } from "../utils/verify"
 const router =express.Router()
@@ -10,8 +10,9 @@ router.post("/interviewer-login",interviewerLogin)
 router.post("/interviewee-login",intervieweeLogin)
 router.post("/interviewee-signup",intervieweeSignup)
 router.post("/verify-otp",verifyOTP)
-
-
+router.post("/forgotPassword",forgotPasswordOTP)
+router.post("/verify-forgotPassword-otp",verifyForgotPasswordOTP)
+router.post("/changePassword",createNewPassword)
 
 
 

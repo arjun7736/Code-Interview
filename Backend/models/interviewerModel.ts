@@ -6,7 +6,7 @@ export interface IInterviewer extends Document {
   profile_picture: string;
   name: string;
   isBlocked: boolean;
-  company: string;
+  company: mongoose.Schema.Types.ObjectId;
 }
 
 const InterviewerSchema = new Schema({
@@ -27,6 +27,10 @@ const InterviewerSchema = new Schema({
   isBlocked: {
     type: Boolean,
   },
+  company:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref: 'Company'
+  }
 });
 
 const Interviewer =mongoose.model<IInterviewer>("Interviewer",InterviewerSchema)
