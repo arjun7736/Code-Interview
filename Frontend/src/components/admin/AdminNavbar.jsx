@@ -1,21 +1,8 @@
-import React from "react";
-
-import {
-  Activity,
-  ArrowUpRight,
-  CircleUser,
-  CreditCard,
-  DollarSign,
-  Menu,
-  Package2,
-  Search,
-  Sheet,
-  Users,
-} from "lucide-react";
-import { Link } from "react-router-dom";
-import { SheetContent, SheetTrigger } from "../ui/sheet";
+import React, { useEffect } from "react";
+import { CircleUser } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import axios from "axios"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,10 +11,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { toast } from "sonner";
 
 function AdminNavbar() {
-  const handleLogout = () => {
-    // Handle logout logic here
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const adminData = localStorage.getItem("admin_token");
+    if (!adminData) navigate("/admin/login");
+  }, []);
+  
+  const handleLogout = async() => {
+    localStorage.removeItem("admin_token");
+    await axios
+    .get("/api/auth/logout")
+    .then(() => {
+      toast("Logout Successfully");
+      navigate("/admin/login")
+    })
+    .catch((error) => {
+      toast(error);
+    });
   };
   return (
     <>
@@ -46,9 +50,16 @@ function AdminNavbar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Profile</DropdownMenuLabel>
+              <DropdownMenuLabel className="cursor-pointer">
+                Profile
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={handleLogout}
+              >
+                Logout
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

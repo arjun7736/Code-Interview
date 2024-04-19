@@ -13,30 +13,31 @@ import {
 } from "../ui/dropdown-menu";
 import { toast } from "sonner";
 
-function CompanyNavbar() {
+function IntervieweeNavbar() {
   const navigate = useNavigate();
+
   useEffect(() => {
-    const companyData = localStorage.getItem("company_token");
-    if (!companyData) {
-      navigate("/company/login");
+    const intervieweeData = localStorage.getItem("interviewee_token");
+    console.log(intervieweeData,"navabr");
+    if (!intervieweeData) {
+      navigate("/interviewee/login");
     } else {
-        navigate("/company");
+      navigate("/interviewee");
     }
   }, []);
 
   const handleLogout = async () => {
-    localStorage.removeItem("company_token");
+    localStorage.removeItem("interviewee_token");
     await axios
       .get("/api/auth/logout")
       .then(() => {
         toast("Logout Successfully");
-        navigate("/company/login");
+        navigate("/interviewee/login");
       })
       .catch((error) => {
         toast(error);
       });
   };
-
   return (
     <>
       <nav className="flex justify-between items-center bg-gray-800 text-white p-3">
@@ -70,4 +71,4 @@ function CompanyNavbar() {
   );
 }
 
-export default CompanyNavbar;
+export default IntervieweeNavbar;

@@ -6,6 +6,7 @@ import mongoose, { Schema, Document } from "mongoose";
     name: string;
     profile_picture?: string;
     isBlocked?: boolean;
+    isPremium?:boolean
 }
 
 const CompanySchema: Schema = new Schema<ICompany>({
@@ -27,6 +28,10 @@ const CompanySchema: Schema = new Schema<ICompany>({
     isBlocked: {
         type: Boolean,
         default: false
+    },
+    isPremium:{
+        type:Boolean,
+        default:false
     }
 });
 

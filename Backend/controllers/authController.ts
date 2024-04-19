@@ -126,7 +126,7 @@ export const interviewerLogin = async (
       interviewer.password
     );
 
-    if (isValiedPassword)
+    if (!isValiedPassword)
       return next(errorHandler(401, "invalied  Credentials"));
 
     if (interviewer.isBlocked)

@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const AddInterviewer = ({ isOpen, onClose }) => {
+
   const navigate = useNavigate();
   const [formData, setformData] = useState({});
  const company= localStorage.getItem("company_token")
@@ -72,7 +73,7 @@ const AddInterviewer = ({ isOpen, onClose }) => {
               Close
             </Button>
             <Button color="primary" onClick={onClose} type="submit">
-              Sign in
+              Create
             </Button>
           </ModalFooter>
         </form>

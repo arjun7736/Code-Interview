@@ -8,10 +8,6 @@ import IntervieweeSignup from "./Pages/interweiveePages/IntervieweeSignup";
 import OTP from "./Pages/common/OTP";
 import CompanyHome from "./Pages/companyPages/CompanyHome";
 import AdminHome from "./Pages/adminPages/AdminHome";
-import AdminNavbar from "./components/admin/AdminNavbar";
-import CompanyNavbar from "./components/company/CompanyNavbar";
-import ViewerNavbar from "./components/interviewee/ViewerNavbar";
-import VieweeNavbar from "./components/interviewer/VieweeNavbar";
 import InterviewerHome from "./Pages/interviewerPages/InterviewerHome";
 import IntervieweeHome from "./Pages/interweiveePages/IntervieweeHome";
 import { Toaster } from "./components/ui/sonner";
@@ -25,7 +21,6 @@ import ChangePassword from "./Pages/common/ChangePassword";
 
 function App() {
 
-  // const adminData = localStorage.getItem('admin_token');
   // const interviewerData = localStorage.getItem('interviewer_token');
   // const intervieweeData = localStorage.getItem('interviewee_token');
   // const companyData = localStorage.getItem('company_token')
@@ -48,7 +43,7 @@ function App() {
           <Route path="/company" element={<CompanyHome />} />
           <Route path="/admin" element={<AdminHome/>} />
           <Route path="/interviewer" element={<InterviewerHome />} />
-          <Route path="/interviewee" element={localStorage.getItem("interviewee_token") ? ( <IntervieweeHome /> ) : ( <Navigate to="/interviewee/login" replace /> ) }/>     
+          <Route path="/interviewee" element={<IntervieweeHome/>}/>     
           <Route path="/interviewee-list" element={<IntervieweeList/>}/>
           <Route path="/interviewer-list" element ={<InterviewerList/>}/>
           <Route path="/company-list" element={<CompanyList/>}/>

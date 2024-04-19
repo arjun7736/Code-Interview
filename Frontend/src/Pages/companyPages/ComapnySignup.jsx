@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ScaleLoader } from "react-spinners";
@@ -14,6 +14,16 @@ import axios from "axios";
 
 const ComapnySignup = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const companyData = localStorage.getItem("company_token");
+    if (!companyData) {
+      navigate("/company/signup");
+    } else {
+        navigate("/company");
+    }
+  }, []);
+  
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const { error, loading } = useSelector((state) => state.company);

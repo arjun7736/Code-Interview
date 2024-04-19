@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ScaleLoader } from "react-spinners";
@@ -10,6 +10,16 @@ import { clearError, loginError, loginStart, loginSuccess } from "@/redux/slices
 
 const CompanyLogin = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const companyData = localStorage.getItem("company_token");
+    if (!companyData) {
+      navigate("/company/login");
+    } else {
+        navigate("/company");
+    }
+  }, []);
+
   const [formData, setformData] = useState({});
   const dispatch =useDispatch()
   const {error,loading,userData}=useSelector((state)=>state.company)

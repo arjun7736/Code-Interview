@@ -1,9 +1,13 @@
-import React from 'react'
+import InterviewerNavbar from "@/components/interviewee/InterviewerNavbar";
+import React from "react";
 
 const InterviewerHome = () => {
   return (
-    <div>InterviewerHome</div>
-  )
-}
+    <>
+      <InterviewerNavbar />
+      
+    </>
+  );
+};
 
-export default InterviewerHome
+export default InterviewerHome;

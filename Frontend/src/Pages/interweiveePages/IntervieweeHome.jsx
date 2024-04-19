@@ -1,8 +1,13 @@
+import IntervieweeNavbar from '@/components/interviewer/IntervieweeNavbar'
 import React from 'react'
 
 const IntervieweeHome = () => {
+console.log("homew");
   return (
-    <div>IntervieweeHome</div>
+    <>
+    <IntervieweeNavbar/>
+    <div>hellooo</div>
+    </>
   )
 }
 

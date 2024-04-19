@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@nextui-org/react";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithPopup } from "firebase/auth";
@@ -19,6 +19,12 @@ const IntervieweeSignup = () => {
   const dispatch = useDispatch();
   const { error, loading } = useSelector((state) => state.interviewee);
   const [formData, setformData] = useState({});
+
+  // useEffect(() => {
+  //   const interviewerData = localStorage.getItem("interviewee_token");
+  //   if (!interviewerData) navigate("/interviewee/signup");
+  //   else navigate("/interviewee")
+  // }, []);
 
   const navigate = useNavigate();
   const handleGoogle = (e) => {

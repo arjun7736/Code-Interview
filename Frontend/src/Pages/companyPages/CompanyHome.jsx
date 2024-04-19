@@ -1,7 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
+import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import { Listbox, ListboxItem } from "@nextui-org/react";
 import CompanyNavbar from "@/components/company/CompanyNavbar";
 import { Button } from "@/components/ui/button";
@@ -12,11 +11,15 @@ import {
   interviewersListStart,
   interviewersListSuccess,
 } from "@/redux/slices/companySlice";
-import { ScaleLoader } from "react-spinners";
+import { PulseLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
+import UpgradePlan from "./UpgradePlan";
 
 const CompanyHome = () => {
-  
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+    const [selectedInterviewer, setSelectedInterviewer] = useState(null);
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const data = localStorage.getItem("company_token");
@@ -27,10 +30,9 @@ const CompanyHome = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `/api/company/interviewers?Id=${company._id}`
+          `/api/company/interviewers?Id=${company?._id}`
         );
         dispatch(interviewersListSuccess(response.data[0].interviewers));
-        console.log(response.data[0].interviewers);
       } catch (error) {
         dispatch(interviewersListError(error.message));
         console.error(error);
@@ -39,9 +41,7 @@ const CompanyHome = () => {
     fetchData();
   }, []);
 
-  const {loading,error,interviewers} =useSelector((state)=>state.company)
-
-  console.log(interviewers,"interviewers");
+  const { loading, error, interviewers } = useSelector((state) => state.company);
 
   const openPopup = () => {
     setIsPopupOpen(true);
@@ -51,54 +51,20 @@ const CompanyHome = () => {
     setIsPopupOpen(false);
   };
 
-  const navigate = useNavigate();
-  const logout = () => {
-    axios
-      .get("/api/auth/logout")
-      .then((data) => {
-        localStorage.removeItem(data.data.user);
-        navigate("/");
-      })
-      .catch((error) => console.log(error));
+  const renderPopup = () => {
+    if (interviewers?.length >= 2) {
+      return <UpgradePlan isOpen={isPopupOpen} onClose={closePopup} />;
+    } else {
+      return <AddInterviewer isOpen={isPopupOpen} onClose={closePopup} />;
+    }
   };
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set(["text"]));
 
-  const selectedValue = React.useMemo(
-    () => Array.from(selectedKeys).join(", "),
-    [selectedKeys]
-  );
+
+  const handleInterviewerClick = (interviewer) => {
+    setSelectedInterviewer(interviewer);
+  };
+
   return (
-    // <>
-    //   <CompanyNavbar />
-    //   <div className="md:grid md:justify-end md:mt-20 justify-center mt-10 grid-cols-1 md:grid-cols-2  p-5 md:p-0">
-    //     <div className=" md:w-96">
-    //       <Card className="py-4">
-    //         <CardHeader className="pb-0 pt-2 px-4 flex-col items-center">
-    //           <h4 className="font-bold text-large">Interviewers</h4>
-    //         </CardHeader>
-    //         <CardBody className="overflow-visible py-2">
-    //           <Listbox
-    //             aria-label="Single selection example"
-    //             variant="flat"
-    //             disallowEmptySelection
-    //             selectionMode="single"
-    //             selectedKeys={selectedKeys}
-    //             onSelectionChange={setSelectedKeys}>
-
-    //             <ListboxItem key="text">Text</ListboxItem>
-               
-
-    //           </Listbox>
-    //           <Button onClick={openPopup}>Add Interviewer</Button>
-    //         </CardBody>
-    //       </Card>
-    //     </div>
-    //     <div className="md:block order-last md:order-first mt-10 md:mt-0">
-    //       Welcome To The Company Home Page You are Logged in as Google
-    //     </div>
-    //   </div>
-    //   <AddInterviewer isOpen={isPopupOpen} onClose={closePopup} />
-    // </>
     <>
       <CompanyNavbar />
       <div className="md:grid md:justify-end md:mt-20 justify-center mt-10 grid-cols-1 md:grid-cols-2  p-5 md:p-0">
@@ -109,17 +75,18 @@ const CompanyHome = () => {
             </CardHeader>
             <CardBody className="overflow-visible py-2">
               {loading ? (
-               <ScaleLoader/>
+                <PulseLoader size={10} />
               ) : interviewers?.length > 0 ? (
                 <Listbox
                   aria-label="Single selection example"
                   variant="flat"
                   disallowEmptySelection
                   selectionMode="single"
-                  selectedKeys={selectedKeys}
-                  onSelectionChange={setSelectedKeys}>
+                >
                   {interviewers.map((interviewer) => (
-                    <ListboxItem key={interviewer._id}>{interviewer.email}</ListboxItem>
+                    <ListboxItem key={interviewer._id} onClick={()=>handleInterviewerClick(interviewer)}>
+                      {interviewer.email}
+                    </ListboxItem>
                   ))}
                 </Listbox>
               ) : (
@@ -130,10 +97,19 @@ const CompanyHome = () => {
           </Card>
         </div>
         <div className="md:block order-last md:order-first mt-10 md:mt-0">
-          Welcome To The Company Home Page You are Logged in as Google
-        </div>
+        {selectedInterviewer ? (
+            <>
+              <h1>Interviewer Details</h1>
+              <p>Name: {selectedInterviewer.name}</p>
+              <p>Email: {selectedInterviewer.email}</p>
+            </>
+          ) : (
+            <p>
+              Welcome To The Company Home Page You are Logged in as Google
+            </p>
+          )}        </div>
       </div>
-      <AddInterviewer isOpen={isPopupOpen} onClose={closePopup} />
+      {renderPopup()} 
     </>
   );
 };

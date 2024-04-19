@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithPopup } from "firebase/auth";
@@ -19,6 +19,16 @@ const IntervieweeLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setformData] = useState({});
+
+  useEffect(() => {
+    const intervieweeData = localStorage.getItem("interviewee_token");
+    console.log(intervieweeData);
+    if (!intervieweeData) {
+      navigate("/interviewee/login");
+    } else {
+      navigate("/interviewee");
+    }
+  }, []);
 
   const { error, loading, intervieweeData } = useSelector(
     (state) => state.interviewee
@@ -47,6 +57,7 @@ const IntervieweeLogin = () => {
           dispatch(loginSuccess(data.data));
           const IntervieweeData = JSON.stringify(data.data);
           localStorage.setItem("interviewee_token", IntervieweeData);
+          console.log("heloooooooooooiiiii");
           navigate("/interviewee");
         })
         .catch((error) => {

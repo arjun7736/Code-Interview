@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +17,12 @@ const InterviewerLogin = () => {
   const [formData, setformData] = useState({});
   const { error, loading } = useSelector((state) => state.interviewer);
 
+  useEffect(() => {
+    const interviewerData = localStorage.getItem("interviewer_token");
+    if (!interviewerData) navigate("/interviewer/login");
+    else navigate("/interviewer")
+  }, []);
+  
   const handleChange = (e) => {
     setformData({ ...formData, [e.target.id]: e.target.value });
   };

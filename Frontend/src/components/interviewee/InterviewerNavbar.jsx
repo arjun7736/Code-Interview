@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import axios from "axios";
 import { CircleUser } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
@@ -11,32 +10,36 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import axios from "axios"
 import { toast } from "sonner";
 
-function CompanyNavbar() {
+
+
+
+function InterviewerNavbar() {
   const navigate = useNavigate();
+
   useEffect(() => {
-    const companyData = localStorage.getItem("company_token");
-    if (!companyData) {
-      navigate("/company/login");
+    const interviewerData = localStorage.getItem("interviewer_token");
+    if (!interviewerData) {
+      navigate("/interviewer/login");
     } else {
-        navigate("/company");
+      navigate("/interviewer");
     }
   }, []);
 
   const handleLogout = async () => {
-    localStorage.removeItem("company_token");
+    localStorage.removeItem("interviewer_token");
     await axios
       .get("/api/auth/logout")
       .then(() => {
         toast("Logout Successfully");
-        navigate("/company/login");
+        navigate("/interviewer/login");
       })
       .catch((error) => {
         toast(error);
       });
   };
-
   return (
     <>
       <nav className="flex justify-between items-center bg-gray-800 text-white p-3">
@@ -70,4 +73,4 @@ function CompanyNavbar() {
   );
 }
 
-export default CompanyNavbar;
+export default InterviewerNavbar;
