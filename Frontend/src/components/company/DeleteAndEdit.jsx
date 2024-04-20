@@ -11,6 +11,7 @@ import {
   Checkbox,
   Input,
 } from "@nextui-org/react";
+import { toast } from "sonner";
 
 const DeleteAndEdit = ({
   isOpen,
@@ -31,11 +32,12 @@ const DeleteAndEdit = ({
         await axios
         .post("/api/company/edit-interviewer",{...formData,id:selectedInterviewer._id })
         .then((data) => {
-          console.log(data);
           setIsEditModalOpen(false)
+          toast("Interviewer Edited Successfully")
         })
         .catch((error) => {
           console.log(error);
+          toast(error)
         });
     } catch (error) {
       console.log(error);
@@ -58,9 +60,11 @@ const DeleteAndEdit = ({
       .then((data) => {
         fetchData();
         setSelectedInterviewer(null);
+        toast("Interviewer Deleted")
       })
       .catch((error) => {
         console.log(error);
+        toast(error)
       });
   };
   return (

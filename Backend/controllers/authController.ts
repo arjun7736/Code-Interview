@@ -306,7 +306,7 @@ export const verifyOTP = async (
           email: data?.email,
           password: data?.password,
           name: data?.name,
-          isBlocked:false
+          isBlocked: false,
         });
         await OTPDB.deleteOne({ _id: data?._id });
         break;
@@ -315,8 +315,8 @@ export const verifyOTP = async (
           email: data?.email,
           password: data?.password,
           name: data?.name,
-          company:data?.company,
-          isBlocked:false
+          company: data?.company,
+          isBlocked: false,
         });
         await OTPDB.deleteOne({ _id: data?._id });
         break;
@@ -325,7 +325,7 @@ export const verifyOTP = async (
           email: data?.email,
           password: data?.password,
           name: data?.name,
-          isBlocked:false
+          isBlocked: false,
         });
         await OTPDB.deleteOne({ _id: data?._id });
         break;
@@ -408,13 +408,42 @@ export const createNewPassword = async (
     if (password !== confirmpassword)
       return next(errorHandler(400, "Passwords do not match"));
     let user: ICompany | IInterviewee | null = null;
-    const hPass=await bcrypt.hash(password,10)
+    const hPass = await bcrypt.hash(password, 10);
     if (role === "company") {
-      user = await CompanyDB.findOneAndUpdate({email:email},{password:hPass},{new:true});
-    }else{
-      user =await IntervieweeDB.findOneAndUpdate({email:email},{password:hPass},{new:true})
+      user = await CompanyDB.findOneAndUpdate(
+        { email: email },
+        { password: hPass },
+        { new: true }
+      );
+    } else {
+      user = await IntervieweeDB.findOneAndUpdate(
+        { email: email },
+        { password: hPass },
+        { new: true }
+      );
     }
     res.json(role);
+  } catch (error) {
+    next(error);
+  }
+};
+
+//<=...............................creating New password........................=>//
+
+export const resentOtp = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    console.log(req.body);
+    
+    const { email } = req.body;
+    const OTP: number = Math.floor(100000 + Math.random() * 900000);
+    const user:IOtp|null = await OTPDB.findOneAndUpdate({ email },{otp:OTP},{new:true});
+    if(!user) return next(errorHandler(500,"Session Expired Add the Data Once More"))
+    sentOTP(email,OTP)
+    res.json({message:"Otp Resent Successfully"})
   } catch (error) {
     next(error);
   }

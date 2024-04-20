@@ -179,8 +179,6 @@ const CompanyHome = () => {
   selectedInterviewer={selectedInterviewer}
   fetchData={fetchData}
   setSelectedInterviewer={setSelectedInterviewer}
-
-
 />
 
     </>

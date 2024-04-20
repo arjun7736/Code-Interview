@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { CircleUser } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,13 +14,15 @@ import {
 import { toast } from "sonner";
 
 function CompanyNavbar() {
+
+
   const navigate = useNavigate();
   useEffect(() => {
     const companyData = localStorage.getItem("company_token");
     if (!companyData) {
       navigate("/company/login");
     } else {
-        navigate("/company");
+      navigate("/company");
     }
   }, []);
 
@@ -36,6 +38,9 @@ function CompanyNavbar() {
         toast(error);
       });
   };
+
+ 
+
 
   return (
     <>
@@ -54,7 +59,12 @@ function CompanyNavbar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Profile</DropdownMenuLabel>
+              <DropdownMenuLabel
+                className="cursor-pointer"
+                // onClick={openProfileModal}
+              >
+                Profile
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="cursor-pointer"
