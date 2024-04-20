@@ -28,11 +28,10 @@ const AdminLogin = () => {
             dispatch(loginSuccess(data.data))
             const AdminData = JSON.stringify(data.data);
             localStorage.setItem('admin_token', AdminData);
-            navigate("/admin")
+            navigate("/admin/dashboard")
           })
           .catch((error) => {
-            dispatch(loginError(error.response.data.message))
-            console.log(error)
+            dispatch(loginError(error.response.data))
           });
       } catch (error) {
         console.log(error);

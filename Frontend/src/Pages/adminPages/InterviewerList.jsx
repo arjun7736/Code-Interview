@@ -28,7 +28,11 @@ const InterviewerList = () => {
         dispatch(setInterviewerData(data.data));
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response.status == 401 || error.response.status == 403) {
+          toast("Error Occured try Login Agian");
+          localStorage.removeItem("admin_token");
+          window.location.reload()
+        }
       });
   });
   const { interviewerData } = useSelector((state) => state.admin);

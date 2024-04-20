@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Popup from "@/components/admin/Popup";
+import { toast } from "sonner";
 const CompanyList = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -27,7 +28,11 @@ const CompanyList = () => {
         dispatch(setCompanydata(data.data));
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response.status == 401 || error.response.status == 403) {
+          toast("Error Occured try Login Agian");
+          localStorage.removeItem("admin_token");
+          window.location.reload()
+        }
       });
   });
   const { companyData } = useSelector((state) => state.admin);
@@ -35,20 +40,20 @@ const CompanyList = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popupId, setPopupId] = useState(null);
   const [user, setUser] = useState(null);
-  const [message,setMessage]=useState("")
+  const [message, setMessage] = useState("");
 
   const openPopup = (message, id, user) => {
     setIsPopupOpen(true);
     setPopupId(id);
     setUser(user);
-    setMessage(message)
+    setMessage(message);
   };
 
   const closePopup = () => {
     setIsPopupOpen(false);
     setPopupId(null);
     setUser(null);
-    setMessage("")
+    setMessage("");
   };
 
   return (
