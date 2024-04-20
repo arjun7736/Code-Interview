@@ -8,9 +8,6 @@ import OTPDB from "../models/otpModel";
 import CompanyDB from "../models/companyModel";
 import mongoose from "mongoose";
 
-
-
-
 //<=-----------------------Interviewer add---------------------------=>//
 
 export const addInterviewer = async (
@@ -59,8 +56,8 @@ export const deleteInterviewer = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { id } = req.body;
-    await InterviewerDB.findByIdAndDelete(id);
+    const { id } = req.params;
+    const data = await InterviewerDB.findByIdAndDelete({ _id: id });
     res.json({ message: "Deleted Successfully" });
   } catch (error) {
     next(error);
@@ -80,8 +77,8 @@ export const listInterviewers = async (
     const pipeline = [
       {
         $match: {
-          _id:objectId
-        }
+          _id: objectId,
+        },
       },
       {
         $lookup: {
@@ -102,16 +99,51 @@ export const listInterviewers = async (
               in: {
                 _id: "$$interviewer._id",
                 email: "$$interviewer.email",
+                name:"$$interviewer.name"
               },
             },
           },
         },
       },
     ];
-    
+
     const data = await CompanyDB.aggregate(pipeline);
 
     res.json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+//<=------------------------Edit Interviewer--------------------------=>//
+export const editInterviewer = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { password, name, id } = req.body;
+    
+    if (!password || !name)
+      return next(errorHandler(400, "password and Name Required"));
+    let isStrongPass = isStrongPassword(password);
+
+    if (!isStrongPass) return next(errorHandler(401, "Weak Password"));
+
+    const hpass =await bcrypt.hash(password, 10);
+
+    const interviewer: IInterviewer | null =
+      await InterviewerDB.findByIdAndUpdate(
+        { _id: id },
+        { $set: { password: hpass, name: name } },
+        { new: true }
+      );
+
+    if (interviewer) {
+      const interviewerWithoutPassword = { ...interviewer.toObject() };
+      delete interviewerWithoutPassword.password;
+      res.json({ message: "Interviewer Updated Successfully ",interviewerWithoutPassword });
+    }
   } catch (error) {
     next(error);
   }

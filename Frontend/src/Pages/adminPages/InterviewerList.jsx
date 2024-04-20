@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Popup from "@/components/Popup";
+import Popup from "@/components/admin/Popup";
 import { Button } from "@/components/ui/button";
 
 const InterviewerList = () => {

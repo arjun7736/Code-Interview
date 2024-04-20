@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import Popup from "@/components/Popup";
+import Popup from "@/components/admin/Popup";
 const CompanyList = () => {
   const dispatch = useDispatch();
   useEffect(() => {

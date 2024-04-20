@@ -9,7 +9,7 @@ import {
   Input,
 } from "@nextui-org/react";
 import axios from "axios";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 
