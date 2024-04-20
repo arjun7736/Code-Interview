@@ -24,7 +24,10 @@ interface CustomRequest extends Request {
     } else if (req.cookies.interviewee_token) {
       tokenCookieName = 'interviewee_token';
       userType = 'Interviewee';
-    } else {
+    } else if (req.cookies.admin_token) {
+      tokenCookieName = 'admin_token';
+      userType = 'Admin';
+    }else {
       return next(errorHandler(401, 'You are not authenticated'));
     }
       const token: string | undefined = req.cookies[tokenCookieName];

@@ -7,6 +7,11 @@ import { sentOTP } from "../utils/otp";
 import OTPDB from "../models/otpModel";
 import CompanyDB from "../models/companyModel";
 import mongoose from "mongoose";
+import Stripe from 'stripe';
+
+
+
+
 
 //<=-----------------------Interviewer add---------------------------=>//
 
@@ -99,7 +104,7 @@ export const listInterviewers = async (
               in: {
                 _id: "$$interviewer._id",
                 email: "$$interviewer.email",
-                name:"$$interviewer.name"
+                name: "$$interviewer.name",
               },
             },
           },
@@ -123,14 +128,14 @@ export const editInterviewer = async (
 ) => {
   try {
     const { password, name, id } = req.body;
-    
+
     if (!password || !name)
       return next(errorHandler(400, "password and Name Required"));
     let isStrongPass = isStrongPassword(password);
 
     if (!isStrongPass) return next(errorHandler(401, "Weak Password"));
 
-    const hpass =await bcrypt.hash(password, 10);
+    const hpass = await bcrypt.hash(password, 10);
 
     const interviewer: IInterviewer | null =
       await InterviewerDB.findByIdAndUpdate(
@@ -142,8 +147,49 @@ export const editInterviewer = async (
     if (interviewer) {
       const interviewerWithoutPassword = { ...interviewer.toObject() };
       delete interviewerWithoutPassword.password;
-      res.json({ message: "Interviewer Updated Successfully ",interviewerWithoutPassword });
+      res.json({
+        message: "Interviewer Updated Successfully ",
+        interviewerWithoutPassword,
+      });
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+//<=------------------------Buy Premium--------------------------=>//
+export const buyPremium = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    console.log(req.body)
+    if (!process.env.STRIPE_KEY) {
+      throw new Error('Stripe key not provided');
+    }
+
+    const stripe = new Stripe(process.env.STRIPE_KEY);
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'inr',
+            product_data: {
+              name: 'Premium Subscription',
+            },
+            unit_amount: 1999*100,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: 'https://localhost:3000/company',
+      cancel_url: 'https://localhost:3000/company',
+    });
+    res.json({ sessionId: session.id });
   } catch (error) {
     next(error);
   }

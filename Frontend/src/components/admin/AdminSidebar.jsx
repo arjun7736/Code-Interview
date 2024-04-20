@@ -77,29 +77,29 @@ const AdminSidebar = () => {
         <div className="flex flex-col  h-full">
           <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-5  font-medium text-2xl m-3 overflow-x-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-100   md:h-[68%] h-[70%]">
             <li> 
-              <NavLink to={"/admin"} className="link">
+              <NavLink to={"/admin/dashboard"} className="link">
                Dashboard
               </NavLink>
             </li>
             <li>
-              <NavLink to={"/company-list"} className="link">
+              <NavLink to={"/admin/company-list"} className="link">
                 Company
               </NavLink>
             </li>
             <li>
-              <NavLink to={"/interviewee-list"} className="link">
+              <NavLink to={"/admin/interviewee-list"} className="link">
                 Interviewee
               </NavLink>
             </li>
             <li>
-              <NavLink to={"/interviewer-list"} className="link">
+              <NavLink to={"/admin/interviewer-list"} className="link">
                 Interviewer
               </NavLink>
             </li>
           </ul>
         </div>
       </motion.div>
-      <div className="m-3 md:hidden  " onClick={() => setOpen(true)}>
+      <div className="m-3 md:hidden"onClick={() => setOpen(true)}>
         <MdMenu size={25} />
       </div>
     </div>

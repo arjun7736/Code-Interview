@@ -41,12 +41,12 @@ function App() {
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/otp" element={<OTP />} />
           <Route path="/company" element={<CompanyHome />} />
-          <Route path="/admin" element={<AdminHome/>} />
+          <Route path="/admin/dashboard" element={<AdminHome/>} />
           <Route path="/interviewer" element={<InterviewerHome />} />
           <Route path="/interviewee" element={<IntervieweeHome/>}/>     
-          <Route path="/interviewee-list" element={<IntervieweeList/>}/>
-          <Route path="/interviewer-list" element ={<InterviewerList/>}/>
-          <Route path="/company-list" element={<CompanyList/>}/>
+          <Route path="/admin/interviewee-list" element={<IntervieweeList/>}/>
+          <Route path="/admin/interviewer-list" element ={<InterviewerList/>}/>
+          <Route path="/admin/company-list" element={<CompanyList/>}/>
         </Routes>
       </BrowserRouter>
       <Toaster className="bg-black" />

@@ -436,8 +436,6 @@ export const resentOtp = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    console.log(req.body);
-    
     const { email } = req.body;
     const OTP: number = Math.floor(100000 + Math.random() * 900000);
     const user:IOtp|null = await OTPDB.findOneAndUpdate({ email },{otp:OTP},{new:true});
