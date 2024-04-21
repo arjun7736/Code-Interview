@@ -53,7 +53,6 @@ const CompanyHome = () => {
  
   const data = localStorage.getItem("company_token");
   const company = JSON.parse(data);
-
   const fetchData = async () => {
     dispatch(interviewersListStart());
     try {
@@ -83,7 +82,7 @@ const CompanyHome = () => {
   };
 
   const renderPopup = () => {
-    if (interviewers?.length >= 2) {
+    if (interviewers?.length >= 2&& !company?.isPremium) {
       return <UpgradePlan isOpen={isPopupOpen} onClose={closePopup} />;
     } else {
       return <AddInterviewer isOpen={isPopupOpen} onClose={closePopup} />;

@@ -22,27 +22,34 @@ const includedFeatures = [
 const UpgradePlan = ({ isOpen, onClose }) => {
   const comapny = localStorage.getItem("company_token");
   const data = JSON.parse(comapny);
+
   const makePayment = async () => {
     try {
       const stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY);
       const response = await axios.post("/api/company/buy-premium", data);
 
       const sessionId = response.data.sessionId;
-      console.log('Session ID:', sessionId);
-  
+      console.log("Session ID:", sessionId);
+
       const result = await stripe.redirectToCheckout({
         sessionId: sessionId,
       });
+
+      if (result.error) {
+        toast("Error Occured");
+      } else {
+        toast("Payment successful");
+      }
     } catch (error) {
-      console.error('Error making payment:', error);
+      toast("Error making payment");
     }
   };
-  
 
   return (
     <>
       {
         <Modal isOpen={isOpen} backdrop="transparent" placement="top-center">
+
           <ModalContent>
             <div className="bg-white py-8 sm:py-12">
               <div className="mx-auto max-w-lg px-6 lg:px-8">
@@ -69,10 +76,7 @@ const UpgradePlan = ({ isOpen, onClose }) => {
                       Pay once, own it forever
                     </p>
                     <p className="text-2xl font-bold tracking-tight text-gray-900">
-                    &#8377; 1999{" "}
-                      <span className="text-sm font-semibold text-gray-600">
-                        INR
-                      </span>
+                      &#8377; 1999{" "}
                     </p>
                   </div>
                   <Button
@@ -83,6 +87,7 @@ const UpgradePlan = ({ isOpen, onClose }) => {
                     Get access
                   </Button>
                 </div>
+                    <Button onClick={onClose}>close</Button>
               </div>
             </div>
           </ModalContent>

@@ -165,7 +165,7 @@ export const buyPremium = async (
 ): Promise<void> => {
   try {
     if (!process.env.STRIPE_KEY) {
-      throw new Error('Stripe key not provided');
+      return next(errorHandler(500,'Stripe key not provided'));
     }
 
     const stripe = new Stripe(process.env.STRIPE_KEY);
@@ -193,6 +193,12 @@ export const buyPremium = async (
         allowed_countries: ['US', 'CA', 'GB', 'IN'],
       },
     });
+
+    await CompanyDB.findByIdAndUpdate({_id:req.body._id},
+      { isPremium: true },
+      { new: true }
+    );
+
     res.json({ sessionId: session.id });
   } catch (error) {
     next(error);
