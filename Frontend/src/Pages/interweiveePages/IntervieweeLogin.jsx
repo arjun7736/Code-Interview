@@ -22,7 +22,6 @@ const IntervieweeLogin = () => {
 
   useEffect(() => {
     const intervieweeData = localStorage.getItem("interviewee_token");
-    console.log(intervieweeData);
     if (!intervieweeData) {
       navigate("/interviewee/login");
     } else {
@@ -38,13 +37,14 @@ const IntervieweeLogin = () => {
     setformData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleClick = (e) => {
+  const handleClick =async (e) => {
     e.preventDefault();
     signInWithPopup(auth, provider).then((data) => {
       toast("Login Successfully");
-      localStorage.setItem("email", data.user.email);
+      const IntervieweeData = JSON.stringify(data.user.providerData[0]);
+      localStorage.setItem("interviewee_token",IntervieweeData );
       navigate("/interviewee");
-    });
+    })
   };
 
   const handleSubmit = (e) => {
@@ -57,7 +57,6 @@ const IntervieweeLogin = () => {
           dispatch(loginSuccess(data.data));
           const IntervieweeData = JSON.stringify(data.data);
           localStorage.setItem("interviewee_token", IntervieweeData);
-          console.log("heloooooooooooiiiii");
           navigate("/interviewee");
         })
         .catch((error) => {

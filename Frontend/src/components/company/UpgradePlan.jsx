@@ -22,14 +22,22 @@ const includedFeatures = [
 const UpgradePlan = ({ isOpen, onClose }) => {
   const comapny = localStorage.getItem("company_token");
   const data = JSON.parse(comapny);
-
   const makePayment = async () => {
-    const stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY);
-    
-    const { data: { id: sessionId } } = await axios.post("/api/company/buy-premium", data);
-    console.log('Session ID:', sessionId);
-    const result = await stripe.redirectToCheckout({ sessionId });
+    try {
+      const stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY);
+      const response = await axios.post("/api/company/buy-premium", data);
+
+      const sessionId = response.data.sessionId;
+      console.log('Session ID:', sessionId);
+  
+      const result = await stripe.redirectToCheckout({
+        sessionId: sessionId,
+      });
+    } catch (error) {
+      console.error('Error making payment:', error);
+    }
   };
+  
 
   return (
     <>
@@ -61,9 +69,9 @@ const UpgradePlan = ({ isOpen, onClose }) => {
                       Pay once, own it forever
                     </p>
                     <p className="text-2xl font-bold tracking-tight text-gray-900">
-                      $349{" "}
+                    &#8377; 1999{" "}
                       <span className="text-sm font-semibold text-gray-600">
-                        USD
+                        INR
                       </span>
                     </p>
                   </div>

@@ -35,7 +35,11 @@ function CompanyNavbar() {
         navigate("/company/login");
       })
       .catch((error) => {
-        toast(error);
+        if (error.response.status == 401 || error.response.status == 403) {
+          toast("Error Occured try Login Agian");
+          localStorage.removeItem("company_token");
+          window.location.reload()
+        }
       });
   };
 

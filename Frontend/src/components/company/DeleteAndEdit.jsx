@@ -38,6 +38,11 @@ const DeleteAndEdit = ({
         .catch((error) => {
           console.log(error);
           toast(error)
+          if (error.response.status == 401 || error.response.status == 403) {
+            toast("Error Occured try Login Agian");
+            localStorage.removeItem("company_token");
+            window.location.reload()
+          }
         });
     } catch (error) {
       console.log(error);

@@ -164,7 +164,6 @@ export const buyPremium = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    console.log(req.body)
     if (!process.env.STRIPE_KEY) {
       throw new Error('Stripe key not provided');
     }
@@ -176,7 +175,7 @@ export const buyPremium = async (
       line_items: [
         {
           price_data: {
-            currency: 'inr',
+            currency: 'usd',
             product_data: {
               name: 'Premium Subscription',
             },
@@ -186,8 +185,13 @@ export const buyPremium = async (
         },
       ],
       mode: 'payment',
-      success_url: 'https://localhost:3000/company',
-      cancel_url: 'https://localhost:3000/company',
+      success_url: 'http://localhost:3000/company',
+      cancel_url: 'http://localhost:3000/company',
+      customer_email: req.body.email, 
+      billing_address_collection: 'auto',
+      shipping_address_collection: {
+        allowed_countries: ['US', 'CA', 'GB', 'IN'],
+      },
     });
     res.json({ sessionId: session.id });
   } catch (error) {

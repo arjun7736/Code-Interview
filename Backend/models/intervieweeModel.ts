@@ -1,11 +1,11 @@
 import mongoose,{Schema,Document} from "mongoose"
 
 export interface IInterviewee extends Document{
-    email:string;
-    password:string;
-    name:string;
-    profile_picture:string;
-    isBlocked:boolean
+    email?:string;
+    password?:string|null;
+    name?:string;
+    profile_picture?:string;
+    isBlocked?:boolean
 }
 const intervieweeSchema = new Schema({
     email:{
@@ -17,7 +17,6 @@ const intervieweeSchema = new Schema({
     },
     password:{
         type:String,
-        required:true
     },
     profile_picture:{
         type:String

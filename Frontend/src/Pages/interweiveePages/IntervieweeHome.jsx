@@ -1,12 +1,12 @@
-import IntervieweeNavbar from '@/components/interviewer/IntervieweeNavbar'
-import React from 'react'
+import IntervieweeNavbar from '@/components/interviewee/IntervieweeNavbar';
+import React, { useEffect } from 'react'
 
 const IntervieweeHome = () => {
-console.log("homew");
+
   return (
     <>
     <IntervieweeNavbar/>
-    <div>hellooo</div>
+  
     </>
   )
 }

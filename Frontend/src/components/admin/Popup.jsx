@@ -29,6 +29,11 @@ const Popup = ({ isOpen, onClose,message, id, role }) => {
         console.log(data);
       })
       .catch((error) => {
+        if (error.response.status == 401 || error.response.status == 403) {
+          toast("Error Occured try Login Agian");
+          localStorage.removeItem("admin_token");
+          window.location.reload()
+        }
         console.log(error);
       });
   };

@@ -1,4 +1,4 @@
-import InterviewerNavbar from "@/components/interviewee/InterviewerNavbar";
+import InterviewerNavbar from "@/components/interviewee/IntervieweeNavbar";
 import React from "react";
 
 const InterviewerHome = () => {

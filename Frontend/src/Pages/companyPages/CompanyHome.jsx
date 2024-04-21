@@ -61,10 +61,13 @@ const CompanyHome = () => {
         `/api/company/interviewers?Id=${company?._id}`
       );
       dispatch(interviewersListSuccess(response.data[0].interviewers));
-      console.log(response.data[0].interviewers);
     } catch (error) {
       dispatch(interviewersListError(error.message));
-      console.error(error);
+      if (error.response.status == 401 || error.response.status == 403) {
+        toast("Error Occured try Login Agian");
+        localStorage.removeItem("company_token");
+        window.location.reload()
+      }
     }
   };
   useEffect(() => {

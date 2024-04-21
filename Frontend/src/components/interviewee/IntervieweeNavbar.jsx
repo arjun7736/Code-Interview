@@ -12,13 +12,17 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { toast } from "sonner";
+import { signOut,getAuth } from "firebase/auth";
 
 function IntervieweeNavbar() {
+
+  const auth = getAuth();
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const intervieweeData = localStorage.getItem("interviewee_token");
-    console.log(intervieweeData,"navabr");
+    const data=JSON.parse(intervieweeData)
     if (!intervieweeData) {
       navigate("/interviewee/login");
     } else {
@@ -27,16 +31,29 @@ function IntervieweeNavbar() {
   }, []);
 
   const handleLogout = async () => {
-    localStorage.removeItem("interviewee_token");
-    await axios
+    const intervieweeData = localStorage.getItem("interviewee_token");
+    const data=JSON.parse(intervieweeData)
+    const google=data?.providerData?.[0]?.providerId!="google.com"
+
+    if(google){
+      await axios
       .get("/api/auth/logout")
       .then(() => {
         toast("Logout Successfully");
         navigate("/interviewee/login");
       })
       .catch((error) => {
-        toast(error);
+        if (error.response.status == 401 || error.response.status == 403) {
+          toast("Error Occured try Login Agian");
+          localStorage.removeItem("interviewee_token");
+          window.location.reload()
+        }
       });
+    }else{
+      await signOut(auth);
+      navigate("/interviewee/login")
+    }
+    localStorage.removeItem("interviewee_token");
   };
   return (
     <>

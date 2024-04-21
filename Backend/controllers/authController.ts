@@ -215,12 +215,14 @@ export const intervieweeLogin = async (
 
     if (!Interviewee) return next(errorHandler(404, "User Not Found"));
 
-    const isValiedPassword: Boolean = await bcrypt.compare(
-      password,
-      Interviewee.password
-    );
-
-    if (!isValiedPassword) return next(errorHandler(401, "Wrong Credentials"));
+    if (Interviewee.password) {
+      const isValiedPassword: Boolean = await bcrypt.compare(
+        password,
+        Interviewee.password
+      );
+      if (!isValiedPassword)
+        return next(errorHandler(401, "Wrong Credentials"));
+    }
 
     if (Interviewee.isBlocked)
       return next(errorHandler(403, "Account is Blocked"));
@@ -273,7 +275,7 @@ export const intervieweeSignup = async (
     if (exist) return next(errorHandler(409, "User already Exist "));
 
     const HashedPassword: string = await bcrypt.hash(password, 10);
-    const OTP: number = Math.floor(1000 + Math.random() * 900000);
+    const OTP: number = Math.floor(100000 + Math.random() * 900000);
     sentOTP(email, OTP);
     await OTPDB.create({
       name,
@@ -286,6 +288,7 @@ export const intervieweeSignup = async (
     next(error);
   }
 };
+
 //<=...............................Verify OTP ........................=>//
 export const verifyOTP = async (
   req: Request,
@@ -438,10 +441,44 @@ export const resentOtp = async (
   try {
     const { email } = req.body;
     const OTP: number = Math.floor(100000 + Math.random() * 900000);
-    const user:IOtp|null = await OTPDB.findOneAndUpdate({ email },{otp:OTP},{new:true});
-    if(!user) return next(errorHandler(500,"Session Expired Add the Data Once More"))
-    sentOTP(email,OTP)
-    res.json({message:"Otp Resent Successfully"})
+    const user: IOtp | null = await OTPDB.findOneAndUpdate(
+      { email },
+      { otp: OTP },
+      { new: true }
+    );
+    if (!user)
+      return next(errorHandler(500, "Session Expired Add the Data Once More"));
+    sentOTP(email, OTP);
+    res.json({ message: "Otp Resent Successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//<=...............................Saving Google signin user........................=>//
+export const googleSigninUser = async(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    console.log(req.body)
+   const{displayName,email,photoURL}=req.body
+   let user =await IntervieweeDB.create({
+    email:email,
+    name:displayName,
+    profile_picture:photoURL
+   })
+   const secret:string|undefined=process.env.JWT_SECRET
+   if(secret){
+     const token:string =jwt.sign({_id:user._id,userType:"interviewee"},secret)
+     const expire = new Date(Date.now() + 3600000);
+     res
+     .cookie("interviewee_token", token, { httpOnly: true, expires: expire })
+     .status(200)
+     .json(user);
+   }
+    res.json(req.body)
   } catch (error) {
     next(error);
   }
