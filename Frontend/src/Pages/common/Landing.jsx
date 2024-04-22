@@ -16,19 +16,25 @@ const Landing = () => {
   useEffect(() => {
     if (intervieweeData) {
       navigate("/interviewee");
-    }else if(companyData){
-      navigate("/company")
-    }else if(adminData){
-      navigate("/admin")
-    }else if(interviewerData){
-      navigate("/interviewer")
-    }else{
-      navigate("/")
+    } else if (companyData) {
+      navigate("/company");
+    } else if (adminData) {
+      navigate("/admin");
+    } else if (interviewerData) {
+      navigate("/interviewer");
+    } else {
+      navigate("/");
     }
   }, []);
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full flex flex-col justify-center items-center">
       <NavBar />
+      <div className="mt-16 text-center">
+        <h1 className="font-serif text-4xl">
+          Welcome To Code-Interview Here You Can Attend Interview and Practice
+          Coding! in Many Languages
+        </h1>
+      </div>
       <div className="flex absolute bottom-20 lg:left-10 md:left-2">
         <Input className=" w-56" placeholder="Put Meeting Lnk here" />
         <Button className="mx-2 ">
