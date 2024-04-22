@@ -9,7 +9,7 @@ import AdminDB, { IAdmin } from "../models/adminModel";
 import { sentOTP } from "../utils/otp";
 import OTPDB, { IOtp } from "../models/otpModel";
 import IntervieweeDB, { IInterviewee } from "../models/intervieweeModel";
-
+import generatePassword from "generate-password";
 //<=...............................company........................=>//
 
 export const companySignup = async (
@@ -206,6 +206,7 @@ export const intervieweeLogin = async (
 ): Promise<void> => {
   try {
     const { email, password } = req.body;
+
     if (!email || !password)
       return next(errorHandler(400, "Email and Password are required"));
 
@@ -456,29 +457,70 @@ export const resentOtp = async (
 };
 
 //<=...............................Saving Google signin user........................=>//
-export const googleSigninUser = async(
+export const googleSigninUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    console.log(req.body)
-   const{displayName,email,photoURL}=req.body
-   let user =await IntervieweeDB.create({
-    email:email,
-    name:displayName,
-    profile_picture:photoURL
-   })
-   const secret:string|undefined=process.env.JWT_SECRET
-   if(secret){
-     const token:string =jwt.sign({_id:user._id,userType:"interviewee"},secret)
-     const expire = new Date(Date.now() + 3600000);
-     res
-     .cookie("interviewee_token", token, { httpOnly: true, expires: expire })
-     .status(200)
-     .json(user);
-   }
-    res.json(req.body)
+    const { displayName, email, photoURL } = req.body;
+
+    const interviewee: IInterviewee | null = await IntervieweeDB.findOne({
+      email: email,
+    });
+
+    if (interviewee) {
+      const secret: string | undefined = process.env.JWT_SECRET;
+      if (secret) {
+        const token: string = jwt.sign(
+          { _id: interviewee._id, userType: "interviewee" },
+          secret
+        );
+        const IntervieweeWithoutPassword = { ...interviewee.toObject() };
+        delete IntervieweeWithoutPassword.password;
+        const expire = new Date(Date.now() + 3600000);
+
+        res
+          .cookie("interviewee_token", token, {
+            httpOnly: true,
+            expires: expire,
+          })
+          .status(200)
+          .json(IntervieweeWithoutPassword);
+      }
+    } else {
+      const password: string = generatePassword.generate({
+        length: 8,
+        numbers: true,
+        symbols: true,
+        uppercase: true,
+        lowercase: true,
+      });
+      const hPass: string = await bcrypt.hash(password, 10);
+
+      let user = await IntervieweeDB.create({
+        email: email,
+        name: displayName,
+        profile_picture: photoURL,
+        password: hPass,
+      });
+
+      const secret: string | undefined = process.env.JWT_SECRET;
+      if (secret) {
+        const token: string = jwt.sign(
+          { _id: user._id, userType: "interviewee" },
+          secret
+        );
+        const expire = new Date(Date.now() + 3600000);
+        res
+          .cookie("interviewee_token", token, {
+            httpOnly: true,
+            expires: expire,
+          })
+          .status(200)
+          .json(user);
+      }
+    }
   } catch (error) {
     next(error);
   }

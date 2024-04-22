@@ -26,10 +26,9 @@ const UpgradePlan = ({ isOpen, onClose }) => {
   const makePayment = async () => {
     try {
       const stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY);
-      const response = await axios.post("/api/company/buy-premium", data);
+      const response = await axios.post("/api/company/buy-premium", data)
 
       const sessionId = response.data.sessionId;
-      console.log("Session ID:", sessionId);
 
       const result = await stripe.redirectToCheckout({
         sessionId: sessionId,

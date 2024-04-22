@@ -37,14 +37,21 @@ const IntervieweeLogin = () => {
     setformData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleClick =async (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
-    signInWithPopup(auth, provider).then((data) => {
-      toast("Login Successfully");
-      const IntervieweeData = JSON.stringify(data.user.providerData[0]);
-      localStorage.setItem("interviewee_token",IntervieweeData );
-      navigate("/interviewee");
-    })
+    const result = await signInWithPopup(auth, provider);
+    toast("Login Successfully");
+    const IntervieweeData = JSON.stringify(result.user.providerData[0]);
+    localStorage.setItem("interviewee_token", IntervieweeData);
+    navigate("/interviewee");
+
+    const response = await axios
+      .post("/api/auth/google-signin", result.user.providerData[0])
+      .then((data) => {
+        console.log(data);
+      }).catch((error)=>{
+        console.log(error);
+      })
   };
 
   const handleSubmit = (e) => {

@@ -146,7 +146,7 @@ const CompanyHome = () => {
                       {selectedInterviewer?.name}
                     </p>
                   </div>
-                  <div className="flex gap-5 ml-20">
+                  <div className="flex gap-5">
                     <FaRegEdit
                       size={18}
                       onClick={handleEdit}

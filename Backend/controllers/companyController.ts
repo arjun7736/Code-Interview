@@ -194,12 +194,12 @@ export const buyPremium = async (
       },
     });
 
-    await CompanyDB.findByIdAndUpdate({_id:req.body._id},
+   const company= await CompanyDB.findByIdAndUpdate({_id:req.body._id},
       { isPremium: true },
       { new: true }
     );
 
-    res.json({ sessionId: session.id });
+    res.json({ sessionId: session.id});
   } catch (error) {
     next(error);
   }

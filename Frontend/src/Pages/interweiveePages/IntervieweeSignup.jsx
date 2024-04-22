@@ -20,20 +20,36 @@ const IntervieweeSignup = () => {
   const { error, loading } = useSelector((state) => state.interviewee);
   const [formData, setformData] = useState({});
 
-  // useEffect(() => {
-  //   const interviewerData = localStorage.getItem("interviewee_token");
-  //   if (!interviewerData) navigate("/interviewee/signup");
-  //   else navigate("/interviewee")
-  // }, []);
+  useEffect(() => {
+    const interviewerData = localStorage.getItem("interviewee_token");
+    if (!interviewerData) navigate("/interviewee/signup");
+    else navigate("/interviewee")
+  }, []);
 
   const navigate = useNavigate();
-  const handleGoogle = (e) => {
+  // const handleGoogle = (e) => {
+  //   e.preventDefault();
+  //   signInWithPopup(auth, provider).then((data) => {
+  //     toast("Account Created Successfully");
+  //     localStorage.setItem("email", data.user.email);
+  //     navigate("/interviewee");
+  //   });
+  // };
+  const handleGoogle = async (e) => {
     e.preventDefault();
-    signInWithPopup(auth, provider).then((data) => {
-      toast("Account Created Successfully");
-      localStorage.setItem("email", data.user.email);
-      navigate("/interviewee");
-    });
+    const result = await signInWithPopup(auth, provider);
+    toast("Login Successfully");
+    const IntervieweeData = JSON.stringify(result.user.providerData[0]);
+    localStorage.setItem("interviewee_token", IntervieweeData);
+    navigate("/interviewee");
+
+    const response = await axios
+      .post("/api/auth/google-signin", result.user.providerData[0])
+      .then((data) => {
+        console.log(data);
+      }).catch((error)=>{
+        console.log(error);
+      })
   };
 
   const handleChange = (e) => {

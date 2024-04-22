@@ -36,9 +36,10 @@ function IntervieweeNavbar() {
 
     if (google) {
       await signOut(auth);
-      toast("Logout Successfully");
-      navigate("/interviewee/login");
-    } else {
+    //   toast("Logout Successfully");
+    //   navigate("/interviewee/login");
+    // } else {
+    }
       await axios
         .get("/api/auth/logout")
         .then(() => {
@@ -52,7 +53,6 @@ function IntervieweeNavbar() {
             window.location.reload();
           }
         });
-    }
     localStorage.removeItem("interviewee_token");
   };
   return (
