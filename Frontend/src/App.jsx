@@ -21,10 +21,6 @@ import ChangePassword from "./Pages/common/ChangePassword";
 
 function App() {
 
-  // const interviewerData = localStorage.getItem('interviewer_token');
-  // const intervieweeData = localStorage.getItem('interviewee_token');
-  // const companyData = localStorage.getItem('company_token')
-
   return (
     <>
       <BrowserRouter>
