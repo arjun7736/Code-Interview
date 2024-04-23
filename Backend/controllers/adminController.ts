@@ -44,7 +44,6 @@ export const getItervieweeData = async (
   }
 };
 
-
 //<=.................Block an Interviewer...........=>//
 export const blockInterviewer = async (
   req: Request,
@@ -58,7 +57,7 @@ export const blockInterviewer = async (
       { $set: { isBlocked: true } },
       { new: true }
     );
-    res.json({message:"interviewer Blocked"});
+    res.json({ message: "interviewer Blocked" });
   } catch (error) {
     next(error);
   }
@@ -77,7 +76,7 @@ export const blockInterviewee = async (
       { $set: { isBlocked: true } },
       { new: true }
     );
-    res.json({message:"Interviewee Blocked"});
+    res.json({ message: "Interviewee Blocked" });
   } catch (error) {
     next(error);
   }
@@ -96,7 +95,7 @@ export const blockCompany = async (
       { $set: { isBlocked: true } },
       { new: true }
     );
-    res.json({message:"Company Blocked"});
+    res.json({ message: "Company Blocked" });
   } catch (error) {
     next(error);
   }
@@ -115,7 +114,7 @@ export const unBlockCompany = async (
       { $set: { isBlocked: false } },
       { new: true }
     );
-    res.json({message:"Company Unblocked Successfully"});
+    res.json({ message: "Company Unblocked Successfully" });
   } catch (error) {
     next(error);
   }
@@ -134,7 +133,7 @@ export const unBlockInterviewee = async (
       { $set: { isBlocked: false } },
       { new: true }
     );
-    res.json({message:"Interviewee Unblocked Successfully"});
+    res.json({ message: "Interviewee Unblocked Successfully" });
   } catch (error) {
     next(error);
   }
@@ -153,7 +152,21 @@ export const unBlockInterviewer = async (
       { $set: { isBlocked: false } },
       { new: true }
     );
-    res.json({message:"InterviewerUnblocked Successfully"});
+    res.json({ message: "InterviewerUnblocked Successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//<=..............count of Premium Companies ..............=>//
+export const PremiumCompanies = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const premiumCompanies: ICompany[] | null = await CompanyDB.find({isPremium: true});
+    res.json( premiumCompanies );
   } catch (error) {
     next(error);
   }

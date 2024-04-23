@@ -1,5 +1,5 @@
 import express from "express"
-import {  blockCompany, blockInterviewee, blockInterviewer, getComapnyData, getInterviewersData, getItervieweeData, unBlockCompany, unBlockInterviewee, unBlockInterviewer } from "../controllers/adminController";
+import {  PremiumCompanies, blockCompany, blockInterviewee, blockInterviewer, getComapnyData, getInterviewersData, getItervieweeData, unBlockCompany, unBlockInterviewee, unBlockInterviewer } from "../controllers/adminController";
 import { verifyToken } from "../utils/verify";
 const router = express.Router();
 
@@ -12,6 +12,7 @@ router.post("/interviewee-block",verifyToken,blockInterviewee)
 router.post("/company-unblock",verifyToken,unBlockCompany)
 router.post("/interviewer-unblock",verifyToken,unBlockInterviewer)
 router.post("/interviewee-unblock",verifyToken,unBlockInterviewee)
+router.get("/premium-companies",PremiumCompanies)
 
 
 

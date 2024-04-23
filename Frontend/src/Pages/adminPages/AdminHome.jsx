@@ -1,12 +1,31 @@
 import AdminNavbar from "@/components/admin/AdminNavbar";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AdminSidebar from "@/components/admin/AdminSidebar";
-import { DollarSign } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import DataCard from "@/components/admin/DataCard";
+import DataTable from "@/components/admin/DataTable";
+import axios from "axios";
 
 function AdminHome() {
-  const navigate = useNavigate();
+  const [company, setCompany] = useState([]);
+  const [interviewer, setInterviewer] = useState([]);
+  const [interviewee, setInterviewee] = useState([]);
+  const [companies, setCompanies] = useState([]);
+
+  const premium = async () => {
+    const PremiumCompanies = await axios.get("/api/admin/premium-companies");
+    const TotalInterviewers = await axios.get("/api/admin/interviewer-data");
+    const TotalInterviewees = await axios.get("/api/admin/interviewee-data");
+    const CompanyList =await axios.get("/api/admin/company-data")
+    setCompany(PremiumCompanies.data);
+    setInterviewer(TotalInterviewers.data);
+    setInterviewee(TotalInterviewees.data);
+    setCompanies(CompanyList.data)
+  };
+
+  useEffect(() => {
+    premium();
+  }, []);
 
   return (
     <>
@@ -15,22 +34,17 @@ function AdminHome() {
         <div className="w-1/6">
           <AdminSidebar />
         </div>
-        <div className="flex flex-col flex-grow">
-          {/* <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Total Revenue
-              </CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$45,231.89</div>
-              <p className="text-xs text-muted-foreground">
-                +20.1% from last month
-              </p>
-            </CardContent>
-          </Card> */}
-          <h1 className="flex ml-96">Welcome to the Dashboard</h1>
+        <div className="md:ml-32 flex flex-col gap-5 mt-10">
+          <div className="flex gap-12">
+            <DataCard data={company} type={"Premium Companies"} />
+            <DataCard data={interviewer} type={"Total Interviewers"} />
+            <DataCard data={interviewee} type={"Total Interviewees"} />
+            <DataCard data={companies} type={"Total Companies"} />
+          </div>
+          <div className="flex gap-5 mt-5">
+            <DataTable data={company} type={"New Companies"}/>
+            <DataTable data={interviewee} type={"New Interviewees"}/>
+          </div>
         </div>
       </div>
     </>
