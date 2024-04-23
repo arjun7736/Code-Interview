@@ -27,14 +27,7 @@ const IntervieweeSignup = () => {
   }, []);
 
   const navigate = useNavigate();
-  // const handleGoogle = (e) => {
-  //   e.preventDefault();
-  //   signInWithPopup(auth, provider).then((data) => {
-  //     toast("Account Created Successfully");
-  //     localStorage.setItem("email", data.user.email);
-  //     navigate("/interviewee");
-  //   });
-  // };
+  
   const handleGoogle = async (e) => {
     e.preventDefault();
     const result = await signInWithPopup(auth, provider);

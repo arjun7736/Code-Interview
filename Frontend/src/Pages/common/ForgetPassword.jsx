@@ -7,6 +7,8 @@ import axios from "axios";
 
 const ForgetPassword = () => {
   const [formData, setFormData] = useState({ email: "", role: "" });
+
+  const [error,setError]= useState("")
 const navigate =useNavigate()
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -30,6 +32,7 @@ const navigate =useNavigate()
         console.log(data);
       })
       .catch((error) => {
+        setError(error.response.data.message)
         console.log(error);
       });
   };
@@ -61,6 +64,7 @@ const navigate =useNavigate()
               <option value="company">Company</option>
               <option value="interviewee">Interviewee</option>
             </select>
+            <p className="text-red-500 font-serif">{error ? error : ""}</p>
             <Button className="w-28 m-5" type="submit">
               Sent OTP
             </Button>

@@ -123,7 +123,7 @@ const DeleteAndEdit = ({
                 />
                 <Input
                 onChange={handleChange}
-                value={selectedInterviewer?.password}
+                // value={}
                   label="Password"
                   id="password"
                   placeholder="Enter your password"
@@ -144,7 +144,7 @@ const DeleteAndEdit = ({
                   color="primary"
                   onClick={handleSubmit}
                 >
-                  Sign in
+                 Update
                 </Button>
               </ModalFooter>
             </form>

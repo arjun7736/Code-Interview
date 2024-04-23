@@ -49,10 +49,11 @@ const CompanyHome = () => {
     setIsConfirmationOpen(false);
   };
     
+
+ const data = localStorage.getItem("company_token");
+ const company = JSON.parse(data);
  
- 
-  const data = localStorage.getItem("company_token");
-  const company = JSON.parse(data);
+  
   const fetchData = async () => {
     dispatch(interviewersListStart());
     try {
