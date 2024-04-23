@@ -19,7 +19,14 @@ import {
 import { Button } from "@/components/ui/button";
 import Popup from "@/components/admin/Popup";
 import { toast } from "sonner";
+
 const CompanyList = () => {
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [popupId, setPopupId] = useState(null);
+  const [user, setUser] = useState(null);
+  const [message, setMessage] = useState("");
+
+
   const dispatch = useDispatch();
   useEffect(() => {
     axios
@@ -34,14 +41,10 @@ const CompanyList = () => {
           window.location.reload()
         }
       });
-  });
+  },[isPopupOpen]);
   const { companyData } = useSelector((state) => state.admin);
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [popupId, setPopupId] = useState(null);
-  const [user, setUser] = useState(null);
-  const [message, setMessage] = useState("");
-
+  
   const openPopup = (message, id, user) => {
     setIsPopupOpen(true);
     setPopupId(id);

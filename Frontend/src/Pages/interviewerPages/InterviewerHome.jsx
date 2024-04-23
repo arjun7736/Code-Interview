@@ -14,7 +14,7 @@ const InterviewerHome = () => {
           Welcome To Code-Interview Interviewer Home page Here You Can Conduct Interview and Test interviewers Skills
         </h1>
       </div>
-      <div className="flex absolute bottom-20 lg:left-10 md:left-2">
+      <div className="flex absolute bottom-20 lg:left-10 md:left-2 ">
         <Button className="mx-2 ">
           {" "}
           <RiVideoAddFill className="mx-1" />

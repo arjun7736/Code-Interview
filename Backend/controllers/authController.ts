@@ -350,7 +350,9 @@ export const logout = (req: Request, res: Response): void => {
     tokenCookieName = "interviewer_token";
   } else if (req.cookies.interviewee_token) {
     tokenCookieName = "interviewee_token";
-  } else {
+  } else if (req.cookies.admin_token) {
+    tokenCookieName = "admin_token";
+  }else {
     res.status(400).json({ message: "No active session found" });
     return;
   }

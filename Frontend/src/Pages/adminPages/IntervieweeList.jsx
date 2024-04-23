@@ -20,6 +20,13 @@ import { Button } from "@/components/ui/button";
 import Popup from "@/components/admin/Popup";
 
 const IntervieweeList = () => {
+
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupId, setPopupId] = useState(null);
+  const [user, setUser] = useState(null);
+
   const dispatch = useDispatch();
   useEffect(() => {
     axios
@@ -34,13 +41,10 @@ const IntervieweeList = () => {
           window.location.reload()
         }
       });
-  });
+  },[isPopupOpen]);
   const { intervieweeData } = useSelector((state) => state.admin);
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [popupMessage, setPopupMessage] = useState("");
-  const [popupId, setPopupId] = useState(null);
-  const [user, setUser] = useState(null);
+  
 
   const openPopup = (message, id,user) => {
     setIsPopupOpen(true);
