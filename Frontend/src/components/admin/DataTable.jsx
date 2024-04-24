@@ -17,7 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Badge } from "../ui/badge";
 
 const DataTable = ({ data, type }) => {
   return (

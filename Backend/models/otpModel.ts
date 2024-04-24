@@ -7,6 +7,8 @@ export interface IOtp extends Document {
   name?: string;
   createdAt?: Date; 
   company?: mongoose.Types.ObjectId; 
+  role?:string; 
+
 }
 const OTPSchema = new Schema({
   email: {
@@ -29,6 +31,9 @@ const OTPSchema = new Schema({
   company: {
     type: mongoose.Types.ObjectId, 
     ref: 'Company',
+  },
+  role:{
+    type:String
   }
 });
 

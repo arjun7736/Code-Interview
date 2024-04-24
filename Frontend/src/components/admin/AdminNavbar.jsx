@@ -12,8 +12,10 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { toast } from "sonner";
+import ProfileCard from "./ProfileCard";
 
 function AdminNavbar() {
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,9 +56,9 @@ function AdminNavbar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel className="cursor-pointer">
-                Profile
-              </DropdownMenuLabel>
+              <DropdownMenuItem className="cursor-pointer">
+              <ProfileCard/>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="cursor-pointer"

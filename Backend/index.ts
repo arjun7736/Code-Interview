@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import authRoute from "./routes/authRoute";
 import adminRoute from "./routes/adminRoute";
 import companyRoute from "./routes/companyRoute"
-
+import morgan from 'morgan';
 
 
 
@@ -18,14 +18,13 @@ const PORT: string | undefined = process.env.PORT;
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(morgan('dev'))
 
 
 
 app.use("/api/auth",authRoute)
 app.use("/api/admin",adminRoute)
 app.use("/api/company",companyRoute)
-
 
 
 

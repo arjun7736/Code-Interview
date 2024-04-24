@@ -27,6 +27,7 @@ function AdminHome() {
     premium();
   }, []);
 
+  
   return (
     <>
       <AdminNavbar />
@@ -42,7 +43,7 @@ function AdminHome() {
             <DataCard data={companies} type={"Total Companies"} />
           </div>
           <div className="flex gap-5 mt-5">
-            <DataTable data={company} type={"New Companies"}/>
+            <DataTable data={companies} type={"New Companies"}/>
             <DataTable data={interviewee} type={"New Interviewees"}/>
           </div>
         </div>

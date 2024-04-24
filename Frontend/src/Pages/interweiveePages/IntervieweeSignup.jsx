@@ -53,11 +53,11 @@ const IntervieweeSignup = () => {
     dispatch(signupStart());
     e.preventDefault();
     await axios
-      .post("/api/auth/interviewee-signup", formData)
+      .post("/api/auth/signup", {...formData,role:"interviewee"})
       .then((data) => {
         dispatch(signupSuccess(data.data));
         const IntervieweeData = JSON.stringify(data.data);
-        localStorage.setItem("interviewee_token", IntervieweeData);
+        localStorage.setItem("interviewee", IntervieweeData);
         toast("OTP Sent to the Registered E-mail");
         navigate("/otp");
       })

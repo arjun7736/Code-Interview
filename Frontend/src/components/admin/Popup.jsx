@@ -26,7 +26,6 @@ const Popup = ({ isOpen, onClose,message, id, role }) => {
       .post(`/api/admin/${role}-${message}`, { id })
       .then((data) => {
         toast(data.data.message);
-        console.log(data);
       })
       .catch((error) => {
         if (error.response.status == 401 || error.response.status == 403) {
@@ -34,7 +33,6 @@ const Popup = ({ isOpen, onClose,message, id, role }) => {
           localStorage.removeItem("admin_token");
           window.location.reload()
         }
-        console.log(error);
       });
   };
 

@@ -7,6 +7,8 @@ export interface IInterviewer extends Document {
   name: string;
   isBlocked: boolean;
   company: mongoose.Schema.Types.ObjectId;
+  role?:string; 
+
 }
 
 const InterviewerSchema = new Schema({
@@ -30,7 +32,11 @@ const InterviewerSchema = new Schema({
   company:{
     type:mongoose.Schema.Types.ObjectId,
     ref: 'Company'
-  }
+  },
+  role:{
+    type:String,
+    default:"interviewer"
+}
 });
 
 const Interviewer =mongoose.model<IInterviewer>("Interviewer",InterviewerSchema)

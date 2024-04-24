@@ -36,11 +36,11 @@ const ComapnySignup = () => {
     try {
       dispatch(signupStart());
       await axios
-        .post("/api/auth/company-signup", formData)
+        .post("/api/auth/signup", {...formData,role:"company"})
         .then((data) => {
           dispatch(signupSuccess());
           const CompanyData = JSON.stringify(data.data);
-          localStorage.setItem("company_token", CompanyData);
+          localStorage.setItem("company", CompanyData);
           navigate("/otp");
         })
         .catch((error) => {

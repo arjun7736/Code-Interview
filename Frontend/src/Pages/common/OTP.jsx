@@ -20,10 +20,9 @@ const OTP = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const interviewerData = localStorage.getItem("interviewer_token");
-  const intervieweeData = localStorage.getItem("interviewee_token");
-  const companyData = localStorage.getItem("company_token");
-
+  const interviewerData = localStorage.getItem("interviewer");
+  const intervieweeData = localStorage.getItem("interviewee");
+  const companyData = localStorage.getItem("company");
   const { error, loading } = useSelector((state) => state.temp);
   const [otp, setotp] = useState("");
   let data = null;
@@ -34,6 +33,8 @@ const OTP = () => {
   } else {
     data = JSON.parse(companyData);
   }
+  // console.log(data)
+
   const handleSubmit = async (e) => {
     dispatch(otpVerificationStart());
     e.preventDefault();
@@ -41,12 +42,12 @@ const OTP = () => {
       .post("/api/auth/verify-otp", { otp, ...data })
       .then((value) => {
         dispatch(otpVerified());
-        if (data.userType === "interviewer") {
+        if (data.role === "interviewer") {
           navigate(-1);
         } else {
-          navigate(`/${data.userType}/login`);
+          navigate(`/${data.role}/login`);
         }
-        localStorage.removeItem(`${data.userType}_token`);
+        localStorage.removeItem(`${data.role}`);
         toast("OTP Verified Successfully");
       })
       .catch((error) => {
@@ -71,10 +72,10 @@ const OTP = () => {
     await axios
       .post("/api/auth/resent-otp", data)
       .then((value) => {
-        console.log(value);
+       toast("OTP Resent To the Mail ID")
       })
       .catch((error) => {
-        console.log(error);
+        dispatch(otpVerificationError(error.response.data.message));
       });
     setTimer(30);
     countDown();
@@ -105,6 +106,7 @@ const OTP = () => {
               Resent OTP
             </h1>
           )}
+          <p className="text-red-500 font-serif">{error ? error : ""}</p>
           {
             <Button className="ml-16 mb-5 w-28" type="submit">
               {loading ? (

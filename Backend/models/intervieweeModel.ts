@@ -6,6 +6,8 @@ export interface IInterviewee extends Document{
     name?:string;
     profile_picture?:string;
     isBlocked?:boolean
+    role?:string; 
+
 }
 const intervieweeSchema = new Schema({
     email:{
@@ -23,6 +25,10 @@ const intervieweeSchema = new Schema({
     },
     isBlocked:{
         type:Boolean
+    },
+    role:{
+        type:String,
+        default:"interviewee"
     }
 })
 

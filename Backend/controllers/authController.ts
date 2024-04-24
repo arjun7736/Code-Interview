@@ -10,59 +10,77 @@ import { sentOTP } from "../utils/otp";
 import OTPDB, { IOtp } from "../models/otpModel";
 import IntervieweeDB, { IInterviewee } from "../models/intervieweeModel";
 import generatePassword from "generate-password";
-//<=...............................company........................=>//
 
-export const companySignup = async (
+
+
+//<=...............................SignUp........................=>//
+
+export const Signup = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { name, password, confirmpassword, email } = req.body;
+
+    const { name, password, confirmpassword, email, role } = req.body;
 
     if (!name || !password || !email || !confirmpassword)
       return next(errorHandler(400, "Missing fields"));
 
-    if (password !== confirmpassword)
-      return next(errorHandler(401, "Passwords Not Matching"));
+    if (password !== confirmpassword) {
+      return next(errorHandler(401, 'Passwords do not match'));
+    }
 
-    if (!isEmail(email)) return next(errorHandler(422, "Invalid Email Format"));
+    if (!isEmail(email)) {
+      return next(errorHandler(422, 'Invalid email format'));
+    }
 
-    if (!isStrongPassword(password))
+    if (!isStrongPassword(password)) {
       return next(
         errorHandler(
           422,
-          "Password Must contain Small,Capital letters ,Symbol & number"
+          'Password must contain lowercase, uppercase, symbol, and number'
         )
       );
+    }
 
-    const Exist_email: ICompany | null = await CompanyDB.findOne({ email });
+    let existingUser;
+    if (role === 'company') {
+      existingUser = await CompanyDB.findOne({ email });
+      const exist_name= await CompanyDB.findOne({ name });
+      if(exist_name) return  next(errorHandler(409,'Company Name already exists'))
+    } else  {
+      existingUser = await IntervieweeDB.findOne({ email });
+    } 
 
-    if (Exist_email) return next(errorHandler(401, "Email Already Registered"));
+    if (existingUser) {
+      return next(errorHandler(401, 'Email already exists'));
+    }
 
-    const exist_name: ICompany | null = await CompanyDB.findOne({ name });
-
-    if (exist_name)
-      return next(errorHandler(401, "Company Name already Registered"));
-
-    const HashedPassword: string = await bcrypt.hash(password, 10);
-
-    const otp: number = Math.floor(1000 + Math.random() * 900000);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const otp = Math.floor(100000 + Math.random() * 900000);
 
     sentOTP(email, otp);
     await OTPDB.create({
       name,
-      password: HashedPassword,
-      otp: otp,
+      password: hashedPassword,
+      otp,
       email,
+      role,
     });
 
-    res.json({ email, userType: "company" });
+    res.json({ email,role }); 
   } catch (error) {
-    console.log(error);
-    return next(error);
+    console.error('Error in companySignup:', error);
+    next(error);
   }
 };
+
+
+
+
+
+
 
 export const companyLogin = async (
   req: Request,
@@ -251,45 +269,6 @@ export const intervieweeLogin = async (
   }
 };
 
-export const intervieweeSignup = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const { name, email, password, confirmpassword } = req.body;
-
-    if (!name || !email || !password)
-      return next(errorHandler(400, "Missing Fields"));
-
-    if (password != confirmpassword)
-      return next(errorHandler(400, "Passwords do not match"));
-
-    if (!isEmail(email)) return next(errorHandler(400, "Invalid Email Format"));
-
-    if (!isStrongPassword(password))
-      return next(errorHandler(400, "Weak Password"));
-
-    const exist: IInterviewee | null = await IntervieweeDB.findOne({
-      email: email,
-    });
-    if (exist) return next(errorHandler(409, "User already Exist "));
-
-    const HashedPassword: string = await bcrypt.hash(password, 10);
-    const OTP: number = Math.floor(100000 + Math.random() * 900000);
-    sentOTP(email, OTP);
-    await OTPDB.create({
-      name,
-      password: HashedPassword,
-      email,
-      otp: OTP,
-    });
-    res.json({ email, userType: "interviewee" });
-  } catch (error) {
-    next(error);
-  }
-};
-
 //<=...............................Verify OTP ........................=>//
 export const verifyOTP = async (
   req: Request,
@@ -297,20 +276,25 @@ export const verifyOTP = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { email, userType, otp } = req.body;
+    console.log(req.body);
+    const { email, role, otp } = req.body;
 
     let data: IOtp | null = null;
 
     if (!otp) return next(errorHandler(400, "Enter OTP"));
 
     data = await OTPDB.findOne({ email: email, otp: otp });
-    switch (userType) {
+    
+    if (!data) return next(errorHandler(400, "Wrong OTP Found!"));
+
+    switch (role) {
       case "company":
         await CompanyDB.create({
           email: data?.email,
           password: data?.password,
           name: data?.name,
           isBlocked: false,
+          role:data?.role
         });
         await OTPDB.deleteOne({ _id: data?._id });
         break;
@@ -321,6 +305,8 @@ export const verifyOTP = async (
           name: data?.name,
           company: data?.company,
           isBlocked: false,
+          role:data?.role
+
         });
         await OTPDB.deleteOne({ _id: data?._id });
         break;
@@ -330,6 +316,7 @@ export const verifyOTP = async (
           password: data?.password,
           name: data?.name,
           isBlocked: false,
+          role:data?.role
         });
         await OTPDB.deleteOne({ _id: data?._id });
         break;
@@ -442,7 +429,7 @@ export const resentOtp = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { email } = req.body;
+    const { email,role } = req.body;
     const OTP: number = Math.floor(100000 + Math.random() * 900000);
     const user: IOtp | null = await OTPDB.findOneAndUpdate(
       { email },
@@ -450,7 +437,7 @@ export const resentOtp = async (
       { new: true }
     );
     if (!user)
-      return next(errorHandler(500, "Session Expired Add the Data Once More"));
+      return next(errorHandler(500, "Session Expired Please Signup Again"));
     sentOTP(email, OTP);
     res.json({ message: "Otp Resent Successfully" });
   } catch (error) {
