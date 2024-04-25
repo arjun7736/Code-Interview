@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from "mongoose";
  export interface ICompany extends Document {
     email: string;
     password: string;
-    name: string;
+    name?: string;
     profile_picture?: string;
     isBlocked?: boolean;
     isPremium?:boolean,

@@ -23,7 +23,7 @@ const AdminLogin = () => {
       dispatch(loginStart())
       try {
          axios
-          .post("/api/auth/admin-login", formData)
+         .post("/api/auth/login", {...formData,role:"admin"})
           .then((data) => {
             dispatch(loginSuccess(data.data))
             const AdminData = JSON.stringify(data.data);

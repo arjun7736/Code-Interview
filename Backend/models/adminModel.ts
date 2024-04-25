@@ -3,8 +3,8 @@ import mongoose,{Schema,Document} from "mongoose"
 export interface IAdmin extends Document{
     email:string;
     password:string;
-    profile_picture:string;
-    name:string;
+    profile_picture?:string;
+    name?:string;
     role?:string; 
 
 }

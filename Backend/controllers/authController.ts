@@ -10,6 +10,7 @@ import { sentOTP } from "../utils/otp";
 import OTPDB, { IOtp } from "../models/otpModel";
 import IntervieweeDB, { IInterviewee } from "../models/intervieweeModel";
 import generatePassword from "generate-password";
+import { Model } from "mongoose";
 
 
 
@@ -77,197 +78,63 @@ export const Signup = async (
 };
 
 
+//<=...............................Login........................=>//
 
-
-
-
-
-export const companyLogin = async (
+export const login = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
     if (!email || !password)
       return next(errorHandler(400, "Please provide all details"));
 
-    const company: ICompany | null = await CompanyDB.findOne({ email });
-    if (!company) return next(errorHandler(401, "company not found"));
-
-    const isValidPassword: boolean = await bcrypt.compare(
-      password,
-      company.password
-    );
-    if (!isValidPassword) return next(errorHandler(401, "Wrong Credentails"));
-
-    if (company.isBlocked) return next(errorHandler(403, "Account is Blocked"));
-
-    const secret: string | undefined = process.env.JWT_SECRET;
-    if (secret) {
-      const token = jwt.sign({ _id: company._id, userType: "company" }, secret);
-      const expire = new Date(Date.now() + 3600000);
-
-      const companyWithoutPassword = { ...company.toObject() };
-      delete companyWithoutPassword.password;
-      res
-        .cookie("company_token", token, { httpOnly: true, expires: expire })
-        .status(200)
-        .json(companyWithoutPassword);
+    let userCollection:Model<any>|null =null;
+    switch (role) {
+      case 'admin':
+        userCollection = AdminDB;
+        break;
+      case 'interviewer':
+        userCollection = InterviewerDB;
+        break;
+      case 'interviewee':
+        userCollection = IntervieweeDB;
+        break;
+      case 'company':
+        userCollection = CompanyDB;
+        break;
     }
-  } catch (error) {
-    return next(error);
-  }
-};
 
-//<=...............................Interviewer........................=>//
+    if (!userCollection) {
+      return next(errorHandler(500, 'User collection is not defined'));
+    }
+    const user = await userCollection.findOne({ email });
+    if (!user) {
+      return next(errorHandler(401, 'User not found'));
+    }
 
-export const interviewerLogin = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const { email, password } = req.body;
-
-    if (!email || !password)
-      return next(errorHandler(400, "Must Fill all the Field"));
-
-    const interviewer: IInterviewer | null = await InterviewerDB.findOne({
-      email,
-    });
-
-    if (!interviewer) return next(errorHandler(404, "Account Not Found"));
-
-    const isValiedPassword: boolean = await bcrypt.compare(
-      password,
-      interviewer.password
-    );
-
-    if (!isValiedPassword)
-      return next(errorHandler(401, "invalied  Credentials"));
-
-    if (interviewer.isBlocked)
-      return next(errorHandler(403, "Account is Blocked"));
+    const passwordMatch:boolean = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return next(errorHandler(401, 'Wrong Credentails'));
+    }
+    if (user.isBlocked) return next(errorHandler(403, "Account is Blocked"));
 
     const secret: string | undefined = process.env.JWT_SECRET;
 
-    if (secret) {
-      const token: string = jwt.sign(
-        { _id: interviewer._id, userType: "interviewer" },
-        secret
-      );
-
+    if(secret){
+      const token = jwt.sign({ _id: user._id }, secret);
       const expire = new Date(Date.now() + 3600000);
-
-      const interviewerWithoutPassword = { ...interviewer.toObject() };
-      delete interviewerWithoutPassword.password;
-
-      res
-        .cookie("interviewer_token", token, { httpOnly: true, expires: expire })
-        .status(200)
-        .json(interviewerWithoutPassword);
+      const userWithoutPassword = { ...user.toObject() };
+      delete userWithoutPassword.password;
+      res.cookie(`${role}_token`,token,{httpOnly:true,expires:expire}).status(200).json(userWithoutPassword)
     }
   } catch (error) {
+    console.error('Error in login:', error);
     next(error);
   }
 };
 
-//<=...............................Admin........................=>//
-
-export const adminLogin = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const { email, password } = req.body;
-
-    if (!email || !password)
-      return next(errorHandler(400, "Fill all the Field"));
-
-    const admin: IAdmin | null = await AdminDB.findOne({ email });
-
-    if (!admin) return next(errorHandler(404, "user not found"));
-
-    const isValiedPassword: boolean = await bcrypt.compare(
-      password,
-      admin.password
-    );
-
-    if (!isValiedPassword)
-      return next(errorHandler(401, "Invalid Credentials"));
-
-    const secret: string | undefined = process.env.JWT_SECRET;
-
-    if (secret) {
-      const token = jwt.sign({ _id: admin._id, userType: "admin" }, secret);
-      const expire = new Date(Date.now() + 3600000);
-
-      const adminWithoutPassword = { ...admin.toObject() };
-      delete adminWithoutPassword.password;
-
-      res
-        .cookie("admin_token", token, { httpOnly: true, expires: expire })
-        .status(200)
-        .json(adminWithoutPassword);
-    }
-  } catch (error) {
-    next(error);
-  }
-};
-//<=...............................Interviewee........................=>//
-export const intervieweeLogin = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const { email, password } = req.body;
-
-    if (!email || !password)
-      return next(errorHandler(400, "Email and Password are required"));
-
-    const Interviewee: IInterviewee | null = await IntervieweeDB.findOne({
-      email: email,
-    });
-
-    if (!Interviewee) return next(errorHandler(404, "User Not Found"));
-
-    if (Interviewee.password) {
-      const isValiedPassword: Boolean = await bcrypt.compare(
-        password,
-        Interviewee.password
-      );
-      if (!isValiedPassword)
-        return next(errorHandler(401, "Wrong Credentials"));
-    }
-
-    if (Interviewee.isBlocked)
-      return next(errorHandler(403, "Account is Blocked"));
-
-    const secret: string | undefined = process.env.JWT_SECRET;
-
-    if (secret) {
-      const token: string = jwt.sign(
-        { _id: Interviewee._id, userType: "interviewee" },
-        secret
-      );
-
-      const expire = new Date(Date.now() + 3600000);
-
-      const IntervieweeWithoutPassword = { ...Interviewee.toObject() };
-      delete IntervieweeWithoutPassword.password;
-
-      res
-        .cookie("interviewee_token", token, { httpOnly: true, expires: expire })
-        .status(200)
-        .json(IntervieweeWithoutPassword);
-    }
-  } catch (error) {
-    next(error);
-  }
-};
 
 //<=...............................Verify OTP ........................=>//
 export const verifyOTP = async (

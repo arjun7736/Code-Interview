@@ -31,7 +31,7 @@ const CompanyLogin = () => {
     dispatch(loginStart())
     try {
        axios
-        .post("/api/auth/company-login", formData)
+        .post("/api/auth/login", {...formData,role:"company"})
         .then((data) => {
           dispatch(loginSuccess(data.data))
           const CompanyData = JSON.stringify(data.data);

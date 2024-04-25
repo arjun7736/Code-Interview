@@ -3,10 +3,10 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface IInterviewer extends Document {
   email: string;
   password: string;
-  profile_picture: string;
-  name: string;
-  isBlocked: boolean;
-  company: mongoose.Schema.Types.ObjectId;
+  profile_picture?: string;
+  name?: string;
+  isBlocked?: boolean;
+  company?: mongoose.Schema.Types.ObjectId;
   role?:string; 
 
 }

@@ -32,7 +32,7 @@ const InterviewerLogin = () => {
     dispatch(loginStart());
     try {
       axios
-        .post("/api/auth/interviewer-login", formData)
+      .post("/api/auth/login", {...formData,role:"interviewer"})
         .then((data) => {
           dispatch(loginSuccess(data.data));
           const InterviewerData = JSON.stringify(data.data);
