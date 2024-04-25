@@ -18,7 +18,7 @@ const ChangePassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await axios
-      .post("/api/auth/changePassword", {...formData,...data})
+      .patch("/api/auth/changePassword", {...formData,...data})
       .then((data) => {
         console.log(data);
         toast("Password Reset Successfully")

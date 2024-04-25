@@ -30,7 +30,7 @@ const IntervieweeList = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     axios
-      .get("/api/admin/interviewee-data")
+    .get("/api/admin/getdata/?role=interviewee")
       .then((data) => {
         dispatch(setIntervieweeData(data.data));
       })

@@ -1,6 +1,5 @@
 import AdminNavbar from "@/components/admin/AdminNavbar";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import DataCard from "@/components/admin/DataCard";
 import DataTable from "@/components/admin/DataTable";
@@ -14,9 +13,9 @@ function AdminHome() {
 
   const premium = async () => {
     const PremiumCompanies = await axios.get("/api/admin/premium-companies");
-    const TotalInterviewers = await axios.get("/api/admin/interviewer-data");
-    const TotalInterviewees = await axios.get("/api/admin/interviewee-data");
-    const CompanyList =await axios.get("/api/admin/company-data")
+    const TotalInterviewers = await axios.get("/api/admin/getdata/?role=interviewer");
+    const TotalInterviewees = await axios.get("/api/admin/getdata/?role=interviewee");
+    const CompanyList =await axios.get("/api/admin/getdata/?role=company")
     setCompany(PremiumCompanies.data);
     setInterviewer(TotalInterviewers.data);
     setInterviewee(TotalInterviewees.data);

@@ -2,157 +2,112 @@ import { Request, Response, NextFunction } from "express";
 import CompanyDB, { ICompany } from "../models/companyModel";
 import InterviewerDB, { IInterviewer } from "../models/interviewerModel";
 import IntervieweeDB, { IInterviewee } from "../models/intervieweeModel";
+import { Model } from "mongoose";
+import { errorHandler } from "../utils/error";
 
-//<=..................get Company Deatils..................=>//
-export const getComapnyData = async (
+
+
+
+//<=.................Getdata...........=>//
+export const getData = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const companyData: ICompany[] | null = await CompanyDB.find();
-    res.json(companyData);
+    const { role } = req.query;
+
+    let userCollection: Model<any> | null = null;
+    switch (role) {
+      case "interviewer":
+        userCollection = InterviewerDB;
+        break;
+      case "interviewee":
+        userCollection = IntervieweeDB;
+        break;
+      case "company":
+        userCollection = CompanyDB;
+        break;
+    }
+    if (!userCollection) {
+      return next(errorHandler(500, "User collection is not defined"));
+    }
+
+   const data = await userCollection.find()
+    res.json(data);
   } catch (error) {
     next(error);
   }
 };
 
-//<=..................get Interviewers Deatils..................=>//
-export const getInterviewersData = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const interviewers: IInterviewer[] | null = await InterviewerDB.find();
-    res.json(interviewers);
-  } catch (error) {
-    next(error);
-  }
-};
-//<=.................Get Interviewee data...........=>//
-export const getItervieweeData = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const Interviewees: IInterviewee[] | null = await IntervieweeDB.find();
-    res.json(Interviewees);
-  } catch (error) {
-    next(error);
-  }
-};
+//<=.................Block ...........=>//
 
-//<=.................Block an Interviewer...........=>//
-export const blockInterviewer = async (
+export const block = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { id } = req.body;
-    const blocked: IInterviewer | null = await InterviewerDB.findOneAndUpdate(
+    const { id, role } = req.body;
+
+    let userCollection: Model<any> | null = null;
+    switch (role) {
+      case "interviewer":
+        userCollection = InterviewerDB;
+        break;
+      case "interviewee":
+        userCollection = IntervieweeDB;
+        break;
+      case "company":
+        userCollection = CompanyDB;
+        break;
+    }
+    if (!userCollection) {
+      return next(errorHandler(500, "User collection is not defined"));
+    }
+    await userCollection.findOneAndUpdate(
       { _id: id },
       { $set: { isBlocked: true } },
       { new: true }
     );
-    res.json({ message: "interviewer Blocked" });
+    res.json({ message: " Blocked" });
   } catch (error) {
     next(error);
   }
 };
 
-//<=.................Block an Interviewee...........=>//
-export const blockInterviewee = async (
+//<=.................unBlock ...........=>//
+export const unBlock = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { id } = req.body;
-    const blocked: IInterviewee | null = await IntervieweeDB.findOneAndUpdate(
-      { _id: id },
-      { $set: { isBlocked: true } },
-      { new: true }
-    );
-    res.json({ message: "Interviewee Blocked" });
-  } catch (error) {
-    next(error);
-  }
-};
+    const { id, role } = req.body;
 
-//<=.................Block an Company...........=>//
-export const blockCompany = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const { id } = req.body;
-    const company: ICompany | null = await CompanyDB.findOneAndUpdate(
-      { _id: id },
-      { $set: { isBlocked: true } },
-      { new: true }
-    );
-    res.json({ message: "Company Blocked" });
-  } catch (error) {
-    next(error);
-  }
-};
+    let userCollection: Model<any> | null = null;
+    switch (role) {
+      case "interviewer":
+        userCollection = InterviewerDB;
+        break;
+      case "interviewee":
+        userCollection = IntervieweeDB;
+        break;
+      case "company":
+        userCollection = CompanyDB;
+        break;
+    }
+    if (!userCollection) {
+      return next(errorHandler(500, "User collection is not defined"));
+    }
 
-//<=.................UnBlock an Company...........=>//
-export const unBlockCompany = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const { id } = req.body;
-    const company: ICompany | null = await CompanyDB.findOneAndUpdate(
+    await userCollection.findOneAndUpdate(
       { _id: id },
       { $set: { isBlocked: false } },
       { new: true }
     );
-    res.json({ message: "Company Unblocked Successfully" });
-  } catch (error) {
-    next(error);
-  }
-};
 
-//<=.................unBlock an Interviewee...........=>//
-export const unBlockInterviewee = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const { id } = req.body;
-    const blocked: IInterviewee | null = await IntervieweeDB.findOneAndUpdate(
-      { _id: id },
-      { $set: { isBlocked: false } },
-      { new: true }
-    );
-    res.json({ message: "Interviewee Unblocked Successfully" });
-  } catch (error) {
-    next(error);
-  }
-};
-
-//<=.................unBlock an Interviewer...........=>//
-export const unBlockInterviewer = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const { id } = req.body;
-    const blocked: IInterviewer | null = await InterviewerDB.findOneAndUpdate(
-      { _id: id },
-      { $set: { isBlocked: false } },
-      { new: true }
-    );
-    res.json({ message: "InterviewerUnblocked Successfully" });
+    res.json({ message: " Unblocked " });
   } catch (error) {
     next(error);
   }
@@ -165,8 +120,10 @@ export const PremiumCompanies = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const premiumCompanies: ICompany[] | null = await CompanyDB.find({isPremium: true});
-    res.json( premiumCompanies );
+    const premiumCompanies: ICompany[] | null = await CompanyDB.find({
+      isPremium: true,
+    });
+    res.json(premiumCompanies);
   } catch (error) {
     next(error);
   }

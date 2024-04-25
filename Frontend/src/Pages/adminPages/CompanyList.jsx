@@ -30,7 +30,7 @@ const CompanyList = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     axios
-      .get("/api/admin/company-data")
+    .get("/api/admin/getdata/?role=company")
       .then((data) => {
         dispatch(setCompanydata(data.data));
       })

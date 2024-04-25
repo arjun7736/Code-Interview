@@ -288,7 +288,7 @@ export const createNewPassword = async (
   }
 };
 
-//<=...............................creating New password........................=>//
+//<=...............................Resent OTP........................=>//
 
 export const resentOtp = async (
   req: Request,
@@ -329,7 +329,7 @@ export const googleSigninUser = async (
       const secret: string | undefined = process.env.JWT_SECRET;
       if (secret) {
         const token: string = jwt.sign(
-          { _id: interviewee._id, userType: "interviewee" },
+          { _id: interviewee._id},
           secret
         );
         const IntervieweeWithoutPassword = { ...interviewee.toObject() };
@@ -359,12 +359,13 @@ export const googleSigninUser = async (
         name: displayName,
         profile_picture: photoURL,
         password: hPass,
+        role:"interviewee"
       });
 
       const secret: string | undefined = process.env.JWT_SECRET;
       if (secret) {
         const token: string = jwt.sign(
-          { _id: user._id, userType: "interviewee" },
+          { _id: user._id},
           secret
         );
         const expire = new Date(Date.now() + 3600000);

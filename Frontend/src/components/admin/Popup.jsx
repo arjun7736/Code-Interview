@@ -1,29 +1,14 @@
-import React, { useState } from "react";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-  Input,
-} from "@nextui-org/react";
+import React from "react";
+
 import axios from "axios";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
-import { useDispatch } from "react-redux";
 
 const Popup = ({ isOpen, onClose,message, id, role }) => {
-  const {
-    isOpen: isModalOpen,
-    onOpen: openModal,
-    onClose: closeModal,
-  } = useDisclosure();
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleAction = async (message,id, role) => {
     await axios
-      .post(`/api/admin/${role}-${message}`, { id })
+      .post(`/api/admin/${message}`, { id,role })
       .then((data) => {
         toast(data.data.message);
       })

@@ -47,8 +47,9 @@ export const addInterviewer = async (
       otp: otp,
       password: hashedPassword,
       company: userId,
+      role:"interviewer"
     });
-    res.json({ email, userType: "interviewer" });
+    res.json({ email,role:"interviewer" });
   } catch (error) {
     next(error);
   }
