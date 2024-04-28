@@ -40,6 +40,9 @@ function InterviewerNavbar() {
         toast(error);
       });
   };
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
   return (
     <>
       <nav className="flex justify-between items-center bg-gray-800 text-white p-3">
@@ -57,7 +60,10 @@ function InterviewerNavbar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Profile</DropdownMenuLabel>
+              <DropdownMenuItem
+               className="cursor-pointer"
+               onClick={handleProfileClick}
+              >Profile</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="cursor-pointer"

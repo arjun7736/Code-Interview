@@ -36,9 +36,6 @@ function IntervieweeNavbar() {
 
     if (google) {
       await signOut(auth);
-    //   toast("Logout Successfully");
-    //   navigate("/interviewee/login");
-    // } else {
     }
       await axios
         .get("/api/auth/logout")
@@ -55,6 +52,10 @@ function IntervieweeNavbar() {
         });
     localStorage.removeItem("interviewee_token");
   };
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
+
   return (
     <>
       <nav className="flex justify-between items-center bg-gray-800 text-white p-3">
@@ -72,7 +73,7 @@ function IntervieweeNavbar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Profile</DropdownMenuLabel>
+              <DropdownMenuItem className="cursor-pointer"onClick={handleProfileClick}>Profile</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="cursor-pointer"

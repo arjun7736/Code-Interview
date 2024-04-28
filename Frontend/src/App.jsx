@@ -18,6 +18,7 @@ import InterviewerList from "./Pages/adminPages/InterviewerList";
 import CompanyList from "./Pages/adminPages/CompanyList";
 import ForgotPasswordOTP from "./Pages/common/ForgotPasswordOTP";
 import ChangePassword from "./Pages/common/ChangePassword";
+import Profile from "./Pages/common/Profile";
 
 function App() {
 
@@ -43,6 +44,7 @@ function App() {
           <Route path="/admin/interviewee-list" element={<IntervieweeList/>}/>
           <Route path="/admin/interviewer-list" element ={<InterviewerList/>}/>
           <Route path="/admin/company-list" element={<CompanyList/>}/>
+          <Route path="/profile" element={<Profile/>}/>
         </Routes>
       </BrowserRouter>
       <Toaster className="bg-black" />

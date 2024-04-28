@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { CircleUser } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import axios from "axios"
+import axios from "axios";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,33 +12,39 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { toast } from "sonner";
-import ProfileCard from "./ProfileCard";
 
 function AdminNavbar() {
-  
   const navigate = useNavigate();
 
   useEffect(() => {
     const adminData = localStorage.getItem("admin_token");
     if (!adminData) navigate("/admin/login");
   }, []);
-  
-  const handleLogout = async() => {
+
+  const handleLogout = async () => {
     localStorage.removeItem("admin_token");
     await axios
-    .get("/api/auth/logout")
-    .then(() => {
-      toast("Logout Successfully");
-      navigate("/admin/login")
-    })
-    .catch((error) => {
-      if (error.response.status == 401 || error.response.status == 403) {
-        toast("Error Occured try Login Agian");
-        localStorage.removeItem("admin_token");
-        window.location.reload()
-      }
-    });
+      .get("/api/auth/logout")
+      .then(() => {
+        toast("Logout Successfully");
+        navigate("/admin/login");
+      })
+      .catch((error) => {
+        if (error.response.status == 401 || error.response.status == 403) {
+          toast("Error Occured try Login Agian");
+          localStorage.removeItem("admin_token");
+          window.location.reload();
+        }
+      });
   };
+  
+const openProfile=()=>{
+
+}
+
+
+
+
   return (
     <>
       <nav className="flex justify-between items-center bg-gray-800 text-white p-3">
@@ -56,8 +62,8 @@ function AdminNavbar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem className="cursor-pointer">
-              <ProfileCard/>
+              <DropdownMenuItem className="cursor-pointer" onClick={openProfile}>
+                Profile
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem

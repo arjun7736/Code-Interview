@@ -2,13 +2,17 @@ import {errorHandler} from "../utils/error"
 import { Request, Response, NextFunction } from 'express';
 import jwt, { Secret } from 'jsonwebtoken';
 
-interface CustomRequest extends Request {
-    user?: any; 
-    userType?: string; 
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: any;
+    userType?: string;
   }
+}
+
   
   export const verifyToken = (
-    req: CustomRequest,
+    req: Request,
     res: Response,
     next: NextFunction
   ): void => {

@@ -382,3 +382,40 @@ export const googleSigninUser = async (
     next(error);
   }
 };
+
+
+//<=------------------------Get Individual data--------------------------=>//
+export const getIndividualData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const role = req?.userType;
+    const id = req?.user._id;
+    
+    let userCollection: any | null = null;
+    switch (role) {
+      case "Admin":
+        userCollection = AdminDB;
+        break;
+      case "Interviewer":
+        userCollection = InterviewerDB;
+        break;
+      case "Interviewee":
+        userCollection = IntervieweeDB;
+        break;
+      case "Company":
+        userCollection = CompanyDB;
+        break;
+    }
+    const data: any | null = await userCollection.findById(id);
+    if (data) {
+      const dataWithoutPassword = { ...data.toObject() };
+      delete dataWithoutPassword.password;
+      res.json(dataWithoutPassword);
+    }
+  } catch (error) {
+    next(error);
+  }
+};

@@ -1,4 +1,4 @@
-import { Signup,  createNewPassword,  forgotPasswordOTP,    googleSigninUser,    logout, resentOtp, verifyForgotPasswordOTP, verifyOTP, login} from "../controllers/authController"
+import { Signup,  createNewPassword,  forgotPasswordOTP,    googleSigninUser,    logout, resentOtp, verifyForgotPasswordOTP, verifyOTP, login, getIndividualData} from "../controllers/authController"
 import  express  from "express"
 import { verifyToken } from "../utils/verify"
 const router =express.Router()
@@ -12,6 +12,7 @@ router.patch("/changePassword",createNewPassword)
 router.post("/resent-otp",resentOtp)
 router.post("/google-signin",googleSigninUser)
 router.get("/logout",verifyToken,logout)
+router.get("/getData",verifyToken,getIndividualData)
 
 
 

@@ -18,12 +18,13 @@ import UpgradePlan from "../../components/company/UpgradePlan";
 import { SquarePen } from "lucide-react";
 import { MdDeleteForever } from "react-icons/md";
 import DeleteAndEdit from "@/components/company/DeleteAndEdit";
+import Profile from "@/Pages/common/Profile";
+import { toast } from "sonner";
 
 const CompanyHome = () => {
 
-
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
-  const [confirmationAction, setConfirmationAction] = useState(null);  
+  const [confirmationAction, setConfirmationAction] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -35,25 +36,22 @@ const CompanyHome = () => {
   );
 
   const handleEdit = () => {
-    setConfirmationAction('edit');
+    setConfirmationAction("edit");
     setIsConfirmationOpen(true);
   };
-  
+
   const handleDelete = () => {
-    setConfirmationAction('delete');
+    setConfirmationAction("delete");
     setIsConfirmationOpen(true);
   };
-  
-  
+
   const handleCancel = () => {
     setIsConfirmationOpen(false);
   };
-    
 
- const data = localStorage.getItem("company_token");
- const company = JSON.parse(data);
- 
-  
+  const data = localStorage.getItem("company_token");
+  const company = JSON.parse(data);
+
   const fetchData = async () => {
     dispatch(interviewersListStart());
     try {
@@ -66,14 +64,11 @@ const CompanyHome = () => {
       if (error.response.status == 401 || error.response.status == 403) {
         toast("Error Occured try Login Agian");
         localStorage.removeItem("company_token");
-        window.location.reload()
+        window.location.reload();
       }
     }
   };
-  useEffect(() => {
-    fetchData();
-  }, []);
-
+ 
   const openPopup = () => {
     setIsPopupOpen(true);
   };
@@ -83,7 +78,7 @@ const CompanyHome = () => {
   };
 
   const renderPopup = () => {
-    if (interviewers?.length >= 2&& !company?.isPremium) {
+    if (interviewers?.length >= 2 && !company?.isPremium) {
       return <UpgradePlan isOpen={isPopupOpen} onClose={closePopup} />;
     } else {
       return <AddInterviewer isOpen={isPopupOpen} onClose={closePopup} />;
@@ -93,10 +88,14 @@ const CompanyHome = () => {
   const handleInterviewerClick = (interviewer) => {
     setSelectedInterviewer(interviewer);
   };
+  useEffect(() => {
+    fetchData();
+  }, [isConfirmationOpen]);
 
   return (
     <>
-      <CompanyNavbar />
+      <CompanyNavbar  />
+
       <div className="md:ml-20 md:gap-10 md:grid md:justify-end md:mt-20 justify-center mt-10 grid-cols-1 md:grid-cols-2  p-5 md:p-0">
         <div className=" md:w-96">
           <Card className="py-4">
@@ -176,14 +175,13 @@ const CompanyHome = () => {
       </div>
       {renderPopup()}
       <DeleteAndEdit
-  isOpen={isConfirmationOpen}
-  action={confirmationAction === 'edit' ? 'Edit' : 'Delete'}
-  onCancel={handleCancel}
-  selectedInterviewer={selectedInterviewer}
-  fetchData={fetchData}
-  setSelectedInterviewer={setSelectedInterviewer}
-/>
-
+        isOpen={isConfirmationOpen}
+        action={confirmationAction === "edit" ? "Edit" : "Delete"}
+        onCancel={handleCancel}
+        selectedInterviewer={selectedInterviewer}
+        fetchData={fetchData}
+        setSelectedInterviewer={setSelectedInterviewer}
+      />
     </>
   );
 };

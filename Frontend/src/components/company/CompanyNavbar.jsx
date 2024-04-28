@@ -12,9 +12,9 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { toast } from "sonner";
+import Profile from "../../Pages/common/Profile";
 
 function CompanyNavbar() {
-
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -42,10 +42,10 @@ function CompanyNavbar() {
         }
       });
   };
-
- 
-
-
+  
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
   return (
     <>
       <nav className="flex justify-between items-center bg-gray-800 text-white p-3">
@@ -63,12 +63,12 @@ function CompanyNavbar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel
+              <DropdownMenuItem
                 className="cursor-pointer"
-                // onClick={openProfileModal}
+                onClick={handleProfileClick}
               >
                 Profile
-              </DropdownMenuLabel>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="cursor-pointer"
