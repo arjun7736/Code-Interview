@@ -78,14 +78,12 @@ const Profile = () => {
     await axios
       .post("/api/company/updateProfile", formData)
       .then((data) => {
-        console.log(data);
         toast("Profile Updated")
       })
       .catch((error) => {
         console.error(error);
       });
   };
-
   return (
     <>
     <h1 className="text-2xl absolute top-10 left-64 font-serif">{userData?.role}Profie</h1>
@@ -136,7 +134,7 @@ const Profile = () => {
                 value={userData?.isPremium ?"Premium User": "Normal User" ||""}
               />):""}
               <div className="pt-12 pb-8">
-                <Button type="submit">Update </Button>
+                <Button type="submit">{Object.keys(formData).length > 0 ? "Update" : "Edit"}</Button>
               </div>
             </div>
           </form>

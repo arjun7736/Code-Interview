@@ -19,6 +19,7 @@ import CompanyList from "./Pages/adminPages/CompanyList";
 import ForgotPasswordOTP from "./Pages/common/ForgotPasswordOTP";
 import ChangePassword from "./Pages/common/ChangePassword";
 import Profile from "./Pages/common/Profile";
+import PaymentDone from "./components/company/PaymentDone";
 
 function App() {
 
@@ -45,6 +46,7 @@ function App() {
           <Route path="/admin/interviewer-list" element ={<InterviewerList/>}/>
           <Route path="/admin/company-list" element={<CompanyList/>}/>
           <Route path="/profile" element={<Profile/>}/>
+          <Route path="/paymentSuccess" element={<PaymentDone/>}/>
         </Routes>
       </BrowserRouter>
       <Toaster className="bg-black" />

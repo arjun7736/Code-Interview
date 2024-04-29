@@ -5,9 +5,6 @@ import IntervieweeDB, { IInterviewee } from "../models/intervieweeModel";
 import { Model } from "mongoose";
 import { errorHandler } from "../utils/error";
 
-
-
-
 //<=.................Getdata...........=>//
 export const getData = async (
   req: Request,
@@ -33,7 +30,7 @@ export const getData = async (
       return next(errorHandler(500, "User collection is not defined"));
     }
 
-   const data = await userCollection.find()
+    const data = await userCollection.find().sort({ _id: -1 });
     res.json(data);
   } catch (error) {
     next(error);
@@ -126,5 +123,47 @@ export const PremiumCompanies = async (
     res.json(premiumCompanies);
   } catch (error) {
     next(error);
+  }
+};
+
+//<=..............search..............=>//
+export const search = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const {query} =req.params
+
+    const interviewerResults = await InterviewerDB.aggregate([
+      { $match: { $or: [{ name: { $regex: query, $options: 'i' } }, { email: { $regex: query, $options: 'i' } }] } }
+    ]);
+
+    const intervieweeResults = await IntervieweeDB.aggregate([
+      { $match: { $or: [{ name: { $regex: query, $options: 'i' } }, { email: { $regex: query, $options: 'i' } }] } }
+    ]);
+
+    const companyResults = await CompanyDB.aggregate([
+      { $match: { $or: [{ name: { $regex: query, $options: 'i' } }, { email: { $regex: query, $options: 'i' } }] } }
+    ]);
+
+    const removePassword = (data: any[]) => {
+      return data.map(doc => {
+        const docWithoutPassword = { ...doc };
+        delete docWithoutPassword.password;
+        return docWithoutPassword;
+      });
+    };
+
+    const interviewerResultsWithoutPassword = removePassword(interviewerResults);
+    const intervieweeResultsWithoutPassword = removePassword(intervieweeResults);
+    const companyResultsWithoutPassword = removePassword(companyResults);
+
+    const combinedResults = interviewerResultsWithoutPassword
+    .concat(intervieweeResultsWithoutPassword, companyResultsWithoutPassword);
+
+    res.json(combinedResults)
+  } catch (error) {
+    next(error)
   }
 };

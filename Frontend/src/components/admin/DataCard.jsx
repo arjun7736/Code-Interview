@@ -2,7 +2,6 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 const DataCard = ({data,type}) => {
-  console.log(data,type);
   return (
     <>
       <Card>

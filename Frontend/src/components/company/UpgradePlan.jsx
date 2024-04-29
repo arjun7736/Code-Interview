@@ -26,7 +26,7 @@ const UpgradePlan = ({ isOpen, onClose }) => {
   const makePayment = async () => {
     try {
       const stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY);
-      const response = await axios.post("/api/company/buy-premium", data)
+      const response = await axios.post("/api/company/buy-premium", data);
 
       const sessionId = response.data.sessionId;
 
@@ -34,11 +34,7 @@ const UpgradePlan = ({ isOpen, onClose }) => {
         sessionId: sessionId,
       });
 
-      if (result.error) {
-        toast("Error Occured");
-      } else {
-        toast("Payment successful");
-      }
+     
     } catch (error) {
       toast("Error making payment");
     }
@@ -48,7 +44,6 @@ const UpgradePlan = ({ isOpen, onClose }) => {
     <>
       {
         <Modal isOpen={isOpen} backdrop="transparent" placement="top-center">
-
           <ModalContent>
             <div className="bg-white py-8 sm:py-12">
               <div className="mx-auto max-w-lg px-6 lg:px-8">
@@ -86,7 +81,7 @@ const UpgradePlan = ({ isOpen, onClose }) => {
                     Get access
                   </Button>
                 </div>
-                    <Button onClick={onClose}>close</Button>
+                <Button onClick={onClose}>close</Button>
               </div>
             </div>
           </ModalContent>

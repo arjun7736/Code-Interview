@@ -185,7 +185,7 @@ export const buyPremium = async (
         },
       ],
       mode: "payment",
-      success_url: "http://localhost:3000/company",
+      success_url: "http://localhost:3000/paymentSuccess",
       cancel_url: "http://localhost:3000/company",
       customer_email: req.body.email,
       billing_address_collection: "auto",

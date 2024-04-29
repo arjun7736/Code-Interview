@@ -33,9 +33,9 @@ const OTP = () => {
   } else {
     data = JSON.parse(companyData);
   }
-  // console.log(data)
-
+console.log(data)
   const handleSubmit = async (e) => {
+    console.log(data)
     dispatch(otpVerificationStart());
     e.preventDefault();
     await axios

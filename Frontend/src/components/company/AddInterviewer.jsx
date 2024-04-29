@@ -34,7 +34,7 @@ const AddInterviewer = ({ isOpen, onClose }) => {
       .post("/api/company/add-interviewer", requestData)
       .then((data) => {
         const interviewer = JSON.stringify(data.data);
-        localStorage.setItem("interviewer_token",interviewer)
+        localStorage.setItem("interviewer",interviewer)
         toast("OTP Sent Successfully")
         navigate("/otp");
         console.log(data);

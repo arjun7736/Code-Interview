@@ -28,10 +28,6 @@ const DataTable = ({ data, type }) => {
             <CardDescription>Recent Joins</CardDescription>
           </div>
           <Button asChild size="sm" className="ml-auto gap-1">
-            <Link href="#">
-              View All
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
           </Button>
         </CardHeader>
         <CardContent>

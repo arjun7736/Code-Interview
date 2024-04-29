@@ -37,19 +37,19 @@ function IntervieweeNavbar() {
     if (google) {
       await signOut(auth);
     }
-      await axios
-        .get("/api/auth/logout")
-        .then(() => {
-          toast("Logout Successfully");
-          navigate("/interviewee/login");
-        })
-        .catch((error) => {
-          if (error.response.status == 401 || error.response.status == 403) {
-            toast("Error Occured try Login Agian");
-            localStorage.removeItem("interviewee_token");
-            window.location.reload();
-          }
-        });
+    await axios
+      .get("/api/auth/logout")
+      .then(() => {
+        toast("Logout Successfully");
+        navigate("/interviewee/login");
+      })
+      .catch((error) => {
+        if (error.response.status == 401 || error.response.status == 403) {
+          toast("Error Occured try Login Agian");
+          localStorage.removeItem("interviewee_token");
+          window.location.reload();
+        }
+      });
     localStorage.removeItem("interviewee_token");
   };
   const handleProfileClick = () => {
@@ -73,7 +73,12 @@ function IntervieweeNavbar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem className="cursor-pointer"onClick={handleProfileClick}>Profile</DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={handleProfileClick}
+              >
+                Profile
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="cursor-pointer"

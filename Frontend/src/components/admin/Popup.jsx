@@ -5,7 +5,6 @@ import { Button } from "../ui/button";
 import { toast } from "sonner";
 
 const Popup = ({ isOpen, onClose,message, id, role }) => {
-
   const handleAction = async (message,id, role) => {
     await axios
       .post(`/api/admin/${message}`, { id,role })
