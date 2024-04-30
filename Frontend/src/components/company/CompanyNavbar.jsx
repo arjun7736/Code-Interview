@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect } from "react";
 import axios from "axios";
 import { CircleUser } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,12 +7,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { toast } from "sonner";
-import Profile from "../../Pages/common/Profile";
 
 function CompanyNavbar() {
 
@@ -38,7 +36,7 @@ function CompanyNavbar() {
         if (error.response.status == 401 || error.response.status == 403) {
           toast("Error Occured try Login Agian");
           localStorage.removeItem("company_token");
-          window.location.reload()
+          window.location.href="/"
         }
       });
   };

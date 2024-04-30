@@ -42,6 +42,29 @@ declare module 'express-serve-static-core' {
       if (err) return next(errorHandler(403, 'Token is not valid'));
       req.user = user;
       req.userType = userType;
+      console.log(user)
+      // if(user.isBlocked) return next(errorHandler(403,"User Is Blocked"))
       next();
     });
   };
+
+
+
+
+
+
+
+
+
+
+//   "<!DOCTYPE html>
+// <html lang="en">
+// <head>
+// <meta charset="utf-8">
+// <title>Error</title>
+// </head>
+// <body>
+// <pre>Error: Account is Blocked<br> &nbsp; &nbsp;at errorHandler (C:\Users\Arjun\Desktop\Brototype\11.Second Project\Code Interview\Backend\utils\error.ts:3:50)<br> &nbsp; &nbsp;at login (C:\Users\Arjun\Desktop\Brototype\11.Second Project\Code Interview\Backend\controllers\authController.ts:121:49)</pre>
+// </body>
+// </html>
+// "

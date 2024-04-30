@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { CircleUser } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
@@ -7,7 +7,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
@@ -33,7 +32,7 @@ function AdminNavbar() {
         if (error.response.status == 401 || error.response.status == 403) {
           toast("Error Occured try Login Agian");
           localStorage.removeItem("admin_token");
-          window.location.reload();
+          window.location.href="/";
         }
       });
   };

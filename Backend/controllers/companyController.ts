@@ -128,24 +128,28 @@ export const editInterviewer = async (
 ) => {
   try {
     const { password, name, id } = req.body;
+    if (password) {
+      let isStrongPass = isStrongPassword(password);
+      if (!isStrongPass) return next(errorHandler(401, "Weak Password"));
 
-    if (!password || !name)
-      return next(errorHandler(400, "password and Name Required"));
-    let isStrongPass = isStrongPassword(password);
-
-    if (!isStrongPass) return next(errorHandler(401, "Weak Password"));
-
-    const hpass = await bcrypt.hash(password, 10);
-
-    const interviewer: IInterviewer | null =
-      await InterviewerDB.findByIdAndUpdate(
+      const hpass = await bcrypt.hash(password, 10);
+  
+        await InterviewerDB.findByIdAndUpdate(
+          { _id: id },
+          { $set: { password: hpass, name: name } },
+          { new: true }
+        );
+    }else{
+       await InterviewerDB.findByIdAndUpdate(
         { _id: id },
-        { $set: { password: hpass, name: name } },
+        { $set: { name: name } },
         { new: true }
       );
+    }
+  const interviewer = await InterviewerDB.findById(id);
 
     if (interviewer) {
-      const interviewerWithoutPassword = { ...interviewer.toObject() };
+      const interviewerWithoutPassword:Partial<IInterviewer> = { ...interviewer.toObject() };
       delete interviewerWithoutPassword.password;
       res.json({
         message: "Interviewer Updated Successfully ",
@@ -214,9 +218,8 @@ export const updateProfile = async (
 ) => {
   try {
     const id = req?.user._id;
-    const userType =req?.userType
+    const userType = req?.userType;
     const { name, profilePicture } = req.body;
-    console.log(id, req.body);
 
     let userCollection: Model<any> | null = null;
     switch (userType) {
@@ -230,7 +233,7 @@ export const updateProfile = async (
         userCollection = CompanyDB;
         break;
       case "Admin":
-        userCollection =AdminDB;
+        userCollection = AdminDB;
         break;
     }
     if (!userCollection) {

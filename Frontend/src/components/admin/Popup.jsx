@@ -1,4 +1,3 @@
-import React from "react";
 
 import axios from "axios";
 import { Button } from "../ui/button";
@@ -15,7 +14,7 @@ const Popup = ({ isOpen, onClose,message, id, role }) => {
         if (error.response.status == 401 || error.response.status == 403) {
           toast("Error Occured try Login Agian");
           localStorage.removeItem("admin_token");
-          window.location.reload()
+          window.location.href="/"
         }
       });
   };

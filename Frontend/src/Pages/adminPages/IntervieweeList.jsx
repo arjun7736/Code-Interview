@@ -1,23 +1,20 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import AdminNavbar from "@/components/admin/AdminNavbar";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import axios from "axios";
-import { MdOutlineEdit } from "react-icons/md";
-import { IoTrashBinOutline } from "react-icons/io5";
 import { setIntervieweeData } from "@/redux/slices/adminSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Popup from "@/components/admin/Popup";
+import { toast } from "sonner";
 
 const IntervieweeList = () => {
 
@@ -38,7 +35,7 @@ const IntervieweeList = () => {
         if (error.response.status == 401 || error.response.status == 403) {
           toast("Error Occured try Login Agian");
           localStorage.removeItem("admin_token");
-          window.location.reload()
+          window.location.href="/"
         }
       });
   },[isPopupOpen]);

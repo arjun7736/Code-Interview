@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import CompanyDB, { ICompany } from "../models/companyModel";
-import InterviewerDB, { IInterviewer } from "../models/interviewerModel";
-import IntervieweeDB, { IInterviewee } from "../models/intervieweeModel";
+import InterviewerDB from "../models/interviewerModel";
+import IntervieweeDB from "../models/intervieweeModel";
 import { Model } from "mongoose";
 import { errorHandler } from "../utils/error";
 

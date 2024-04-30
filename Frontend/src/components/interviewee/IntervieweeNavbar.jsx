@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import axios from "axios";
 import { CircleUser } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,7 +7,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
@@ -21,7 +20,6 @@ function IntervieweeNavbar() {
 
   useEffect(() => {
     const intervieweeData = localStorage.getItem("interviewee_token");
-    const data = JSON.parse(intervieweeData);
     if (!intervieweeData) {
       navigate("/interviewee/login");
     } else {
@@ -47,7 +45,7 @@ function IntervieweeNavbar() {
         if (error.response.status == 401 || error.response.status == 403) {
           toast("Error Occured try Login Agian");
           localStorage.removeItem("interviewee_token");
-          window.location.reload();
+          window.location.href="/"
         }
       });
     localStorage.removeItem("interviewee_token");

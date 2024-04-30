@@ -2,10 +2,10 @@ import { Request, Response, NextFunction } from "express";
 import { errorHandler } from "../utils/error";
 import { isEmail, isStrongPassword } from "../utils/validator";
 import CompanyDB, { ICompany } from "../models/companyModel";
-import InterviewerDB, { IInterviewer } from "../models/interviewerModel";
+import InterviewerDB from "../models/interviewerModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import AdminDB, { IAdmin } from "../models/adminModel";
+import AdminDB from "../models/adminModel";
 import { sentOTP } from "../utils/otp";
 import OTPDB, { IOtp } from "../models/otpModel";
 import IntervieweeDB, { IInterviewee } from "../models/intervieweeModel";
@@ -118,16 +118,16 @@ export const login = async (
     if (!passwordMatch) {
       return next(errorHandler(401, 'Wrong Credentails'));
     }
-    if (user.isBlocked) return next(errorHandler(403, "Account is Blocked"));
+    // if (user.isBlocked) return next(errorHandler(403, "Account is Blocked"));
 
     const secret: string | undefined = process.env.JWT_SECRET;
 
     if(secret){
-      const token = jwt.sign({ _id: user._id }, secret);
+      const token = jwt.sign({ _id: user._id,isBlocked:user.isBlocked }, secret);
       const expire = new Date(Date.now() + 3600000);
       const userWithoutPassword = { ...user.toObject() };
       delete userWithoutPassword.password;
-      res.cookie(`${role}_token`,token,{httpOnly:true,expires:expire}).status(200).json(userWithoutPassword)
+      res.cookie(`${role}_token`,token,{httpOnly:true,expires:expire}).json(userWithoutPassword)
     }
   } catch (error) {
     console.error('Error in login:', error);
@@ -143,7 +143,6 @@ export const verifyOTP = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    console.log(req.body);
     const { email, role, otp } = req.body;
 
     let data: IOtp | null = null;

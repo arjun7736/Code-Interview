@@ -19,6 +19,8 @@ import {
 } from "../ui/table";
 
 const DataTable = ({ data, type }) => {
+  const slicedData = data.slice(0, 4);
+
   return (
     <>
       <Card className="flex-1">
@@ -38,7 +40,7 @@ const DataTable = ({ data, type }) => {
                   <TableHead className="text-right">Email</TableHead>
                 </TableRow>
               </TableHeader>
-              {data.map((value) => (
+              {slicedData.map((value) => (
               <TableBody>
                 <TableRow>
                   <TableCell>

@@ -1,5 +1,5 @@
 import AdminNavbar from "@/components/admin/AdminNavbar";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import DataCard from "@/components/admin/DataCard";
 import DataTable from "@/components/admin/DataTable";
@@ -23,10 +23,10 @@ function AdminHome() {
       "/api/admin/getdata/?role=interviewee"
     );
     const CompanyList = await axios.get("/api/admin/getdata/?role=company");
-    setCompany(PremiumCompanies.data.slice(0, 4));
-    setInterviewer(TotalInterviewers.data.slice(0, 4));
-    setInterviewee(TotalInterviewees.data.slice(0, 4));
-    setCompanies(CompanyList.data.slice(0, 4));
+    setCompany(PremiumCompanies.data);
+    setInterviewer(TotalInterviewers.data);
+    setInterviewee(TotalInterviewees.data);
+    setCompanies(CompanyList.data);
   };
 
   useEffect(() => {

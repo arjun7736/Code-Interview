@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardBody, Divider, Image } from "@nextui-org/react";
 import { FaRegEdit } from "react-icons/fa";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Listbox, ListboxItem } from "@nextui-org/react";
 import CompanyNavbar from "@/components/company/CompanyNavbar";
@@ -13,12 +13,9 @@ import {
   interviewersListSuccess,
 } from "@/redux/slices/companySlice";
 import { PulseLoader } from "react-spinners";
-import { useNavigate } from "react-router-dom";
 import UpgradePlan from "../../components/company/UpgradePlan";
-import { SquarePen } from "lucide-react";
 import { MdDeleteForever } from "react-icons/md";
 import DeleteAndEdit from "@/components/company/DeleteAndEdit";
-import Profile from "@/Pages/common/Profile";
 import { toast } from "sonner";
 
 const CompanyHome = () => {
@@ -26,12 +23,11 @@ const CompanyHome = () => {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [confirmationAction, setConfirmationAction] = useState(null);
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [selectedInterviewer, setSelectedInterviewer] = useState(null);
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const { loading, error, interviewers } = useSelector(
+  const { loading,  interviewers } = useSelector(
     (state) => state.company
   );
 
@@ -64,7 +60,7 @@ const CompanyHome = () => {
       if (error.response.status == 401 || error.response.status == 403) {
         toast("Error Occured try Login Agian");
         localStorage.removeItem("company_token");
-        window.location.reload();
+        window.location.href="/"
       }
     }
   };

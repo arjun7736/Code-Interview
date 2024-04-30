@@ -29,7 +29,7 @@ app.use("/api/company",companyRoute)
 
 
 
-app.use((err: Error & { statuscode?: number },req: Request,res: Response,next: NextFunction) => {
+app.use((err: Error & { statuscode?: number },req: Request,res: Response) => {
     const statusCode = err.statuscode || 500;
     const errorMEssage = err.message || "Internal Server Error";
     return res.status(statusCode).json({

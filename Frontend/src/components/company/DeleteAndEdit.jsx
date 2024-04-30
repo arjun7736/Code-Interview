@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { Button } from "../ui/button";
 import axios from "axios";
 import {
@@ -7,8 +7,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  useDisclosure,
-  Checkbox,
   Input,
 } from "@nextui-org/react";
 import { toast } from "sonner";
@@ -31,7 +29,7 @@ const DeleteAndEdit = ({
     try {
         await axios
         .post("/api/company/edit-interviewer",{...formData,id:selectedInterviewer._id })
-        .then((data) => {
+        .then(() => {
           setIsEditModalOpen(false)
           toast("Interviewer Edited Successfully")
         })
@@ -41,7 +39,7 @@ const DeleteAndEdit = ({
           if (error.response.status == 401 || error.response.status == 403) {
             toast("Error Occured try Login Agian");
             localStorage.removeItem("company_token");
-            window.location.reload()
+            window.location.href="/"
           }
         });
     } catch (error) {
@@ -62,7 +60,7 @@ const DeleteAndEdit = ({
   const handleDelete = async () => {
     await axios
       .delete(`/api/company/delete-interviewer/${selectedInterviewer._id}`)
-      .then((data) => {
+      .then(() => {
         fetchData();
         setSelectedInterviewer(null);
         toast("Interviewer Deleted")

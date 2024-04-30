@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
@@ -40,6 +40,7 @@ const InterviewerLogin = () => {
           navigate("/interviewer");
         })
         .catch((error) => {
+          console.log(error)
           dispatch(loginError(error.response.data.message));
         });
     } catch (error) {
