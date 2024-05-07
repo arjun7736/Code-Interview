@@ -3,9 +3,11 @@ import dotenv from "dotenv";
 dotenv.config();
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
-import authRoute from "./routes/authRoute";
-import adminRoute from "./routes/adminRoute";
-import companyRoute from "./routes/companyRoute"
+import authRoute from "./src/routes/authRoute";
+import adminRoute from "./src/routes/adminRoute";
+import companyRoute from "./src/routes/companyRoute"
+import interviewerRoute from "./src/routes/interviewerRoute"
+import intervieweeRoute from "./src/routes/intervieweeRoute"
 import morgan from 'morgan';
 
 
@@ -25,21 +27,8 @@ app.use(morgan('dev'))
 app.use("/api/auth",authRoute)
 app.use("/api/admin",adminRoute)
 app.use("/api/company",companyRoute)
-
-
-
-
-app.use((err: Error & { statuscode?: number },req: Request,res: Response) => {
-    const statusCode = err.statuscode || 500;
-    const errorMEssage = err.message || "Internal Server Error";
-    return res.status(statusCode).json({
-      success: false,
-      message: errorMEssage,
-      statusCode
-    });
-  }
-);
-
+app.use("/api/interviewer",interviewerRoute)
+app.use("/api/interviewee",intervieweeRoute)
 
 
 

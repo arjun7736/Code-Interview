@@ -1,0 +1,50 @@
+import AdminHeader from '@/components/admin/AdminHeader'
+import UsersTable from '@/components/admin/UsersTable'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { logout, setInterviewerData } from '@/redux/slices/adminSlice';
+import { RootState } from '@/redux/store';
+import axios from 'axios';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'sonner';
+
+const InterviewerList = () => {
+  const dispatch =useDispatch()
+  const getInterviewerData = async ():Promise<void> => {
+    await axios
+      .get("/api/admin/getdata/?role=interviewer")
+      .then((data) => {
+        dispatch(setInterviewerData(data.data));
+      })
+      .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          toast("Error Occurred, try logging in again");
+          dispatch(logout())
+        }
+      });
+  };
+
+  useEffect(() => {
+    getInterviewerData();
+  }, []);
+  const { interviewerData } = useSelector((state: RootState) => state.admin);
+
+  return (
+    <div className="flex min-h-screen w-full flex-col">
+    <AdminHeader />
+    <Card>
+      <CardHeader>
+        <CardTitle>Interviewers</CardTitle>
+        <CardDescription>
+          Manage Interviewers and view their Status
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <UsersTable data={interviewerData} fun={getInterviewerData}/>
+      </CardContent>
+    </Card>
+  </div>
+  )
+}
+
+export default InterviewerList
