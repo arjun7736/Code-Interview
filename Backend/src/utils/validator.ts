@@ -4,7 +4,7 @@ export const isEmail = (mail:string):boolean => {
         if (typeof email !== "string") return false;
         if (email.charAt(0) === "." || email.charAt(0) === "_") return false;
         function isValidSymbols(email:string):boolean {
-            var regex = /[^a-zA-Z0-9._%+-@]/;
+            const regex = /[^a-zA-Z0-9._%+-@]/;
             if (regex.test(email)) {
                 return false;
             } else {
@@ -35,7 +35,7 @@ export const isEmail = (mail:string):boolean => {
 
 export const isPhoneNumber = (number:number):boolean => {
     try {
-        let arr:string[] = number.toString(10).split('');
+        const arr:string[] = number.toString(10).split('');
         const countOfNumber = (arr:string[]):boolean => {
             let count = 0
             for (let i = 0; i < arr.length; i++) {

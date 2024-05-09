@@ -1,0 +1,41 @@
+// // .eslintrc.json
+// {
+//     "parser": "@typescript-eslint/parser",
+//     "extends": [
+//       "eslint:recommended",
+//       "plugin:@typescript-eslint/recommended"
+//     ],
+//     "plugins": [
+//       "@typescript-eslint"
+//     ],
+//     "globals": {
+//       "browser": true 
+//     }
+//   }
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "globals": {
+    "browser": true 
+  },
+  "rules": {
+    "camelcase": ["error", {"allow": ["^\\$?[a-z][a-zA-Z\\d]*$", "^_[a-z][a-zA-Z\\d]*$"]}],
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "variable",
+        "format": ["camelCase", "UPPER_CASE"],
+        "filter": {
+          "regex": "^\\([a-zA-Z]*\\)",
+          "match": false
+        }
+      }
+    ]
+  }
+}

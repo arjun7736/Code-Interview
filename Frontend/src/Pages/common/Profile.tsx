@@ -38,7 +38,6 @@ if(companyData){
   const getData = async () => {
     try {
 
-
       const response = await axios.get(`/api/auth/getData`);
       console.log(response.data)
       setUserData(response.data);
@@ -108,7 +107,7 @@ if(companyData){
 console.log(formData)
   return (
   <>
-  <h1 className="text-2xl absolute top-10 left-64 font-serif">{userData?.role}Profie</h1>
+  <h1 className="text-2xl absolute top-10 left-64 font-serif">{userData?.name}Profie</h1>
   <div className="max-w-4xl flex items-center h-auto lg:h-screen flex-wrap mx-auto my-32 lg:my-0 shadow-xl relative">
     <div
       id="profile"

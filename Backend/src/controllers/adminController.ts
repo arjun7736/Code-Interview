@@ -1,9 +1,15 @@
 import { Request, Response } from "express";
 import { ICompany } from "../interfaces/modelInterface";
-import { blockUser, getAllData, unBlockUser } from "../repositories/adminRepository";
+import {
+  blockUser,
+  getAllData,
+  unBlockUser,
+} from "../repositories/adminRepository";
 import { getPremiumCompanies } from "../repositories/companyRepository";
+import { ErrorResponse } from "../interfaces/errorInterface";
 
 //<=----------------------Get Data----------------------=>//
+
 export const getData = async (req: Request, res: Response): Promise<void> => {
   try {
     const role: string | undefined = req.query.role as string | undefined;
@@ -11,9 +17,10 @@ export const getData = async (req: Request, res: Response): Promise<void> => {
       const data = await getAllData(role);
       res.json(data);
     }
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+      const customError = error as ErrorResponse;
+      const statusCode = customError.statusCode || 500;
+      res.status(statusCode).send(customError.message);
   }
 };
 
@@ -24,9 +31,10 @@ export const block = async (req: Request, res: Response): Promise<void> => {
     const { id, role } = req.body;
     await blockUser(role, id);
     res.json({ message: " Blocked" });
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error:unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
@@ -39,24 +47,24 @@ export const unBlock = async (req: Request, res: Response): Promise<void> => {
     await unBlockUser(role, id);
 
     res.json({ message: " Unblocked " });
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
 //<=----------------------count of Premium Companies----------------------=>//
-export const PremiumCompanies = async (
+export const premiumCompanyList = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const premiumCompanies: ICompany[] | null =
-      await getPremiumCompanies();
-
+    const premiumCompanies: ICompany[] | null = await getPremiumCompanies();
     res.json(premiumCompanies);
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };

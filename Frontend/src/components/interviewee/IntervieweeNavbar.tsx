@@ -1,6 +1,5 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { CircleUser } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -8,6 +7,7 @@ import { useEffect } from "react";
 import { logout } from "@/redux/slices/intervieweeSlice";
 import { toast } from "sonner";
 import axios from "axios";
+import { Avatar, AvatarImage } from "../ui/avatar";
 
 const IntervieweeNavbar = () => {
   const navigate =useNavigate()
@@ -44,7 +44,9 @@ const IntervieweeNavbar = () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
-                <CircleUser className="h-5 w-5" />
+              <Avatar>
+                  <AvatarImage src={intervieweeData?.profile_picture} />
+                </Avatar>
                 <span className="sr-only">Toggle user menu</span>
               </Button>
             </DropdownMenuTrigger>

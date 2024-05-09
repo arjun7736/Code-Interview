@@ -5,10 +5,10 @@ import { errorResponse } from "../utils/error";
 import { isEmail, isStrongPassword } from "../utils/validator";
 import { sentOTP } from "../utils/otp";
 import Stripe from "stripe";
-import { isJSDocNullableType } from "typescript";
 import { findByIdAndDelete, findUserByEmail, updateInterviewer } from "../repositories/interviewerRepository";
 import { createOTPuser } from "../repositories/userRepository";
 import { listInterviewersByCompany, paymentDone, updateCompanyProfile } from "../repositories/companyRepository";
+import { ErrorResponse } from "../interfaces/errorInterface";
 
 //<=-----------------------add Interviewer---------------------------=>//
 
@@ -52,9 +52,10 @@ export const addInterviewer = async (
       res.json({ Message: "Error While creating a Interviewer" });
     }
 
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
@@ -67,10 +68,15 @@ export const deleteInterviewer = async (
   try {
     const { id } = req.params;
     const data = await findByIdAndDelete(id);
-    res.json({ message: "Deleted Successfully" });
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+    if(data){
+      res.json({ message: "Deleted Successfully" });
+    }else{
+      throw errorResponse(500,"Error in Deletion")
+    }
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
@@ -87,9 +93,10 @@ export const listInterviewers = async (
     }
     const data = await listInterviewersByCompany(Id);
     res.json(data);
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
@@ -100,7 +107,7 @@ export const editInterviewer = async (req: Request, res: Response) => {
     const { password, name, id } = req.body;
 let hpass
     if (password) {
-      let isStrongPass: boolean = isStrongPassword(password);
+      const isStrongPass: boolean = isStrongPassword(password);
       if (!isStrongPass) throw errorResponse(401, "Weak Password");
 
        hpass = await bcrypt.hash(password, 10);
@@ -121,9 +128,10 @@ let hpass
         interviewerWithoutPassword,
       });
     }
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
@@ -166,9 +174,10 @@ export const buyPremium = async (
 await paymentDone(req.body._id)
 
     res.json({ sessionId: session.id });
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
@@ -186,8 +195,9 @@ export const updateProfile = async (req: Request, res: Response) => {
       delete companyWithoutPassword.password;
       res.json(companyWithoutPassword);
     }
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };

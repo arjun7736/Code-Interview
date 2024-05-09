@@ -1,4 +1,5 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
+import { Server } from "socket.io";
 import dotenv from "dotenv";
 dotenv.config();
 import mongoose from "mongoose";
@@ -11,7 +12,7 @@ import intervieweeRoute from "./src/routes/intervieweeRoute"
 import morgan from 'morgan';
 
 
-
+const io=new Server()
 const URI: string | undefined = process.env.MONGO_URI;
 const PORT: string | undefined = process.env.PORT;
 
@@ -22,6 +23,10 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'))
 
+
+// io.on("connection",(socket)=>{
+//   console.log("User Connected")
+// });
 
 
 app.use("/api/auth",authRoute)
@@ -44,4 +49,5 @@ if (PORT) {
   app.listen(PORT, () => {
     console.log("Server is running on port " + PORT);
   });
+  io.listen(3001)
 }

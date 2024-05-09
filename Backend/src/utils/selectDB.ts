@@ -2,10 +2,9 @@ import CompanyDB from "../models/companyModel";
 import IntervieweeDB from "../models/intervieweeModel";
 import InterviewerDB from "../models/interviewerModel";
 import AdminDB from "../models/adminModel";
-import OTPDB from "../models/otpModel";
 import { Model } from "mongoose";
 
-export enum UserCollection {
+export enum Role {
     ADMIN = "admin",
     INTERVIEWER = "interviewer",
     INTERVIEWEE = "interviewee",
@@ -13,19 +12,18 @@ export enum UserCollection {
   }
   
 export function getUserCollection(role: string): Model<any> | null {
-  // console.log(role)
     let userCollection: Model<any> | null = null;
     switch (role) {
-      case UserCollection.ADMIN:
+      case Role.ADMIN:
         userCollection = AdminDB;
         break;
-      case UserCollection.INTERVIEWER:
+      case Role.INTERVIEWER:
         userCollection = InterviewerDB;
         break;
-      case UserCollection.INTERVIEWEE:
+      case Role.INTERVIEWEE:
         userCollection = IntervieweeDB;
         break;
-      case UserCollection.COMPANY:
+      case Role.COMPANY:
         userCollection = CompanyDB;
         break;
     }

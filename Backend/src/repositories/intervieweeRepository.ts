@@ -1,5 +1,4 @@
 
-import { Model } from "mongoose";
 import { IInterviewee } from "../interfaces/modelInterface";
 import IntervieweeDB from "../models/intervieweeModel";
 

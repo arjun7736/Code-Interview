@@ -4,14 +4,14 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { isEmail, isStrongPassword } from "../utils/validator";
 import { sentOTP } from "../utils/otp";
-import { UserCollection, getUserCollection } from "../utils/selectDB";
-import { ICompany, IInterviewee, IOtp } from "../interfaces/modelInterface";
+import { Role } from "../utils/selectDB";
+import { ICompany, IInterviewee, IInterviewer, IOtp } from "../interfaces/modelInterface";
 import generatePassword from "generate-password";
-import mongoose from "mongoose";
 import { createForgotPasswordOTP, createOTPuser, deleteOTP, findUser, findUserWithOTP, getIndividualUserData, updateOTP } from "../repositories/userRepository";
 import { createCompany, findCompany, findUserByName, updateCompanyPassword } from "../repositories/companyRepository";
 import { createInterviewee, findInterviewee, getUserByEmail, updateIntervieweePassword } from "../repositories/intervieweeRepository";
 import { createInterviewer } from "../repositories/interviewerRepository";
+import { ErrorResponse } from "../interfaces/errorInterface";
 
 //<=----------------------Login----------------------=>//
 
@@ -23,7 +23,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     const user = await findUser(email, role);
 
-    if (!user) throw errorResponse(401, "There is no Account in Given E-mail");
+    if (!user) throw errorResponse(401, "No Account Found Check Credentials");
 
     const passwordMatch: boolean = await bcrypt.compare(
       password,
@@ -31,7 +31,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     );
 
     if (!passwordMatch) {
-      throw errorResponse(401, "Wrong Credentails");
+      throw errorResponse(401, "No Account Found Check Credentials");
     }
 
     if (user.isBlocked) throw errorResponse(403, "Account is Blocked");
@@ -49,9 +49,10 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         .cookie(`${role}_token`, token, { httpOnly: true, expires: expire })
         .json(userWithoutPassword);
     }
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+      const customError = error as ErrorResponse
+      const statusCode = customError.statusCode || 500;
+      res.status(statusCode).send(customError.message);
   }
 };
 
@@ -83,7 +84,7 @@ export const signUp = async (req: Request, res: Response): Promise<void> => {
       throw errorResponse(409, "Email already exists");
     }
 
-    if (role === UserCollection.COMPANY) {
+    if (role === Role.COMPANY) {
       const existName: ICompany | null = await findUserByName(
         name
       );
@@ -107,9 +108,10 @@ export const signUp = async (req: Request, res: Response): Promise<void> => {
     );
 
     if (user) res.json({ Message: "OTP sent Successfully" });
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
@@ -120,12 +122,12 @@ export const verifyOTP = async (req: Request, res: Response): Promise<void> => {
 
     if (!otp) throw errorResponse(400, "Enter OTP");
 
-    let data: IOtp | null = await findUserWithOTP(email, otp);
+    const data: IOtp | null = await findUserWithOTP(email, otp);
     console.log(data);
     if (!data) throw errorResponse(401, "Wrong OTP");
 
     switch (role) {
-      case UserCollection.COMPANY:
+      case Role.COMPANY:
         await createCompany(
           data.email,
           data.name || "",
@@ -134,7 +136,7 @@ export const verifyOTP = async (req: Request, res: Response): Promise<void> => {
         );
         await deleteOTP(data._id);
         break;
-      case UserCollection.INTERVIEWEE:
+      case Role.INTERVIEWEE:
         await createInterviewee(
           data.email,
           data.name || "",
@@ -143,7 +145,7 @@ export const verifyOTP = async (req: Request, res: Response): Promise<void> => {
         );
         await deleteOTP(data._id);
         break;
-      case UserCollection.INTERVIEWER:
+      case Role.INTERVIEWER:
         await createInterviewer(
           data.email,
           data.password || "",
@@ -154,9 +156,10 @@ export const verifyOTP = async (req: Request, res: Response): Promise<void> => {
         break;
     }
     res.json({ message: "OTP Verified Successfully" });
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
@@ -181,9 +184,10 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
     res
       .status(200)
       .json({ message: "Logged out successfully!", user: tokenCookieName });
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
@@ -195,14 +199,14 @@ export const forgotPasswordOTP = async (
   try {
     const { email, role } = req.body;
 
-    let IsUserExist: ICompany | IInterviewee | null = null;
+    let isUserExist: ICompany | IInterviewee | null = null;
 
-    if (role === UserCollection.COMPANY) {
-      IsUserExist = await findCompany(email);
+    if (role === Role.COMPANY) {
+      isUserExist = await findCompany(email);
     } else {
-      IsUserExist = await getUserByEmail(email);
+      isUserExist = await getUserByEmail(email);
     }
-    if (!IsUserExist) throw errorResponse(404, "No User Found");
+    if (!isUserExist) throw errorResponse(404, "No User Found");
 
     const OTP: number = Math.floor(100000 + Math.random() * 900000);
 
@@ -211,9 +215,10 @@ export const forgotPasswordOTP = async (
     await createForgotPasswordOTP(email, OTP);
 
     res.json({ Message: "OTP sent Successfully" });
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
@@ -225,14 +230,15 @@ export const verifyForgotPasswordOTP = async (
   try {
     const { email, otp, role } = req.body;
 
-    let data: IOtp | null = await findUserWithOTP(email, otp);
+    const data: IOtp | null = await findUserWithOTP(email, otp);
 
     if (!data) throw errorResponse(400, "Invalied OTP");
 
     res.json({ email, role, messsage: "OTP Verified" });
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
@@ -251,22 +257,26 @@ export const createNewPassword = async (
     let user: ICompany | IInterviewee | null = null;
     const hPass = await bcrypt.hash(password, 10);
 
-    if (role == UserCollection.COMPANY) {
+    if (role == Role.COMPANY) {
       user = await updateCompanyPassword(email, hPass);
     } else {
       user = await updateIntervieweePassword(email, hPass);
     }
-    res.json({ Message: "Password Changes Successfully" });
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+    if (!user) throw errorResponse(500, "Something went wrong!");
+    else{
+      res.json({ Message: "Password Changes Successfully" });
+    }
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
 //<=----------------------Resent OTP----------------------=>//
 export const resentOtp = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, role } = req.body;
+    const { email } = req.body;
     const OTP: number = Math.floor(100000 + Math.random() * 900000);
 
     const user: IOtp | null = await updateOTP(email, OTP);
@@ -274,9 +284,10 @@ export const resentOtp = async (req: Request, res: Response): Promise<void> => {
 
     sentOTP(email, OTP);
     res.json({ message: "Otp Resent Successfully" });
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
@@ -295,8 +306,8 @@ export const googleSigninUser = async (
       const secret: string | undefined = process.env.JWT_SECRET;
       if (secret) {
         const token: string = jwt.sign({ _id: interviewee._id }, secret);
-        const IntervieweeWithoutPassword = { ...interviewee.toObject() };
-        delete IntervieweeWithoutPassword.password;
+        const intervieweeWithoutPassword = { ...interviewee.toObject() };
+        delete intervieweeWithoutPassword.password;
         const expire = new Date(Date.now() + 3600000);
 
         res
@@ -305,7 +316,7 @@ export const googleSigninUser = async (
             expires: expire,
           })
           .status(200)
-          .json(IntervieweeWithoutPassword);
+          .json(intervieweeWithoutPassword);
       }
     } else {
       const password: string = generatePassword.generate({
@@ -339,9 +350,10 @@ export const googleSigninUser = async (
           .json(user);
       }
     }
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
 
@@ -355,15 +367,17 @@ export const getIndividualData = async (
     const role: string | undefined = req?.userType;
     const id: string | undefined = req?.user._id;
     if (role && id) {
-      const data: any | null = await getIndividualUserData(role, id);
+      const data: ICompany|IInterviewer|IInterviewer | null = await getIndividualUserData(role, id);
       if (data) {
         const dataWithoutPassword = { ...data.toObject() };
         delete dataWithoutPassword.password;
         res.json(dataWithoutPassword);
       }
     }
-  } catch (error: any) {
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).send(error.message);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
   }
 };
+

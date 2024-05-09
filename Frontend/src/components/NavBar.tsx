@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import { CircleUser} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,9 +18,8 @@ const NavBar = () => {
         <div className="flex w-full items-center justify-end gap-4 md:ml-auto md:gap-2 lg:gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon" className="rounded-full">
-                <CircleUser className="h-5 w-5" />
-                <span className="sr-only">Toggle user menu</span>
+              <Button variant="secondary"  className="rounded-lg w-20 outline-none">
+                Login
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

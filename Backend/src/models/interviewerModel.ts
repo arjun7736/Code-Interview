@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IInterviewer } from "../interfaces/modelInterface";
 
 const InterviewerSchema:Schema = new Schema<IInterviewer>({

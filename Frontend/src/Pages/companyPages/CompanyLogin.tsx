@@ -37,6 +37,7 @@ const CompanyLogin = () => {
       dispatch(loginSuccess(response.data));
       navigate("/company");
     } catch (error) {
+      console.log(error)
       dispatch(loginError(error?.response?.data)); 
     }
   };

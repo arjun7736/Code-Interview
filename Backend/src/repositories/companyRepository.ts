@@ -1,6 +1,5 @@
 
 import mongoose from "mongoose";
-import { Model } from "mongoose";
 import { ICompany } from "../interfaces/modelInterface";
 import CompanyDB from "../models/companyModel";
 

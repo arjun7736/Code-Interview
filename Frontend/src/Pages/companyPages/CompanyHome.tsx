@@ -2,6 +2,7 @@ import AddInterviewer from "@/components/company/AddInterviewer";
 import CompanyNavbar from "@/components/company/CompanyNavbar";
 import DeleteAndEdit from "@/components/company/DeleteAndEdit";
 import UpgradePlan from "@/components/company/UpgradePlan";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
@@ -12,7 +13,6 @@ import {
 } from "@/redux/slices/companySlice";
 import { RootState } from "@/redux/store";
 import axios from "axios";
-import { Image } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
@@ -97,7 +97,6 @@ const CompanyHome = () => {
   useEffect(() => {
     fetchData();
   }, [isConfirmationOpen]);
-console.log(interviewers)
   return (
     <>
       <CompanyNavbar />
@@ -133,18 +132,18 @@ console.log(interviewers)
             <Button onClick={openPopup} variant={"ghost"} className="ml-28 mt-5">Add Interviewer</Button>
           </Card>
         </div>
+        <div>
+        <Button>Schedule an Interview</Button>
+        </div>
         <div className="md:block order-last md:order-first mt-10 md:mt-0">
           {selectedInterviewer ? (
             <>
               <Card className="max-w-[720px]">
                 <CardHeader className="flex gap-3">
-                  <div className="flex flex-row justify-around">
-                    <Image
-                      height={40}
-                      radius="sm"
-                      src={selectedInterviewer.profile_picture}
-                      width={40}
-                    />
+                  <div className="flex flex-row justify-around"> 
+                    <Avatar>
+                      <AvatarImage src ={selectedInterviewer?.profile_picture||"https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg"}/>
+                    </Avatar>
                     <div className="flex flex-col">
                       <p className="text-md">{selectedInterviewer?.email}</p>
                       <p className="text-small text-default-500">
