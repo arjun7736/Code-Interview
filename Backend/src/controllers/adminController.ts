@@ -1,22 +1,14 @@
 import { Request, Response } from "express";
-import { ICompany } from "../interfaces/modelInterface";
-import {
-  blockUser,
-  getAllData,
-  unBlockUser,
-} from "../repositories/adminRepository";
-import { getPremiumCompanies } from "../repositories/companyRepository";
 import { ErrorResponse } from "../interfaces/errorInterface";
+import { blockUserService, getAllDataService, getPremiumCompanyListService, unBlockUserService } from "../services/adminService";
 
 //<=----------------------Get Data----------------------=>//
 
 export const getData = async (req: Request, res: Response): Promise<void> => {
   try {
-    const role: string | undefined = req.query.role as string | undefined;
-    if (role) {
-      const data = await getAllData(role);
-      res.json(data);
-    }
+    const role: string  = req.query.role as string ;
+    const data = await getAllDataService(role);
+    res.json(data);
   } catch (error: unknown) {
       const customError = error as ErrorResponse;
       const statusCode = customError.statusCode || 500;
@@ -29,7 +21,7 @@ export const getData = async (req: Request, res: Response): Promise<void> => {
 export const block = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id, role } = req.body;
-    await blockUser(role, id);
+    await blockUserService(role, id);
     res.json({ message: " Blocked" });
   } catch (error:unknown) {
     const customError = error as ErrorResponse;
@@ -43,9 +35,7 @@ export const block = async (req: Request, res: Response): Promise<void> => {
 export const unBlock = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id, role } = req.body;
-
-    await unBlockUser(role, id);
-
+    await unBlockUserService(role, id);
     res.json({ message: " Unblocked " });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
@@ -60,7 +50,7 @@ export const premiumCompanyList = async (
   res: Response
 ): Promise<void> => {
   try {
-    const premiumCompanies: ICompany[] | null = await getPremiumCompanies();
+    const premiumCompanies =getPremiumCompanyListService()
     res.json(premiumCompanies);
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
