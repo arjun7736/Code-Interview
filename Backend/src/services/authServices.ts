@@ -18,7 +18,7 @@ import {
 import { errorResponse } from "../utils/error";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { Role } from "../utils/selectDB";
+import { Role, StatusCode } from "../utils/selectDB";
 import {
   createCompany,
   findCompany,
@@ -51,13 +51,13 @@ export const userLoginService = async (
 
   const user = await findUser(email, role);
 
-  if (!user) throw errorResponse(401, "No Account Found Check Credentials");
+  if (!user) throw errorResponse(StatusCode.UNOTHERIZED, "No Account Found Check Credentials");
 
   const passwordMatch: boolean = await bcrypt.compare(password, user.password);
   if (!passwordMatch) {
-    throw errorResponse(401, "No Account Found Check Credentials");
+    throw errorResponse(StatusCode.UNOTHERIZED, "No Account Found Check Credentials");
   }
-  if (user.isBlocked) throw errorResponse(403, "Account is Blocked");
+  if (user.isBlocked) throw errorResponse(StatusCode.FORBIDDEN, "Account is Blocked");
 
   const userWithoutPassword = clearPassword(user);
 
@@ -69,7 +69,7 @@ export const userLoginService = async (
 export const createToken = (id: string, isBlocked?: boolean): string => {
   const secret: string | undefined = process.env.JWT_SECRET;
   if (!secret) {
-    throw errorResponse(500, "Secret Missing");
+    throw errorResponse(StatusCode.SERVER_ERROR, "Secret Missing");
   }
   return jwt.sign({ _id: id, isBlocked }, secret);
 };
@@ -119,7 +119,7 @@ export const otpService = async (email: string, role: string, otp: number) => {
 
   const data: IOtp | null = await findUserWithOTP(email, otp);
 
-  if (!data) throw errorResponse(401, "Wrong OTP");
+  if (!data) throw errorResponse(StatusCode.UNOTHERIZED, "Wrong OTP");
 
   switch (role) {
     case Role.COMPANY:
@@ -163,7 +163,7 @@ export const logoutService = async (req: Request): Promise<string> => {
   } else if (req.cookies.admin_token) {
     return "admin_token";
   } else {
-    throw errorResponse(400, "No active session found");
+    throw errorResponse(StatusCode.BAD_REQUEST, "No active session found");
   }
 };
 
@@ -181,7 +181,7 @@ export const forgotPasswordOTPService = async (
   }
 
   if (!user) {
-    throw errorResponse(404, "No User Found");
+    throw errorResponse(StatusCode.NOT_FOUND, "No User Found");
   }
 
   const OTP = Math.floor(100000 + Math.random() * 900000);
@@ -198,7 +198,7 @@ export const verifyForgotPasswordOTPService = async (
   otpValidator(otp);
   const data = await findUserWithOTP(email, otp);
   if (!data) {
-    throw errorResponse(400, "Invalid OTP");
+    throw errorResponse(StatusCode.BAD_REQUEST, "Invalid OTP");
   }
 };
 
@@ -220,7 +220,7 @@ export const createNewPasswordService = async (
     user = await updateIntervieweePassword(email, hashedPassword);
   }
   if (!user) {
-    throw errorResponse(500, "Something went wrong!");
+    throw errorResponse(StatusCode.SERVER_ERROR, "Something went wrong!");
   }
 };
 
@@ -229,7 +229,7 @@ export const resendOtpService = async (email: string): Promise<void> => {
   const OTP = Math.floor(100000 + Math.random() * 900000);
   const user = await updateOTP(email, OTP);
   if (!user) {
-    throw errorResponse(401, "Session Expired. Please Sign Up Again");
+    throw errorResponse(StatusCode.UNOTHERIZED, "Session Expired. Please Sign Up Again");
   }
   await sentOTP(email, OTP);
 };

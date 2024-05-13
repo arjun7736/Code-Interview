@@ -11,6 +11,7 @@ import {
   updateProfileService,
 } from "../services/companyService";
 import { clearPassword } from "../services/authServices";
+import { StatusCode } from "../utils/selectDB";
 
 //<=-----------------------add Interviewer---------------------------=>//
 
@@ -24,7 +25,7 @@ export const addInterviewer = async (
     res.json({ email, role: "interviewer" });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -41,7 +42,7 @@ export const deleteInterviewer = async (
     res.json({ message: "Interviewer Deleted Successfully" });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -57,7 +58,7 @@ export const listInterviewers = async (
     res.json(interviewers);
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -70,7 +71,7 @@ export const editInterviewer = async (req: Request, res: Response) => {
     const updatedInterviewer = await editInterviewerService(id, name, password);
 
     if (!updatedInterviewer) {
-      throw errorResponse(500, "Error While Update Interviewer");
+      throw errorResponse(StatusCode.SERVER_ERROR, "Error While Update Interviewer");
     }
     const interviewerWithoutPassword = clearPassword(updatedInterviewer);
 
@@ -80,7 +81,7 @@ export const editInterviewer = async (req: Request, res: Response) => {
     });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -96,7 +97,7 @@ export const buyPremium = async (
     res.json({ sessionId: session });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -109,13 +110,13 @@ export const updateProfile = async (req: Request, res: Response) => {
     const updatedCompany = await updateProfileService(id, name, profilePicture);
 
     if (!updatedCompany) {
-      throw errorResponse(500, "Error in Update Profile");
+      throw errorResponse(StatusCode.SERVER_ERROR, "Error in Update Profile");
     }
     const companyWithoutPassword = clearPassword(updatedCompany);
     res.json(companyWithoutPassword);
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -128,7 +129,7 @@ export const createMeetingLink = (req: Request, res: Response) => {
     res.json({ Message: "Email sent Successfully" });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };

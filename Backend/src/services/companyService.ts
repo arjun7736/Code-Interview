@@ -17,6 +17,7 @@ import { isEmail, isStrongPassword } from "../utils/validator";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from 'uuid';
 import { sendLink } from "../utils/sendLink";
+import { StatusCode } from "../utils/selectDB";
 
 //<=----------------------Create Interviewer service----------------------=>//
 export const addInterviewerService = async (
@@ -25,20 +26,20 @@ export const addInterviewerService = async (
   companyId: string
 ): Promise<void> => {
   if (!email || !password) {
-    throw errorResponse(400, "Fill all the fields");
+    throw errorResponse(StatusCode.BAD_REQUEST, "Fill all the fields");
   }
 
   if (!isEmail(email)) {
-    throw errorResponse(401, "Enter a valid email");
+    throw errorResponse(StatusCode.UNOTHERIZED, "Enter a valid email");
   }
 
   if (!isStrongPassword(password)) {
-    throw errorResponse(401, "Weak password");
+    throw errorResponse(StatusCode.UNOTHERIZED, "Weak password");
   }
 
   const existingUser = await findUserByEmail(email);
   if (existingUser) {
-    throw errorResponse(404, "Interviewer already exists");
+    throw errorResponse(StatusCode.NOT_FOUND, "Interviewer already exists");
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -53,7 +54,7 @@ export const addInterviewerService = async (
 export const deleteInterviewerService = async (id: string): Promise<void> => {
   const deletedInterviewer = await findByIdAndDelete(id);
   if (!deletedInterviewer) {
-    throw errorResponse(404, "Interviewer Not Found");
+    throw errorResponse(StatusCode.NOT_FOUND, "Interviewer Not Found");
   }
 };
 
@@ -63,7 +64,7 @@ export const listInterviewersService = async (
   companyId: string | undefined
 ): Promise<IInterviewer[]> => {
   if (!companyId || typeof companyId !== "string") {
-    throw errorResponse(400, "Invalid Company ID");
+    throw errorResponse(StatusCode.BAD_REQUEST, "Invalid Company ID");
   }
 
   const interviewers = await listInterviewersByCompany(companyId);
@@ -78,12 +79,12 @@ export const editInterviewerService = async (
   password?: string
 ): Promise<IInterviewer | null> => {
   if (!id || !name) {
-    throw errorResponse(400, "Missing required information (ID and name)");
+    throw errorResponse(StatusCode.BAD_REQUEST, "Missing required information (ID and name)");
   }
   let hashedPassword: string | undefined;
   if (password) {
     if (!isStrongPassword(password)) {
-      throw errorResponse(401, "Weak password");
+      throw errorResponse(StatusCode.UNOTHERIZED, "Weak password");
     }
     hashedPassword = await bcrypt.hash(password, 10);
   }
@@ -138,7 +139,7 @@ export const updateProfileService = async (
   profilePicture?: string
 ): Promise<ICompany | null> => {
   if (!userId || !name) {
-    throw errorResponse(400, "Missing required information (ID and name)");
+    throw errorResponse(StatusCode.BAD_REQUEST, "Missing required information (ID and name)");
   }
   const updatedCompany = await updateCompanyProfile(
     userId,

@@ -19,6 +19,7 @@ import {
   verifyForgotPasswordOTPService,
 } from "../services/authServices";
 import { errorResponse } from "../utils/error";
+import { StatusCode } from "../utils/selectDB";
 
 
 
@@ -37,7 +38,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       .json(user);
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -51,7 +52,7 @@ export const signUp = async (req: Request, res: Response): Promise<void> => {
     res.json({ Message: "OTP sent Successfully" });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -66,7 +67,7 @@ export const verifyOTP = async (req: Request, res: Response): Promise<void> => {
     res.json({ message: "OTP Verified Successfully" });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -81,7 +82,7 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
       .json({ message: "Logged out successfully!", user: tokenCookieName });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -99,7 +100,7 @@ export const forgotPasswordOTP = async (
     res.json({ Message: "OTP sent Successfully" });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -117,7 +118,7 @@ export const verifyForgotPasswordOTP = async (
     res.json({ messsage: "OTP Verified" });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -136,7 +137,7 @@ export const createNewPassword = async (
     res.json({ Message: "Password Changes Successfully" });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -151,7 +152,7 @@ export const resentOtp = async (req: Request, res: Response): Promise<void> => {
     res.json({ message: "Otp Resent Successfully" });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -174,7 +175,7 @@ export const googleSigninUser = async (
         email,
         photoURL
       );
-      if (!intervieweeData) throw errorResponse(500, "Error in sign-up");
+      if (!intervieweeData) throw errorResponse(StatusCode.SERVER_ERROR, "Error in sign-up");
     }
     if (intervieweeData) {
       const token: string = createToken(intervieweeData._id);
@@ -191,7 +192,7 @@ export const googleSigninUser = async (
     }
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };
@@ -206,19 +207,19 @@ export const getIndividualData = async (
     const role: string | undefined = req?.userType;
     const id: string | undefined = req?.user._id;
     if (!role || !id) {
-      throw errorResponse(500, 'Cant Find ID');
+      throw errorResponse(StatusCode.SERVER_ERROR, 'Cant Find ID');
     }
     
     const data = await getIndividualUserService(role, id);
     if (!data) {
-      res.status(404).json({ message: 'User not found' });
+      res.status(StatusCode.NOT_FOUND).json({ message: 'User not found' });
     } else {
       res.json(data);
     }
   
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };

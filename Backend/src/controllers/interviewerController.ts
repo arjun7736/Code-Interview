@@ -3,6 +3,7 @@ import { ErrorResponse } from "../interfaces/errorInterface";
 import { updateInterviewerService } from "../services/interviewerService";
 import { errorResponse } from "../utils/error";
 import { clearPassword } from "../services/authServices";
+import { StatusCode } from "../utils/selectDB";
 
 export const updateProfile = async (req: Request, res: Response) => {
   try {
@@ -15,13 +16,13 @@ export const updateProfile = async (req: Request, res: Response) => {
       profilePicture
     );
     if (!updatedInterviewer) {
-      throw errorResponse(500, "Error In Update Profile");
+      throw errorResponse(StatusCode.SERVER_ERROR, "Error In Update Profile");
     }
     const companyWithoutPassword = clearPassword(updatedInterviewer);
     res.json(companyWithoutPassword);
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || 500;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
 };

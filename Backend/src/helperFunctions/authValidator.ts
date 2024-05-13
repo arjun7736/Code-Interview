@@ -1,13 +1,14 @@
 import { errorResponse } from "../utils/error";
+import { StatusCode } from "../utils/selectDB";
 import { isEmail, isStrongPassword } from "../utils/validator";
 
 //<=----------------------Login Validator----------------------=>//
 export const validateLoginData = (email: string, password: string) => {
   if (!email || !password)
-    throw errorResponse(400, "Email and Password Required");
+    throw errorResponse(StatusCode.BAD_REQUEST, "Email and Password Required");
 
   if (!isEmail(email)) {
-    throw errorResponse(422, "Invalid email format");
+    throw errorResponse(StatusCode.FORBIDDEN, "Invalid email format");
   }
 };
 
@@ -20,20 +21,20 @@ export const validateSignupData = (
   email: string
 ) => {
   if (!name || !password || !confirmpassword || !email) {
-    throw errorResponse(400, "Missing fields");
+    throw errorResponse(StatusCode.BAD_REQUEST, "Missing fields");
   }
 
   if (!isEmail(email)) {
-    throw errorResponse(422, "Invalid email format");
+    throw errorResponse(StatusCode.FORBIDDEN, "Invalid email format");
   }
   passwordValidator(password, confirmpassword);
 };
 
 //<=----------------------OTP Validator----------------------=>//
 export const otpValidator = (otp: number) => {
-  if (!otp) throw errorResponse(400, "Enter OTP");
+  if (!otp) throw errorResponse(StatusCode.BAD_REQUEST, "Enter OTP");
   if (otp.toString().length != 6)
-    throw errorResponse(402, "Enter all the Digits ");
+    throw errorResponse(StatusCode.BAD_REQUEST, "Enter all the Digits ");
 };
 
 //<=----------------------Password Validator----------------------=>//
@@ -42,10 +43,10 @@ export const passwordValidator = (
   confirmpassword: string
 ) => {
   if (!password || !confirmpassword) {
-    throw errorResponse(400, "Missing Fields");
+    throw errorResponse(StatusCode.BAD_REQUEST, "Missing Fields");
   }
   if (password !== confirmpassword) {
-    throw errorResponse(401, "Passwords are Not Matching");
+    throw errorResponse(StatusCode.UNOTHERIZED, "Passwords are Not Matching");
   }
   if (!isStrongPassword(password)) {
     throw errorResponse(

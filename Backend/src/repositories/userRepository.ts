@@ -1,11 +1,11 @@
 import OTPDB from "../models/otpModel";
-import { getUserCollection } from "../utils/selectDB";
+import { StatusCode, getUserCollection } from "../utils/selectDB";
 import { ICompany, IInterviewee, IInterviewer, IOtp } from "../interfaces/modelInterface";
 
 export async function findUser(email: string, role: string): Promise<any | null> {
   const userCollection = getUserCollection(role);
   if (!userCollection) {
-    throw { statusCode: 400, message: "User collection not found" };
+    throw { statusCode: StatusCode.BAD_REQUEST, message: "User collection not found" };
   }
   return await userCollection.findOne({ email: email });
 }

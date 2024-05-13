@@ -4,13 +4,6 @@ import InterviewerDB from "../models/interviewerModel";
 import AdminDB from "../models/adminModel";
 import { Model } from "mongoose";
 
-export enum Role {
-    ADMIN = "admin",
-    INTERVIEWER = "interviewer",
-    INTERVIEWEE = "interviewee",
-    COMPANY = "company",
-  }
-  
 export function getUserCollection(role: string): Model<any> | null {
     let userCollection: Model<any> | null = null;
     switch (role) {
@@ -29,3 +22,19 @@ export function getUserCollection(role: string): Model<any> | null {
     }
     return userCollection;
   }
+
+  
+export enum StatusCode{
+  BAD_REQUEST=400,
+  UNOTHERIZED =401,
+  FORBIDDEN=403,
+  NOT_FOUND =404,
+  SERVER_ERROR=500
+}
+  
+export enum Role {
+  ADMIN = "admin",
+  INTERVIEWER = "interviewer",
+  INTERVIEWEE = "interviewee",
+  COMPANY = "company",
+}
