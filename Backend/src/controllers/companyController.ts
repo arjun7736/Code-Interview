@@ -7,6 +7,7 @@ import {
   deleteInterviewerService,
   editInterviewerService,
   listInterviewersService,
+  sentLinkToEmail,
   updateProfileService,
 } from "../services/companyService";
 import { clearPassword } from "../services/authServices";
@@ -112,6 +113,19 @@ export const updateProfile = async (req: Request, res: Response) => {
     }
     const companyWithoutPassword = clearPassword(updatedCompany);
     res.json(companyWithoutPassword);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || 500;
+    res.status(statusCode).send(customError.message);
+  }
+};
+
+//<=------------------------Create meeeting Link--------------------------=>//
+export const createMeetingLink = (req: Request, res: Response) => {
+  try {
+    const { interviewerEmail, intervieweeEmail } = req.body;
+    sentLinkToEmail(interviewerEmail, intervieweeEmail);
+    res.json({ Message: "Email sent Successfully" });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || 500;

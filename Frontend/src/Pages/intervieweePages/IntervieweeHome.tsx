@@ -1,8 +1,16 @@
 import IntervieweeNavbar from '@/components/interviewee/IntervieweeNavbar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useCallback, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 const IntervieweeHome = () => {
+  const navigate = useNavigate()
+   const [value, setValue] = useState<string | null>(null);
+  
+  const handleJoinRoom =useCallback(() => {
+    navigate(`/videocall/${value}`);
+  },[navigate,value])
   return (
     <>
     <IntervieweeNavbar/>
@@ -14,8 +22,12 @@ const IntervieweeHome = () => {
           </h1>
         </div>
         <div className="flex ">
-          <Input className=" w-56" placeholder="Put Meeting Lnk here" />
-          <Button className="mx-2 ">
+        <Input
+            className=" w-56"
+            placeholder="Put Meeting Lnk here"
+            onChange={(e) => setValue(e.target.value)}
+          />
+          <Button className="mx-2 " onClick={handleJoinRoom}>
             {" "}
             Join Meeting{" "}
           </Button>

@@ -39,7 +39,6 @@ if(companyData){
     try {
 
       const response = await axios.get(`/api/auth/getData`);
-      console.log(response.data)
       setUserData(response.data);
     } catch (error) {
       if (error.response && (error.response.status === 401 || error.response.status === 403)) {
@@ -97,14 +96,12 @@ if(companyData){
     e.preventDefault();
       await axios.post(`/api/${data}/updateProfile`, formData).then((data)=>{
         setUserData(data.data)
-        console.log(data)
         toast("Profile Updated Successfully");
       }).catch((error)=>{
         console.log(error);
       })
   };
   
-console.log(formData)
   return (
   <>
   <h1 className="text-2xl absolute top-10 left-64 font-serif">{userData?.name}Profie</h1>
