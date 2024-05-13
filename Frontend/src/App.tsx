@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { AdminState, companyState, intervieweeState, interviewerState } from "./interface/userStateInterface";
 import PaymentDone from "./components/company/PaymentDone";
+import VideoCall from "./Pages/common/VideoCall";
 
 
 function App() {
@@ -63,7 +64,7 @@ const {intervieweeData}= useSelector((state:RootState)=>state.interviewee as int
           <Route path="/interviewer/login" element={interviewerData?<InterviewerHome/>:<InterviewerLogin/>}/>
           <Route path="/interviewer" element={<InterviewerHome/>}/>
 
-
+          <Route path ="/videocall/:roomId" element={<VideoCall/>}/>
         </Routes>
       </BrowserRouter>
       <Toaster className="bg-black" />

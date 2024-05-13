@@ -5,6 +5,7 @@ import UpgradePlan from "@/components/company/UpgradePlan";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import {
   interviewersError,
@@ -12,7 +13,7 @@ import {
   interviewersSuccess,
 } from "@/redux/slices/companySlice";
 import { RootState } from "@/redux/store";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
@@ -29,6 +30,7 @@ interface Interviewer {
 }
 
 const CompanyHome = () => {
+  
   const { interviewers, loading,companyData } = useSelector(
     (state: RootState) => state.company
   );
@@ -67,8 +69,9 @@ const CompanyHome = () => {
         console.log(data);
       })
     } catch (error) {
-      dispatch(interviewersError(error.message));
-      if (error.response?.status === 401 || error.response?.status === 403) {
+      const axiosError = error as AxiosError; 
+      dispatch(interviewersError(axiosError.message));
+      if (axiosError.response?.status === 401 || axiosError.response?.status === 403) {
         toast("Error Occured try Login Agian");
       }
     }
@@ -97,6 +100,27 @@ const CompanyHome = () => {
   useEffect(() => {
     fetchData();
   }, [isConfirmationOpen]);
+
+
+  const [selectedOption, setSelectedOption] = useState('');
+  const [email, setEmail] = useState('');
+
+  const handleSelectChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  const handleInputChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handleButtonClick = async() => {
+    try {
+      await axios.post("/api/company/createMeeting",{intervieweeEmail:email,interviewerEmail:selectedOption})
+      toast("Link Sent Successfully")
+    } catch (error) {
+      console.log(error)
+    }
+  };
   return (
     <>
       <CompanyNavbar />
@@ -133,8 +157,21 @@ const CompanyHome = () => {
           </Card>
         </div>
         <div>
-        <Button>Schedule an Interview</Button>
-        </div>
+      <select className="w-96 my-5" value={selectedOption} onChange={handleSelectChange}>
+        {interviewers?.map((value)=>(
+          <option value={value.email}>{value.email}</option>
+        ))
+       }
+      </select>
+      <Input
+      className="my-5"
+        type="email"
+        placeholder="Enter the Interviewee Email"
+        value={email}
+        onChange={handleInputChange}
+      />
+      <Button onClick={handleButtonClick}>Schedule an Interview</Button>
+    </div>
         <div className="md:block order-last md:order-first mt-10 md:mt-0">
           {selectedInterviewer ? (
             <>

@@ -15,6 +15,8 @@ import { errorResponse } from "../utils/error";
 import { sentOTP } from "../utils/otp";
 import { isEmail, isStrongPassword } from "../utils/validator";
 import bcrypt from "bcrypt";
+import { v4 as uuidv4 } from 'uuid';
+import { sendLink } from "../utils/sendLink";
 
 //<=----------------------Create Interviewer service----------------------=>//
 export const addInterviewerService = async (
@@ -145,3 +147,10 @@ export const updateProfileService = async (
   );
   return updatedCompany;
 };
+
+//<=----------------------Sent Mail service----------------------=>//
+export const sentLinkToEmail=async(interviewerEmail:string,intervieweeEmail:string):Promise<void>=>{
+  const link =uuidv4()
+ await sendLink(interviewerEmail,link)
+ await sendLink(intervieweeEmail,link)
+}
