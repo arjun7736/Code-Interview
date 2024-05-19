@@ -133,7 +133,7 @@ export const createNewPassword = async (
     const { email, password, confirmpassword, role } = req.body;
 
     createNewPasswordService(email, password, confirmpassword, role);
-
+ 
     res.json({ Message: "Password Changes Successfully" });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
