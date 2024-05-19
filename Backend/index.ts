@@ -11,6 +11,8 @@ import intervieweeRoute from "./src/routes/intervieweeRoute";
 import morgan from "morgan";
 import cors from "cors";
 
+
+
 const URI: string | undefined = process.env.MONGO_URI;
 const PORT: string | undefined = process.env.PORT;
 
@@ -25,8 +27,6 @@ app.use("/api/admin", adminRoute);
 app.use("/api/company", companyRoute);
 app.use("/api/interviewer", interviewerRoute);
 app.use("/api/interviewee", intervieweeRoute);
-
-
 
 
 if (URI) {
