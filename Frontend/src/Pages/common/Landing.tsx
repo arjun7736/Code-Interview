@@ -1,6 +1,7 @@
 import NavBar from "@/components/NavBar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Link } from "react-router-dom";
 
 const Landing = () => {
   return (
@@ -16,11 +17,10 @@ const Landing = () => {
         <div className="flex ">
           <Input className=" w-56" placeholder="Put Meeting Lnk here" />
           <Button className="mx-2 ">
-            {" "}
-            {/* <RiVideoAddFill className="mx-1" /> */}
             Join Meeting{" "}
           </Button>
         </div>
+       <Link to={"/compiler"}><Button >Compiler</Button></Link> 
       </div>
     </>
   );
