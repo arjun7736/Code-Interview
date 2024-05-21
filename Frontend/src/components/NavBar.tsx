@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -7,8 +7,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const NavBar = () => {
+  const {interviewerData}=useSelector((state:RootState)=>state.interviewer)
+  const {intervieweeData}=useSelector((state:RootState)=>state.interviewee)
+  const {companyData}=useSelector((state:RootState)=>state.company)
+
+  const navigate = useNavigate(); 
+
+  useEffect(() => {
+    if (companyData) {
+      navigate("/company");
+    } else if (intervieweeData) {
+      navigate("/interviewee");
+    } else if (interviewerData) {
+     navigate("/interviewer");
+    }
+  }, []);
+
   return (
     <>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
