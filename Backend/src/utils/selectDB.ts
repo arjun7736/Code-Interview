@@ -3,6 +3,7 @@ import IntervieweeDB from "../models/intervieweeModel";
 import InterviewerDB from "../models/interviewerModel";
 import AdminDB from "../models/adminModel";
 import { Model } from "mongoose";
+import {  IAdmin, ICompany, IInterviewee, IInterviewer } from "../interfaces/modelInterface";
 
 
 
@@ -26,8 +27,8 @@ export enum Role {
 
 
 
-export function getUserCollection(role: string): Model<any> | null {
-    let userCollection: Model<any> | null = null;
+export function getUserCollection(role: string): Model<IAdmin | ICompany | IInterviewee | IInterviewer> | null {
+    let userCollection: Model<IAdmin | ICompany | IInterviewee | IInterviewer> | null = null;
     switch (role) {
       case Role.ADMIN:
         userCollection = AdminDB;

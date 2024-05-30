@@ -1,5 +1,10 @@
-import { IInterviewer } from "../interfaces/modelInterface";
-import { updateinterviewerProfile } from "../repositories/interviewerRepository";
+import { IInterviewer, IQuestion } from "../interfaces/modelInterface";
+import {
+  addNewQuestionSet,
+  countDocuments,
+  getIndividualQuestions,
+  updateinterviewerProfile,
+} from "../repositories/interviewerRepository";
 import { errorResponse } from "../utils/error";
 import { StatusCode } from "../utils/selectDB";
 
@@ -9,7 +14,22 @@ export const updateInterviewerService = async (
   profilePicture?: string
 ): Promise<IInterviewer | null> => {
   if (!userId || !name) {
-    throw errorResponse(StatusCode.BAD_REQUEST, "Missing required information (ID and name)");
+    throw errorResponse(
+      StatusCode.BAD_REQUEST,
+      "Missing required information (ID and name)"
+    );
   }
   return await updateinterviewerProfile(userId, name, profilePicture);
+};
+
+export const addQuestions = async (questions: IQuestion[], id: string) => {
+  if (questions.length === 0)
+    throw errorResponse(StatusCode.BAD_REQUEST, "Cannot Add Empty Data");
+  const questionSet: number = await countDocuments();
+  return await addNewQuestionSet(questions, id, questionSet + 1);
+};
+
+export const getInterviewerQuestions = async(id: string) => {
+  if (!id) throw errorResponse(StatusCode.UNOTHERIZED, "Login Again");
+  return await getIndividualQuestions(id)
 };

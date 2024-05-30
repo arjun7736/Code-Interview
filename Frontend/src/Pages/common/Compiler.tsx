@@ -4,6 +4,9 @@ import { ScaleLoader } from "react-spinners";
 import Editor from "@monaco-editor/react";
 import axiosInstance from "@/intersepters/axiosIntersepter";
 import { hourglass } from "ldrs";
+import Question from "@/components/Question";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 hourglass.register();
 
 const Compiler = () => {
@@ -14,6 +17,7 @@ const Compiler = () => {
   const editorRef = useRef();
   const [code, setCode] = useState<string>("");
   const [language, setLanguage] = useState<Language[] | null>(null);
+
   const languages = async () => {
     try {
       const data = await axiosInstance.get("/languages");
@@ -40,6 +44,7 @@ const Compiler = () => {
       setResponse(test?.data?.stdout);
       test?.data?.stderr ? setError(test?.data?.stderr) : setError("");
       setLoading(false);
+      console.log(test)
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -49,88 +54,92 @@ const Compiler = () => {
     setResponse("");
     setError("");
   };
+  const{question}= useSelector((state:RootState)=>state.temp)
   return (
-    <div className="w-full h-full">
-      <div className=" mt-16 h-[100vh] sm:flex">
-        <div className="w-full h-[50%] border border-black sm:w-[50%] sm:h-[100%] bg-white">
-          <div className="h-[10vh] border flex justify-between items-center">
-            {language ? (
-              <select
-                name="languages"
-                className="ml-8 w-24"
-                value={languageId}
-                onChange={(e) => setLanguageId(Number(e.target.value))}
-              >
-                {language.map((value) => (
-                  <option value={value.id}>{value.name}</option>
-                ))}
-              </select>
-            ) : (
-              <>
-                <ScaleLoader />
-                <h1 className="font-serif">
-                  Please Wait we're Fetching Languages
-                </h1>{" "}
-              </>
-            )}
-            <Button className="" onClick={runCode}>
-              Run
-            </Button>
+    <>
+      {question?<Question />:""}
+      <div className="w-full h-full">
+        <div className=" mt-16 h-[100vh] sm:flex">
+          <div className="w-full h-[50%] border border-black sm:w-[50%] sm:h-[100%] bg-white">
+            <div className="h-[10vh] border flex justify-between items-center">
+              {language ? (
+                <select
+                  name="languages"
+                  className="ml-8 w-24"
+                  value={languageId}
+                  onChange={(e) => setLanguageId(Number(e.target.value))}
+                >
+                  {language.map((value) => (
+                    <option value={value.id}>{value.name}</option>
+                  ))}
+                </select>
+              ) : (
+                <>
+                  <ScaleLoader />
+                  <h1 className="font-serif">
+                    Please Wait we're Fetching Languages
+                  </h1>{" "}
+                </>
+              )}
+              <Button className="" onClick={runCode}>
+                Run
+              </Button>
+            </div>
+            <div>
+              <Editor
+                theme="vs-dark"
+                height="90.5vh"
+                defaultLanguage="javascript"
+                defaultValue="console.log('Welcome to Code-Interview')"
+                onMount={mount}
+                value={code}
+                onChange={(value) => setCode(value)}
+              />
+            </div>
           </div>
-          <div>
-            <Editor
-              theme="vs-dark"
-              height="90.5vh"
-              defaultLanguage="javascript"
-              defaultValue="console.log('Welcome to Code-Interview')"
-              onMount={mount}
-              value={code}
-              onChange={(value) => setCode(value)}
-            />
-          </div>
-        </div>
-        <div className="w-full h-[50%] border border-black sm:w-[50%] sm:h-[100%] ">
-          <div className="h-[10vh] flex justify-end items-center">
-            <Button onClick={clearOut}>Clear</Button>
-          </div>
-          <div
-            className="bg-[#1E1E1E] h-[90vh]"
-            style={{ color: "#FFFFFF", fontSize: "16px" }}
-          >
-            {loading ? (
-               <div className="flex justify-center items-center h-full">
-               <l-hourglass
-                 size="60"
-                 bg-opacity="0.1"
-                 speed="2"
-                 color="white"
-               ></l-hourglass>
-             </div>
-            ) : response ? (
-              <pre>
-                {response.split("\n").map((line, index) => (
-                  <React.Fragment key={index}>
-                    {line}
-                    <br />
-                  </React.Fragment>
-                ))}
-              </pre>
-            ) : error ? (
-              <pre>
-                {error.split("\n").map((line, index) => (
-                  <React.Fragment key={index}>
-                    {line}
-                    <br />
-                  </React.Fragment>
-                ))}
-              </pre>
-            ) : (
-              ""
-            )}
+          <div className="w-full h-[50%] border border-black sm:w-[50%] sm:h-[100%] ">
+            <div className="h-[10vh] flex justify-end items-center">
+              <Button onClick={clearOut}>Clear</Button>
+            </div>
+            <div
+              className="bg-[#1E1E1E] h-[90vh]"
+              style={{ color: "#FFFFFF", fontSize: "16px" }}
+            >
+              {loading ? (
+                <div className="flex justify-center items-center h-full">
+                  <l-hourglass
+                    size="60"
+                    bg-opacity="0.1"
+                    speed="2"
+                    color="white"
+                  ></l-hourglass>
+                </div>
+              ) : response ? (
+                <pre>
+                  {response.split("\n").map((line, index) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                </pre>
+              ) : error ? (
+                <pre>
+                  {error.split("\n").map((line, index) => (
+                    <React.Fragment key={index}>
+                      {line}
+                      <br />
+                    </React.Fragment>
+                  ))}
+                </pre>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

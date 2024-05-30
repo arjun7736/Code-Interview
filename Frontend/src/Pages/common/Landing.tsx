@@ -23,7 +23,8 @@ const Landing = () => {
     <>
       <NavBar />
       <div className="min-h-[90vh] flex flex-col justify-center items-start space-y-12 px-4">
-      <img src={images[currentImageIndex]} alt="" className="absolute inset-0 w-full h-full object-scale-down  z-[-1]" />     
+      <img src={images[currentImageIndex]} alt="" className="absolute inset-0 w-full h-full object-scale-down  z-[-1]" />
+     
         <div className="text-center">
           <h1 className="font-bold text-4xl text-gray-800">Welcome To Code-Interview</h1>
           <p className="text-lg mt-4 text-gray-600">
