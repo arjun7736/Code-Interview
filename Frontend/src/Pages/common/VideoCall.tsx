@@ -8,20 +8,36 @@ import { Button } from "@/components/ui/button";
 import { Code } from "lucide-react";
 import { FaLocationArrow } from "react-icons/fa";
 import { setQuestion } from "@/redux/slices/tempSlice";
+import { io } from 'socket.io-client';
 
-
-
+const socket = io('http://localhost:3000');
 
 
 const VideoCall = () => {
   const dispatch =useDispatch()
+
+  useEffect(() => {
+    socket.on('receive_message', (message) => {
+      dispatch(setQuestion(message));
+    });
+
+    return () => {
+      socket.off('receive_message');
+    };
+  }, [dispatch]);
+
+  const sendMessage = (message:string) => {
+    socket.emit('send_message', message);
+  };
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
-  // const toggleModal = () => setIsModalOpen(!isModalOpen);
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    sendMessage(inputValue)
     dispatch(setQuestion(inputValue))
     setIsModalOpen(false);
   };
@@ -30,7 +46,7 @@ const VideoCall = () => {
   useEffect(() => {
     const checkForText = () => {
       const bodyText = document.body.innerText || document.body.textContent;
-      if (bodyText.includes("(You)")) {
+      if (bodyText?.includes("(You)")) {
         setContainsText(true);
       } else {
         setContainsText(false);
@@ -58,7 +74,7 @@ const VideoCall = () => {
 
   const { roomId } = useParams<{ roomId?: string }>();
   const room = roomId || "123";
-  const myMeeting = async (element) => {
+  const myMeeting = async (element): Promise<void> => {
     const appID: number = 383066241;
     const serverSecret = import.meta.env.VITE_ZEGOCLOUD_SERVER_SECRET;
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
@@ -83,7 +99,7 @@ const VideoCall = () => {
 
 
     {containsText&&(
-      // <>
+      <>
        <Button
         onClick={() => window.open("/compiler", "_blank")}
         style={{
@@ -94,24 +110,24 @@ const VideoCall = () => {
           left: "170px"
         }}><Code />
         </Button>
-      // <Button
-      //   style={{
-      //     backgroundColor: "#313443",
-      //     position: 'absolute',
-      //     zIndex: 1000,
-      //     bottom: "16px",
-      //     left: "240px"
-      //   }}>Q&A</Button>
-      // <Button
-      //   onClick={toggleModal}
-      //   style={{
-      //     backgroundColor: "#313443",
-      //     position: 'absolute',
-      //     zIndex: 1000,
-      //     bottom: "16px",
-      //     left: "320px"
-      //   }}><FaLocationArrow /></Button>
-        // </>
+      <Button
+        style={{
+          backgroundColor: "#313443",
+          position: 'absolute',
+          zIndex: 1000,
+          bottom: "16px",
+          left: "240px"
+        }}>Q&A</Button>
+      <Button
+        onClick={toggleModal}
+        style={{
+          backgroundColor: "#313443",
+          position: 'absolute',
+          zIndex: 1000,
+          bottom: "16px",
+          left: "320px"
+        }}><FaLocationArrow /></Button>
+        </>
        )}
 
 

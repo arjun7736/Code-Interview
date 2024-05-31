@@ -13,9 +13,12 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
+import { useNavigate } from 'react-router-dom';
+
 
 const CompanyList = () => {
   const dispatch = useDispatch();
+  const navigate =useNavigate()
 
   const getCompanyData = async ():Promise<void> => {
     await axios
@@ -27,6 +30,7 @@ const CompanyList = () => {
         if (error.response.status === 401 || error.response.status === 403) {
           toast("Error Occurred, try logging in again");
          dispatch(logout())
+         navigate("/")
         }
       });
   };

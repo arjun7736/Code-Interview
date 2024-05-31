@@ -7,8 +7,11 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
+
 
 const InterviewerList = () => {
+  const navigate =useNavigate()
   const dispatch =useDispatch()
   const getInterviewerData = async ():Promise<void> => {
     await axios
@@ -20,6 +23,7 @@ const InterviewerList = () => {
         if (error.response.status === 401 || error.response.status === 403) {
           toast("Error Occurred, try logging in again");
           dispatch(logout())
+          navigate("/")
         }
       });
   };

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 
 const DeleteAndEdit: React.FC<Props> = ({
@@ -24,13 +24,13 @@ const DeleteAndEdit: React.FC<Props> = ({
     try {
       await axios.post("/api/company/edit-interviewer", {
         ...formData,
-        id: selectedInterviewer?._id, // Check for null before accessing _id
+        id: selectedInterviewer?._id,
       });
       setIsEditModalOpen(false);
       toast("Interviewer Edited Successfully");
     } catch (error: AxiosError) {
       console.log(error);
-      toast(error.message); // Use error.message for more specific error message
+      toast(error.message); 
       if (error.response?.status === 401 || error.response?.status === 403) {
         toast("Error Occured try Login Agian");
         localStorage.removeItem("company_token");

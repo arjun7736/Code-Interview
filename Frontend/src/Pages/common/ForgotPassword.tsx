@@ -12,7 +12,6 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { ScaleLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { setUserRole } from "@/redux/slices/tempSlice";
 

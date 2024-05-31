@@ -9,7 +9,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 hourglass.register();
 
+
+
 const Compiler = () => {
+  const question= useSelector((state:RootState)=>state.temp.question)
+
+  
   const [languageId, setLanguageId] = useState<number>(63);
   const [loading, setLoading] = useState<boolean>(false);
   const [response, setResponse] = useState<string>("");
@@ -54,7 +59,6 @@ const Compiler = () => {
     setResponse("");
     setError("");
   };
-  const{question}= useSelector((state:RootState)=>state.temp)
   return (
     <>
       {question?<Question />:""}

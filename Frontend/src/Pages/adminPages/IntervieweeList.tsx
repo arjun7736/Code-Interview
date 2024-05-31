@@ -16,6 +16,7 @@ import { useEffect } from "react";
 
 const IntervieweeList = () => {
 const dispatch =useDispatch()
+const navigate =useNavigate()
 
   const getIntervieweeData = async ():Promise<void> => {
     await axios
@@ -27,6 +28,7 @@ const dispatch =useDispatch()
         if (error.response.status === 401 || error.response.status === 403) {
           toast("Error Occurred, try logging in again");
           dispatch(logout())
+          navigate("/")
         }
       });
   };

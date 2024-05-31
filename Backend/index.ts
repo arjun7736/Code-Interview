@@ -10,7 +10,8 @@ import interviewerRoute from "./src/routes/interviewerRoute";
 import intervieweeRoute from "./src/routes/intervieweeRoute";
 import morgan from "morgan";
 import cors from "cors";
-
+import http from 'http';
+import { Server } from 'socket.io';
 
 
 const URI: string | undefined = process.env.MONGO_URI;
@@ -28,6 +29,27 @@ app.use("/api/company", companyRoute);
 app.use("/api/interviewer", interviewerRoute);
 app.use("/api/interviewee", intervieweeRoute);
 
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: '*',
+    }
+});
+
+io.on('connection', (socket) => {
+  console.log('A user connected:', socket.id);
+
+  socket.on('send_message', (message) => {
+    console.log('Message received:', message);
+
+    io.emit('receive_message', message);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('A user disconnected:', socket.id);
+  });
+});
+
 
 if (URI) {
   mongoose
@@ -38,7 +60,7 @@ if (URI) {
   console.log("not Connected");
 }
 if (PORT) {
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log("Server is running on port " + PORT);
   });
 }else{

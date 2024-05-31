@@ -40,6 +40,7 @@ const handleLogout = async (): Promise<void> => {
     if (axios.isAxiosError(error) && (error.response?.status === 401 || error.response?.status === 403)) {
       toast('Error Occurred, try logging in again');
       dispatch(logout())
+      navigate("/")
     } else {
       console.error('Unexpected error:', error); 
     }

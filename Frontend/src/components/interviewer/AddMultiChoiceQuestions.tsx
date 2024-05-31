@@ -65,14 +65,16 @@ const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose }) => {
                                 ))}
                             </select>
                         </div>
+                        <Button type ="button" onClick={handleAddQuestion}>Add</Button>
+
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
                     <Button variant="outline" onClick={onClose}>Cancel</Button>
-                    <Button type ="button" onClick={handleAddQuestion}>Add</Button>
                     <Button type="submit">Submit</Button>
                 </CardFooter>
             </form>
+            
         </Card>
     )
 }

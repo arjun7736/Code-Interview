@@ -44,7 +44,11 @@ export const interviewerSlice = createSlice({
       state.error = action.payload;
       state.interviewerData = null;
     },
-    logout: () => initialState,
+    logout: (state) => {
+      state.loading =false;
+      state.error= null;
+      state.interviewerData= null;
+    },
   },
 });
 

@@ -37,6 +37,7 @@ const CompanyNavbar = () => {
       ) {
         toast("Error Occurred, try logging in again");
         dispatch(logout());
+        navigate("/")
       } else {
         console.error("Unexpected error:", error);
       }

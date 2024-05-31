@@ -11,6 +11,7 @@ import {
   interviewersError,
   interviewersStart,
   interviewersSuccess,
+  logout,
 } from "@/redux/slices/companySlice";
 import { RootState } from "@/redux/store";
 import axios, { AxiosError } from "axios";
@@ -20,6 +21,7 @@ import { MdDeleteForever } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { PulseLoader } from "react-spinners";
 import { toast } from "sonner";
+import { useNavigate } from 'react-router-dom';
 
 
 interface Interviewer {
@@ -30,7 +32,7 @@ interface Interviewer {
 }
 
 const CompanyHome = () => {
-  
+  const navigate =useNavigate()
   const { interviewers, loading,companyData } = useSelector(
     (state: RootState) => state.company
   );
@@ -73,6 +75,8 @@ const CompanyHome = () => {
       dispatch(interviewersError(axiosError.message));
       if (axiosError.response?.status === 401 || axiosError.response?.status === 403) {
         toast("Error Occured try Login Agian");
+        dispatch(logout())
+        navigate("/")
       }
     }
   };
