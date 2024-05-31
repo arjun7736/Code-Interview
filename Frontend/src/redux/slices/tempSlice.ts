@@ -6,7 +6,9 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 const initialState:tempState={
     loading: false,
     error:null,
-    userRole:null
+    userRole:null,
+    question:null,
+    interviewersQuestion:null
 }
 
 export const tempSlice=createSlice ({
@@ -29,9 +31,15 @@ export const tempSlice=createSlice ({
             state.loading =false
             state.error =null
             state.userRole=null
+        },
+        setQuestion:(state,action:PayloadAction<string>)=>{
+            state.question=action.payload
+        },
+        interviewersQuestions:(state,action:PayloadAction<[]>)=>{
+            state.interviewersQuestion=action.payload
         }
     }
 })
 
-export const {otpVerificationError,otpVerificationStart,otpVerified,setUserRole}=tempSlice.actions
+export const {otpVerificationError,otpVerificationStart,otpVerified,setUserRole,setQuestion,interviewersQuestions}=tempSlice.actions
 export default tempSlice.reducer

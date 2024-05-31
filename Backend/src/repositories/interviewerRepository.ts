@@ -1,5 +1,7 @@
-import { IInterviewer } from "../interfaces/modelInterface";
+import mongoose from "mongoose";
+import { IInterviewer, IQuestion } from "../interfaces/modelInterface";
 import InterviewerDB from "../models/interviewerModel";
+import QuestionDB from "../models/questionModel"
 
 export async function createInterviewer(
   email: string,
@@ -38,10 +40,24 @@ export async function updateInterviewer(
 export async function updateinterviewerProfile(
   id: string,
   name?: string,
+  // eslint-disable-next-line camelcase
   profile_picture?: string
 ): Promise<IInterviewer | null> {
   return InterviewerDB.findByIdAndUpdate(
     { _id: id },
+    // eslint-disable-next-line camelcase
     { $set: { name: name, profile_picture: profile_picture } }
   );
+}
+
+export async function addNewQuestionSet(questions:IQuestion[],id:string,questionSet:number){
+  return await QuestionDB.create({questionSet,questions,author:id})
+}
+
+export const countDocuments= async()=>{
+  return await QuestionDB.countDocuments()
+}
+
+export const getIndividualQuestions=async(id:string)=>{
+  return await QuestionDB.find({ author: id }).exec();
 }

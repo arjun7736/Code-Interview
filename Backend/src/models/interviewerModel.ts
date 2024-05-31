@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { IInterviewer } from "../interfaces/modelInterface";
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const InterviewerSchema:Schema = new Schema<IInterviewer>({
   email: {
     type: String,

@@ -40,4 +40,6 @@ export interface tempState {
   loading: boolean;
   error: null | string;
   userRole:TempData|null
+  question:string|null
+  interviewersQuestion:string[]|null
 }
