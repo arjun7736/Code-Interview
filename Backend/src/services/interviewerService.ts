@@ -3,6 +3,7 @@ import {
   addNewQuestionSet,
   countDocuments,
   getIndividualQuestions,
+  setLink,
   updateinterviewerProfile,
 } from "../repositories/interviewerRepository";
 import { errorResponse } from "../utils/error";
@@ -33,3 +34,7 @@ export const getInterviewerQuestions = async(id: string) => {
   if (!id) throw errorResponse(StatusCode.UNOTHERIZED, "Login Again");
   return await getIndividualQuestions(id)
 };
+
+export const setMeetingLinkService=async(link:string,questionSet:string)=>{
+  return await setLink(link,questionSet)
+}

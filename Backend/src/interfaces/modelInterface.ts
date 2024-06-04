@@ -54,11 +54,21 @@ interface IIndividualQuestion {
   rightAnswer: string;
 }
 
+interface IAttendees{
+  interviewee:mongoose.Types.ObjectId
+  result:string
+}
 export interface IQuestion extends Document {
   questionSet: number;
   questions: IIndividualQuestion[];
   author: mongoose.Types.ObjectId; 
-  attentedInterviewees: mongoose.Types.ObjectId[]; 
+  attentedInterviewees: IAttendees[]; 
 }
 
 export type UserModel = IAdmin | ICompany | IInterviewee | IInterviewer;
+
+export interface ILink extends Document{
+  meetingLink:string,
+  questionSet:string,
+  createdAt:Date
+}

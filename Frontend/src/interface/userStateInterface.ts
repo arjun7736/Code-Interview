@@ -41,5 +41,5 @@ export interface tempState {
   error: null | string;
   userRole:TempData|null
   question:string|null
-  interviewersQuestion:string[]|null
+  interviewersQuestion:string[]|null,
 }

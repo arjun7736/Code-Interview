@@ -1,5 +1,5 @@
 import { IInterviewee } from "../interfaces/modelInterface";
-import { updateIntervieweeProfile } from "../repositories/intervieweeRepository";
+import { getLinkById, getQuestionSet, getQuestionsById, updateIntervieweeProfile, updateQuestionSetById } from "../repositories/intervieweeRepository";
 import { errorResponse } from "../utils/error";
 import { StatusCode } from "../utils/selectDB";
 
@@ -13,3 +13,16 @@ export const updateIntervieweeService = async (
   }
   return await updateIntervieweeProfile(userId, name, profilePicture);
 };
+
+export const fetchQuestions=async(id:string)=>{
+  return await getQuestionsById(id)
+}
+export const getQuestionSetService =async(link:string)=>{
+  return await getQuestionSet(link)
+} 
+export const getMeetingLinkService=async(id:string)=>{
+  return await getLinkById(id)
+}
+export const updateQuestionSetService=async(interviewee:string,result:string,questionSet:string)=>{
+return await updateQuestionSetById(interviewee,result,questionSet)
+}

@@ -17,7 +17,7 @@ const OTPSchema:Schema = new Schema<IOtp>({
   },
   createdAt: {
     type:Date,
-    default:Date.now(),
+    default:Date.now,
     expires:"5m"
   },
   company: {

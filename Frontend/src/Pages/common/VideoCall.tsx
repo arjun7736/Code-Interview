@@ -14,8 +14,8 @@ const socket = io('http://localhost:3000');
 
 
 const VideoCall = () => {
-  const dispatch =useDispatch()
 
+  const dispatch =useDispatch()
   useEffect(() => {
     socket.on('receive_message', (message) => {
       dispatch(setQuestion(message));

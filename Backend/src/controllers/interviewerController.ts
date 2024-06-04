@@ -3,12 +3,12 @@ import { ErrorResponse } from "../interfaces/errorInterface";
 import {
   addQuestions,
   getInterviewerQuestions,
+  setMeetingLinkService,
   updateInterviewerService,
 } from "../services/interviewerService";
 import { errorResponse } from "../utils/error";
 import { clearPassword } from "../services/authServices";
 import { StatusCode } from "../utils/selectDB";
-import { IQuestion } from "../interfaces/modelInterface";
 
 export const updateProfile = async (req: Request, res: Response) => {
   try {
@@ -56,3 +56,19 @@ export const getQuestions = async (req: Request, res: Response) => {
     res.status(statusCode).send(customError.message);
   }
 };
+
+export const setMeetingLink=async(req:Request,res:Response)=>{
+  try {
+    const {link,questionSet}=req.body
+    const meetingLink =await setMeetingLinkService(link,questionSet)
+    if(meetingLink){
+      res.json({Message:"Success"})
+    }else{
+      res.json({Message:"Failed"})
+    }
+  } catch (error:unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    res.status(statusCode).send(customError.message);
+  }
+}

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { IInterviewer, IQuestion } from "../interfaces/modelInterface";
 import InterviewerDB from "../models/interviewerModel";
 import QuestionDB from "../models/questionModel"
+import LinkDB from "../models/linkModel";
 
 export async function createInterviewer(
   email: string,
@@ -60,4 +61,8 @@ export const countDocuments= async()=>{
 
 export const getIndividualQuestions=async(id:string)=>{
   return await QuestionDB.find({ author: id }).exec();
+}
+
+export const setLink=async(link:string,questionSet:string)=>{
+  return await LinkDB.create({meetingLink:link,questionSet:questionSet})
 }

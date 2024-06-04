@@ -2,13 +2,12 @@ import { TempData } from "@/interface/userDataTypeInterface";
 import { tempState } from "@/interface/userStateInterface";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-
 const initialState:tempState={
     loading: false,
     error:null,
     userRole:null,
     question:null,
-    interviewersQuestion:null
+    interviewersQuestion:null,
 }
 
 export const tempSlice=createSlice ({
@@ -37,7 +36,7 @@ export const tempSlice=createSlice ({
         },
         interviewersQuestions:(state,action:PayloadAction<[]>)=>{
             state.interviewersQuestion=action.payload
-        }
+        },
     }
 })
 
