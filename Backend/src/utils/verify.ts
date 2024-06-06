@@ -39,7 +39,7 @@ declare module 'express-serve-static-core' {
       if (!token) {
       throw errorResponse(StatusCode.UNOTHERIZED, 'You are not authenticated')
     }
-      jwt.verify(token, process.env.JWT_SECRET as string, (err: any, user: any) => {
+      jwt.verify(token, process.env.JWT_SECRET as string, (err, user: any) => {
       if (err) throw errorResponse(StatusCode.FORBIDDEN, 'Token is not valid')
       req.user = user;
       req.userType = userType;

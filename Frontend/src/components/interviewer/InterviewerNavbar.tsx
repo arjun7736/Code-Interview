@@ -31,7 +31,7 @@ const InterviewerNavbar = () => {
       dispatch(logout());
       await axios.get("/api/auth/logout");
       toast("Logout Successful");
-      navigate("/interviewer/login");
+      navigate("/");
     } catch (error) {
       if (
         axios.isAxiosError(error) &&

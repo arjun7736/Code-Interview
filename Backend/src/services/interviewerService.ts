@@ -2,7 +2,9 @@ import { IInterviewer, IQuestion } from "../interfaces/modelInterface";
 import {
   addNewQuestionSet,
   countDocuments,
+  deleteQuestionById,
   getIndividualQuestions,
+  removeQuestionFromArray,
   setLink,
   updateinterviewerProfile,
 } from "../repositories/interviewerRepository";
@@ -30,11 +32,22 @@ export const addQuestions = async (questions: IQuestion[], id: string) => {
   return await addNewQuestionSet(questions, id, questionSet + 1);
 };
 
-export const getInterviewerQuestions = async(id: string) => {
+export const getInterviewerQuestions = async (id: string) => {
   if (!id) throw errorResponse(StatusCode.UNOTHERIZED, "Login Again");
-  return await getIndividualQuestions(id)
+  return await getIndividualQuestions(id);
 };
 
-export const setMeetingLinkService=async(link:string,questionSet:string)=>{
-  return await setLink(link,questionSet)
-}
+export const setMeetingLinkService = async (
+  link: string,
+  questionSet: string
+) => {
+  return await setLink(link, questionSet);
+};
+
+export const deleteQuestionService = async (id: string) => {
+  const data = await deleteQuestionById(id);
+  if(!data){
+    await removeQuestionFromArray(id)
+  }
+  return data;
+};

@@ -13,6 +13,7 @@ import axios from "axios";
 import { logout, setIntervieweeData } from "@/redux/slices/adminSlice";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const IntervieweeList = () => {
 const dispatch =useDispatch()

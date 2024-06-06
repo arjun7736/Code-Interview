@@ -53,6 +53,9 @@ export const userLoginService = async (
 
   if (!user) throw errorResponse(StatusCode.UNOTHERIZED, "No Account Found Check Credentials");
 
+  if (typeof user.password !== 'string') {
+    throw errorResponse(StatusCode.UNOTHERIZED,"Invalid password format");
+  }
   const passwordMatch: boolean = await bcrypt.compare(password, user.password);
   if (!passwordMatch) {
     throw errorResponse(StatusCode.UNOTHERIZED, "No Account Found Check Credentials");

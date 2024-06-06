@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { ErrorResponse } from "../interfaces/errorInterface";
 import {
   addQuestions,
+  deleteQuestionService,
   getInterviewerQuestions,
   setMeetingLinkService,
   updateInterviewerService,
@@ -48,8 +49,8 @@ export const addQuestion = async (req: Request, res: Response) => {
 export const getQuestions = async (req: Request, res: Response) => {
   try {
     const id = req?.user._id;
-    const questions= await getInterviewerQuestions(id);
-    res.json(questions)
+    const questions = await getInterviewerQuestions(id);
+    res.json(questions);
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
@@ -57,18 +58,42 @@ export const getQuestions = async (req: Request, res: Response) => {
   }
 };
 
-export const setMeetingLink=async(req:Request,res:Response)=>{
+export const setMeetingLink = async (req: Request, res: Response) => {
   try {
-    const {link,questionSet}=req.body
-    const meetingLink =await setMeetingLinkService(link,questionSet)
-    if(meetingLink){
-      res.json({Message:"Success"})
-    }else{
-      res.json({Message:"Failed"})
+    const { link, questionSet } = req.body;
+    const meetingLink = await setMeetingLinkService(link, questionSet);
+    if (meetingLink) {
+      res.json({ Message: "Success" });
+    } else {
+      res.json({ Message: "Failed" });
     }
-  } catch (error:unknown) {
+  } catch (error: unknown) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
     res.status(statusCode).send(customError.message);
   }
-}
+};
+
+export const deleteQuestion = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const deleted = await deleteQuestionService(id);
+    res.json(deleted);
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    res.status(statusCode).send(customError.message);
+  }
+};
+
+export const updateQuestionSet = (req: Request, res: Response) => {
+  try {
+    res.json("succcess")
+  } catch (error: unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    res.status(statusCode).send(customError.message);
+  }
+};
+
+

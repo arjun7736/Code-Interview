@@ -205,7 +205,7 @@ export const getIndividualData = async (
 ): Promise<void> => {
   try {
     const role: string | undefined = req?.userType;
-    const id: string | undefined = req?.user._id;
+    const id: string | undefined = req?.user?._id;
     if (!role || !id) {
       throw errorResponse(StatusCode.SERVER_ERROR, 'Cant Find ID');
     }

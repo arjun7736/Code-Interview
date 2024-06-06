@@ -4,48 +4,61 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import QuestionList from "./QuestionList";
+import QuestionList from "../../components/interviewer/QuestionList";
 import AddMultiChoiceQuestions from "@/components/interviewer/AddMultiChoiceQuestions";
 import { toast } from "sonner";
+import IndividualQuestionTable from "@/components/interviewer/IndividualQuestionTable";
+import { interviewersQuestions } from "@/redux/slices/tempSlice";
+import { useDispatch } from "react-redux";
 
 const InterviewerHome = () => {
   const [selectedQuestionSet, SetSelectQuestionSet] = useState<null | []>(null);
-  const [questionSets, setQuestionSets] = useState<any[]>([]);
-  const [selectedQuestionSetId, setSelectedQuestionSetId] = useState<string | null>(null);
+  const [questionSets, setQuestionSets] = useState([]);
+  const [selectedQuestionSetId, setSelectedQuestionSetId] = useState<
+    string | null
+  >(null);
   const [value, setValue] = useState<string | null>(null);
   const [showSelectQuestionModal, setShowSelectQuestionModal] = useState(false);
   const [showAddQuestions, setShowAddQuestions] = useState(false);
-  
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   useEffect(() => {
     axios
       .get("/api/interviewer/getQuestions")
       .then((response) => {
-        console.log(response);
         setQuestionSets(response.data);
+        dispatch(interviewersQuestions(response?.data));
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [selectedQuestionSet, dispatch]);
 
   const handleJoinRoom = useCallback(() => {
     setShowSelectQuestionModal(true);
   }, []);
 
-  const handleQuestionSetChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleQuestionSetChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setSelectedQuestionSetId(event.target.value);
   };
 
-  const handleProceed = useCallback(async(selectedQuestionSetId:string|null) => {
-    setShowSelectQuestionModal(false);
-    if (value) {
-   const data =  await axios.post("/api/interviewer/setMeetingLink",{link:value,questionSet:selectedQuestionSetId})
-   toast(data.data.Message)
-     navigate(`/videocall/${value}`);
-    }
-  }, [ navigate, value]);
+  const handleProceed = useCallback(
+    async (selectedQuestionSetId: string | null) => {
+      setShowSelectQuestionModal(false);
+      if (value) {
+        const data = await axios.post("/api/interviewer/setMeetingLink", {
+          link: value,
+          questionSet: selectedQuestionSetId,
+        });
+        toast(data.data.Message);
+        navigate(`/videocall/${value}`);
+      }
+    },
+    [navigate, value]
+  );
 
   const toggleAddQuestions = () => {
     setShowAddQuestions(!showAddQuestions);
@@ -58,7 +71,10 @@ const InterviewerHome = () => {
         <div className="container max-w-[1350px] text-center flex justify-around w-[100vw] mb-10">
           <div className="w-[40vw]">
             {selectedQuestionSet ? (
-              <div>hi</div>
+              <IndividualQuestionTable
+                questionsData={selectedQuestionSet}
+                select={SetSelectQuestionSet}
+              />
             ) : (
               <>
                 <h1 className="font-bold text-4xl text-gray-800">
@@ -96,15 +112,23 @@ const InterviewerHome = () => {
                     Select a question set
                   </option>
                   {questionSets.map((set) => (
-                    <option key={set.questionSet} value={set.questionSet} className="text-black">
+                    <option
+                      key={set.questionSet}
+                      value={set.questionSet}
+                      className="text-black"
+                    >
                       QuestionSet {set.questionSet}
                     </option>
                   ))}
                 </select>
               </div>
               <div className="mt-4 flex justify-between">
-                <Button onClick={() => handleProceed(selectedQuestionSetId)}>Done & Join Meeting</Button>
-                <Button onClick={() => handleProceed(null)}>Continue Without Questions</Button>
+                <Button onClick={() => handleProceed(selectedQuestionSetId)}>
+                  Done & Join Meeting
+                </Button>
+                <Button onClick={() => handleProceed(null)}>
+                  Continue Without Questions
+                </Button>
               </div>
             </div>
           </div>

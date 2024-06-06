@@ -1,43 +1,47 @@
-import { SetStateAction, ChangeEvent, useState } from "react"
+import { ChangeEvent, SetStateAction, useEffect, useState } from "react"
 import { Button } from "../ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import axios from "axios"
 
-const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose }) => {
-    const [question, setQuestion] = useState('');
-    const [options, setOptions] = useState([]);
-    const [rightOption, setSelectedOption] = useState('');
-    const [addedQuestions, setAddedQuestions] = useState<AddedQuestion[]>([]);
+const UpdateIndividualQuestionSet:React.FC<MultiChoiceProps> = ({onClose,data}) => {
+  const [question, setQuestion] = useState('');
+  const [options, setOptions] = useState([]);
+  const [rightOption, setSelectedOption] = useState('');
+  const [addedQuestions, setAddedQuestions] = useState<AddedQuestion[]>([]);
 
 
-    const handleAddQuestion = () => {
-        setAddedQuestions(prevQuestions => [...prevQuestions, { question, options, rightOption }]);
-        setQuestion('');
-        setOptions([]);
-        setSelectedOption('');
-    };
-    const handleQuestionChange = (e: { target: { value: SetStateAction<string> } }) => {
-        setQuestion(e.target.value);
-    };
+  const handleOptionChange = (e: ChangeEvent<HTMLInputElement>,index: number) => {
+    const newOptions = [...options];
+    newOptions[index] = e.target.value;
+    setOptions(newOptions);
+};
+const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault()
+    console.log(addedQuestions)
+    // await axios.post("/api/interviewer/addQuestions",{questions:addedQuestions}).then((data)=>{
+    //     console.log(data)
+    // }).catch((error)=>{
+    //     console.log(error)
+    // })
+    onClose()
+}
 
-    const handleOptionChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
-        const newOptions = [...options];
-        newOptions[index] = e.target.value;
-        setOptions(newOptions);
-    };
-    const handleSubmit = async (e: { preventDefault: () => void }) => {
-        e.preventDefault()
-        await axios.post("/api/interviewer/addQuestions",{questions:addedQuestions}).then((data)=>{
-            console.log(data)
-        }).catch((error)=>{
-            console.log(error)
-        })
-        onClose()
-    }
-    
-    return (
+  const handleQuestionChange = (e: { target: { value: SetStateAction<string> } }) => {
+    setQuestion(e.target.value);
+    setAddedQuestions(prevState => ({
+        ...prevState,
+        question: e.target.value
+    }));};
+    useEffect(() => {
+      if (data && data.question) {
+        setQuestion(data.question);
+      }
+    }, [data]);
+
+  return (
+    <>
         <Card className="w-[650px] ">
             <form onSubmit={handleSubmit}>
                 <CardHeader>
@@ -53,7 +57,7 @@ const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose }) => {
                             {[...Array(4)].map((_, index) => (
                                 <div key={index}>
                                     <Label htmlFor={`option${index + 1}`}>Option {index + 1}</Label>
-                                    <Input id={`option${index + 1}`} placeholder={`Enter Option ${index + 1}`} value={options[index]} onChange={(e) => handleOptionChange(e, index)} />
+                                    <Input id={`option${index + 1}`} placeholder={`Enter Option ${index + 1}`} value={options[index] || data.options[index]||""} onChange={(e) => handleOptionChange(e, index)} />
                                 </div>
                             ))}
                         </div>
@@ -65,27 +69,30 @@ const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose }) => {
                                 ))}
                             </select>
                         </div>
-                        <Button type ="button" onClick={handleAddQuestion}>Add</Button>
+                        <Button type ="button" >Add</Button>
 
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                    <Button variant="outline" onClick={onClose}>Cancel</Button>
+                    <Button variant="outline" >Cancel</Button>
                     <Button type="submit">Submit</Button>
                 </CardFooter>
             </form>
         </Card>
-    )
+    </>
+  )
 }
 
-export default AddMultiChoiceQuestions
+export default UpdateIndividualQuestionSet
+
 
 
 interface MultiChoiceProps{
-    onClose:()=>void
+  onClose:()=>void,
+  data:[]
 }
 interface AddedQuestion {
-    question: string;
-    options: string[];
-    rightOption: string;
+  question: string;
+  options: string[];
+  rightOption: string;
 }

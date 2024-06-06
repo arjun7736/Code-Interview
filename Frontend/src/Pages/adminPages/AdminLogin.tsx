@@ -52,7 +52,7 @@ const AdminLogin = () => {
 
   return (
    <>
-     <Card className="mx-auto max-w-sm shadow-lg mt-20">
+     <Card className="mx-auto max-w-sm shadow-lg mt-20" data-testid="admin">
     <CardHeader>
       <CardTitle className="text-2xl">Admin Login</CardTitle>
       <CardDescription>
@@ -81,6 +81,7 @@ const AdminLogin = () => {
           type="submit"
           className="w-full"
           disabled={loading}
+          data-testid="login"
         >
           {loading ? <ScaleLoader  color="white"/> : "Login"}
         </Button>

@@ -1,13 +1,14 @@
-import mongoose from "mongoose";
+/* eslint-disable camelcase */
 import { IInterviewer, IQuestion } from "../interfaces/modelInterface";
 import InterviewerDB from "../models/interviewerModel";
 import QuestionDB from "../models/questionModel"
 import LinkDB from "../models/linkModel";
+import mongoose from "mongoose";
 
 export async function createInterviewer(
   email: string,
   password: string,
-  company: any,
+  company: string |mongoose.Types.ObjectId |undefined ,
   role: string
 ): Promise<IInterviewer | null> {
   return await InterviewerDB.create({
@@ -41,12 +42,10 @@ export async function updateInterviewer(
 export async function updateinterviewerProfile(
   id: string,
   name?: string,
-  // eslint-disable-next-line camelcase
   profile_picture?: string
 ): Promise<IInterviewer | null> {
   return InterviewerDB.findByIdAndUpdate(
     { _id: id },
-    // eslint-disable-next-line camelcase
     { $set: { name: name, profile_picture: profile_picture } }
   );
 }
@@ -65,4 +64,13 @@ export const getIndividualQuestions=async(id:string)=>{
 
 export const setLink=async(link:string,questionSet:string)=>{
   return await LinkDB.create({meetingLink:link,questionSet:questionSet})
+}
+export const deleteQuestionById=async(id:string)=>{
+  return await QuestionDB.findByIdAndDelete(id)
+}
+export const removeQuestionFromArray=async(id:string)=>{
+  return await QuestionDB.updateOne(
+    { 'questions._id': id },
+    { $pull: { questions: { _id: id } } }
+  );
 }

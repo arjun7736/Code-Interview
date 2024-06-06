@@ -26,7 +26,7 @@ const Question = () => {
 
     return (
        <>
-       {question?(<div className="absolute top-3 ml-10">
+       {message?(<div className="absolute top-3 ml-10">
         <div>
           <span className="inline-flex justify-center items-center w-6 h-6 rounded bg-green-500 text-white font-medium text-sm">
               Q

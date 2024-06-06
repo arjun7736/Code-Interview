@@ -110,23 +110,15 @@ const VideoCall = () => {
           left: "170px"
         }}><Code />
         </Button>
-      <Button
-        style={{
-          backgroundColor: "#313443",
-          position: 'absolute',
-          zIndex: 1000,
-          bottom: "16px",
-          left: "240px"
-        }}>Q&A</Button>
-      <Button
+      {interviewerData?(<Button
         onClick={toggleModal}
         style={{
           backgroundColor: "#313443",
           position: 'absolute',
           zIndex: 1000,
           bottom: "16px",
-          left: "320px"
-        }}><FaLocationArrow /></Button>
+          left: "250px"
+        }}><FaLocationArrow /></Button>):""}
         </>
        )}
 

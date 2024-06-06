@@ -1,8 +1,10 @@
+/* eslint-disable camelcase */
 import OTPDB from "../models/otpModel";
 import { StatusCode, getUserCollection } from "../utils/selectDB";
 import { ICompany, IInterviewee, IInterviewer, IOtp } from "../interfaces/modelInterface";
+import mongoose from "mongoose";
 
-export async function findUser(email: string, role: string): Promise<any | null> {
+export async function findUser(email: string, role: string) {
   const userCollection = getUserCollection(role);
   if (!userCollection) {
     throw { statusCode: StatusCode.BAD_REQUEST, message: "User collection not found" };
@@ -16,7 +18,7 @@ export async function createOTPuser(
   email: string,
   role: string,
   name?: string,
-  company?: any,
+  company?: string | mongoose.Types.ObjectId,
   profile_picture?: string
 ): Promise<ICompany | IInterviewee | IInterviewer | null> {
   return await OTPDB.create({

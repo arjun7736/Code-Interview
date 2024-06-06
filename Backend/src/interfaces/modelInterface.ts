@@ -15,6 +15,7 @@ export interface IAdmin extends Document {
   password: string;
   profile_picture?: string;
   name?: string;
+  isBlocked?: boolean;
   role?: string;
 }
 
@@ -33,7 +34,7 @@ export interface IInterviewer extends Document {
   profile_picture?: string;
   name?: string;
   isBlocked?: boolean;
-  company?: any;
+  company?: string | mongoose.Types.ObjectId ;
   role?: string;
 }
 
