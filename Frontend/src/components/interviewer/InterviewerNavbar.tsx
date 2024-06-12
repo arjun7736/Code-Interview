@@ -14,6 +14,7 @@ import axios from "axios";
 import { logout } from "@/redux/slices/interviewerSlice";
 import { toast } from "sonner";
 import { Avatar, AvatarImage } from "../ui/avatar";
+import { MainBackGround } from "@/lib/Color";
 
 const InterviewerNavbar = () => {
   const navigate = useNavigate();
@@ -47,8 +48,8 @@ const InterviewerNavbar = () => {
   };
   return (
     <>
-      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-        <nav className=" w-56 gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6" style={{backgroundColor:MainBackGround}}>
+        <nav className=" w-56 gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6 text-white">
           Code-Interview
         </nav>
         <div className="flex w-full items-center justify-end gap-4 md:ml-auto md:gap-2 lg:gap-4">

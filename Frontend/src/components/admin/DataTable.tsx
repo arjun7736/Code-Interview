@@ -1,12 +1,13 @@
 import { CompanyData, IntervieweeData, InterviewerData } from "@/interface/userDataTypeInterface";
 import { Avatar,  AvatarImage } from "../ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Light } from "@/lib/Color";
 
 
 const DataTable: React.FC<DataCardProps> = ({data,type}) => {
   const slicedData = data?.slice(0, 4);
   return (
-    <Card x-chunk="dashboard-01-chunk-5">
+    <Card x-chunk="dashboard-01-chunk-5" style={{backgroundColor:Light}}>
       <CardHeader>
         <CardTitle>{type}</CardTitle>
       </CardHeader>

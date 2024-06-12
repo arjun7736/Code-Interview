@@ -4,8 +4,13 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import axios from "axios"
+import { toast } from "sonner"
+import { MainBackGround } from "@/lib/Color"
 
-const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose }) => {
+const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose,questionSet }) => {
+    if (!questionSet){
+        questionSet=null
+    }
     const [question, setQuestion] = useState('');
     const [options, setOptions] = useState([]);
     const [rightOption, setSelectedOption] = useState('');
@@ -27,10 +32,12 @@ const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose }) => {
         newOptions[index] = e.target.value;
         setOptions(newOptions);
     };
+    
+
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault()
-        await axios.post("/api/interviewer/addQuestions",{questions:addedQuestions}).then((data)=>{
-            console.log(data)
+        await axios.post("/api/interviewer/addQuestions",{questions:addedQuestions,questionSet}).then(()=>{
+            toast("Questions Added")
         }).catch((error)=>{
             console.log(error)
         })
@@ -38,7 +45,7 @@ const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose }) => {
     }
     
     return (
-        <Card className="w-[650px] ">
+        <Card className="w-[650px] shadow-2xl">
             <form onSubmit={handleSubmit}>
                 <CardHeader>
                     <CardTitle>Add Question</CardTitle>
@@ -65,13 +72,13 @@ const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose }) => {
                                 ))}
                             </select>
                         </div>
-                        <Button type ="button" onClick={handleAddQuestion}>Add</Button>
+                        <Button  type ="button" onClick={handleAddQuestion} style={{backgroundColor:MainBackGround}}>Add</Button>
 
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
                     <Button variant="outline" onClick={onClose}>Cancel</Button>
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit" style={{backgroundColor:MainBackGround}}>Submit</Button>
                 </CardFooter>
             </form>
         </Card>
@@ -83,6 +90,7 @@ export default AddMultiChoiceQuestions
 
 interface MultiChoiceProps{
     onClose:()=>void
+    questionSet?:number|null
 }
 interface AddedQuestion {
     question: string;

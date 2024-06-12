@@ -8,19 +8,21 @@ import {
 } from "../ui/table";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { Image,  } from "lucide-react";
 import { useState } from "react";
-import { CompanyData, IntervieweeData, InterviewerData } from "@/interface/userDataTypeInterface";
+import {
+  CompanyData,
+  IntervieweeData,
+  InterviewerData,
+} from "@/interface/userDataTypeInterface";
 import Popup from "./Popup";
+import { Light, MainBackGround } from "@/lib/Color";
+import { Avatar, AvatarImage } from "../ui/avatar";
 
-const UsersTable:React.FC<usersData> = ({data,fun}) => {
-
-
+const UsersTable: React.FC<usersData> = ({ data, fun }) => {
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
   const [popupId, setPopupId] = useState<string | null>(null);
   const [user, setUser] = useState<string | null>(null);
   const [message, setMessage] = useState<string>("");
-
 
   const openPopup = (message: string, id: string, user: string) => {
     setIsPopupOpen(true);
@@ -38,7 +40,7 @@ const UsersTable:React.FC<usersData> = ({data,fun}) => {
 
   return (
     <>
-      <Table>
+      <Table style={{ backgroundColor: Light }} className="rounded-lg ">
         <TableHeader>
           <TableRow>
             <TableHead className="hidden w-[100px] sm:table-cell">
@@ -54,29 +56,42 @@ const UsersTable:React.FC<usersData> = ({data,fun}) => {
           </TableRow>
         </TableHeader>
 
-        {data?.map((value)=>(
+        {data?.map((value) => (
           <TableBody>
-          <TableRow>
-            <TableCell className="hidden sm:table-cell">
-              <Image
-                className="aspect-square rounded-md object-cover"
-                height="64"
-                src={value?.profile_picture}
-                width="64"
-              />
-            </TableCell>
-            <TableCell className="font-medium">
-              {value?.name}
-            </TableCell>
-            <TableCell>
-              <Badge variant="outline">{value?.isBlocked?"Blocked":"Active"}</Badge>
-            </TableCell>
-            <TableCell>{value?.email}</TableCell>
-            <TableCell>
-            <Button onClick={() =>openPopup(value.isBlocked ? "unblock" : "block", value._id, value?.role)} >{value?.isBlocked?"Unblock" : "Block"}</Button>&nbsp;
-            </TableCell>
-          </TableRow>
-        </TableBody>
+            <TableRow>
+              <TableCell className="hidden sm:table-cell">
+                <Avatar>
+                  <AvatarImage
+                    className="aspect-square rounded-md object-cover"
+                    src={value?.profile_picture}
+                    width="64"
+                  />
+                </Avatar>
+              </TableCell>
+              <TableCell className="font-medium">{value?.name}</TableCell>
+              <TableCell>
+                <Badge variant="outline" className={value?.isBlocked ? 'text-red-500' : 'text-green-500'}>
+                  {value?.isBlocked ? "Blocked" : "Active"}
+                </Badge>
+              </TableCell>
+              <TableCell>{value?.email}</TableCell>
+              <TableCell>
+                <Button
+                  onClick={() =>
+                    openPopup(
+                      value.isBlocked ? "unblock" : "block",
+                      value._id,
+                      value?.role
+                    )
+                  }
+                  style={{ backgroundColor: MainBackGround }}
+                >
+                  {value?.isBlocked ? "Unblock" : "Block"}
+                </Button>
+                &nbsp;
+              </TableCell>
+            </TableRow>
+          </TableBody>
         ))}
       </Table>
       <Popup
@@ -93,7 +108,7 @@ const UsersTable:React.FC<usersData> = ({data,fun}) => {
 
 export default UsersTable;
 
-interface usersData{
-  data: CompanyData[]|InterviewerData[]|IntervieweeData[]|null;
-  fun
+interface usersData {
+  data: CompanyData[] | InterviewerData[] | IntervieweeData[] | null;
+  fun;
 }

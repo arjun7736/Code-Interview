@@ -2,6 +2,7 @@ import AdminHeader from "@/components/admin/AdminHeader";
 import DataCard from "@/components/admin/DataCard";
 import DataTable from "@/components/admin/DataTable";
 import { AdminState } from "@/interface/userStateInterface";
+import { MainBackGround, ThirdBG } from "@/lib/Color";
 import { setCompanyData, setIntervieweeData, setInterviewerData, setPremiumCompanies } from "@/redux/slices/adminSlice";
 import { RootState } from "@/redux/store";
 import axios from "axios";
@@ -45,11 +46,11 @@ const premium = async () => {
   // };
   return (
     <>
-      <div className="flex min-h-screen w-full flex-col">
+      <div className="flex min-h-screen w-full flex-col" style={{ background: ThirdBG }}>
         <AdminHeader />
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
           <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-            <DataCard data={premiumCompanies}  type={"Premium Companies"}/>
+            <DataCard data={premiumCompanies}  type={"Premium Companies"} />
             <DataCard data={interviewerData} type={"Total Interviewers"}/>
             <DataCard data={intervieweeData} type={"Total Interviewees"}/>
             <DataCard data={companyData} type={"Total Companies"}/>

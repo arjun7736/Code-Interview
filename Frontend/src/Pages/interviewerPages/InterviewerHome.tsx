@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import IndividualQuestionTable from "@/components/interviewer/IndividualQuestionTable";
 import { interviewersQuestions } from "@/redux/slices/tempSlice";
 import { useDispatch } from "react-redux";
+import {Light, MainBackGround, ThirdBG } from "@/lib/Color";
 
 const InterviewerHome = () => {
   const [selectedQuestionSet, SetSelectQuestionSet] = useState<null | []>(null);
@@ -33,7 +34,7 @@ const InterviewerHome = () => {
       .catch((error) => {
         console.error(error);
       });
-  }, [selectedQuestionSet, dispatch]);
+  }, [selectedQuestionSet, dispatch,showAddQuestions]);
 
   const handleJoinRoom = useCallback(() => {
     setShowSelectQuestionModal(true);
@@ -67,9 +68,9 @@ const InterviewerHome = () => {
   return (
     <>
       <InterviewerNavbar />
-      <div className="min-h-[90vh] flex flex-col justify-center items-start space-y-12 px-4 relative">
+      <div className="min-h-[90vh] flex flex-col justify-center items-start space-y-12 px-4 relative" style={{backgroundColor:ThirdBG}}>
         <div className="container max-w-[1350px] text-center flex justify-around w-[100vw] mb-10">
-          <div className="w-[40vw]">
+          <div className="w-[40vw]" >
             {selectedQuestionSet ? (
               <IndividualQuestionTable
                 questionsData={selectedQuestionSet}
@@ -86,7 +87,7 @@ const InterviewerHome = () => {
               </>
             )}
           </div>
-          <div className="bg-slate-200 h-96 w-80 rounded-lg ml-2">
+          <div className="h-96 w-80 rounded-lg ml-2" style={{backgroundColor:Light}}>
             <QuestionList select={SetSelectQuestionSet} />
           </div>
         </div>
@@ -122,11 +123,11 @@ const InterviewerHome = () => {
                   ))}
                 </select>
               </div>
-              <div className="mt-4 flex justify-between">
-                <Button onClick={() => handleProceed(selectedQuestionSetId)}>
+              <div className="mt-4 flex justify-between gap-10">
+                <Button onClick={() => handleProceed(selectedQuestionSetId)} style={{backgroundColor:MainBackGround}}>
                   Done & Join Meeting
                 </Button>
-                <Button onClick={() => handleProceed(null)}>
+                <Button onClick={() => handleProceed(null)} style={{backgroundColor:MainBackGround}}>
                   Continue Without Questions
                 </Button>
               </div>
@@ -148,7 +149,7 @@ const InterviewerHome = () => {
               placeholder="Put Meeting Link here"
               onChange={(e) => setValue(e.target.value)}
             />
-            <Button
+            <Button style={{backgroundColor:MainBackGround}}
               className="ml-2 py-2 px-4 text-white font-semibold rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-opacity-75 transition duration-150 ease-in-out"
               onClick={handleJoinRoom}
             >
@@ -158,7 +159,7 @@ const InterviewerHome = () => {
 
           <div className="flex">
             <div className="mb-4 ml-4">
-              <Button
+              <Button style={{backgroundColor:MainBackGround}}
                 className="ml-2 py-2 px-4 text-white font-semibold rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-opacity-75 transition duration-150 ease-in-out"
                 onClick={() => setShowAddQuestions(true)}
               >
@@ -167,7 +168,7 @@ const InterviewerHome = () => {
             </div>
             <div className="mb-4 ml-4">
               <Link to={"/compiler"}>
-                <Button className="ml-2 py-2 px-4 text-white font-semibold rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-opacity-75 transition duration-150 ease-in-out">
+                <Button className="ml-2 py-2 px-4 text-white font-semibold rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-opacity-75 transition duration-150 ease-in-out"style={{backgroundColor:MainBackGround}}>
                   Compiler
                 </Button>
               </Link>

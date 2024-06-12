@@ -1,10 +1,11 @@
 import { CompanyData, IntervieweeData, InterviewerData } from '@/interface/userDataTypeInterface';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { DollarSign } from 'lucide-react'
+import { Light } from '@/lib/Color';
 
 const DataCard: React.FC<DataCardProps>  = ({data,type}) => {
   return (
-    <Card x-chunk="dashboard-01-chunk-0">
+    <Card x-chunk="dashboard-01-chunk-0" style={{backgroundColor:Light}}>
     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
       <CardTitle className="text-sm font-medium">
        {type}

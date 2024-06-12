@@ -6,6 +6,7 @@ import {
   buyPremiumService,
   deleteInterviewerService,
   editInterviewerService,
+  getInterviewDataService,
   listInterviewersService,
   sentLinkToEmail,
   updateProfileService,
@@ -124,8 +125,9 @@ export const updateProfile = async (req: Request, res: Response) => {
 //<=------------------------Create meeeting Link--------------------------=>//
 export const createMeetingLink = (req: Request, res: Response) => {
   try {
-    const { interviewerEmail, intervieweeEmail } = req.body;
-    sentLinkToEmail(interviewerEmail, intervieweeEmail);
+    const { interviewerEmail, intervieweeEmail,date,time } = req.body;
+    console.log(date,time,"con")
+    sentLinkToEmail(interviewerEmail, intervieweeEmail,date,time);
     res.json({ Message: "Email sent Successfully" });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
@@ -133,3 +135,16 @@ export const createMeetingLink = (req: Request, res: Response) => {
     res.status(statusCode).send(customError.message);
   }
 };
+
+
+export const getInterviewData=async(req:Request,res:Response)=>{
+  try {
+    const {id}=req.params
+    const data=await getInterviewDataService(id)
+    res.json(data)
+  } catch (error:unknown) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    res.status(statusCode).send(customError.message);
+  }
+}

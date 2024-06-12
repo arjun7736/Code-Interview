@@ -8,7 +8,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { CircleUser, Menu, Search } from "lucide-react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -17,6 +17,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import axios from "axios";
 import { logout } from "@/redux/slices/adminSlice";
+import { MainBackGround } from "@/lib/Color";
 
 const AdminHeader = () => {
   const navigate =useNavigate()
@@ -34,7 +35,7 @@ const handleLogout = async (): Promise<void> => {
     dispatch(logout())
     await axios.get('/api/auth/logout'); 
     toast('Logout Successful');
-    navigate('/admin/login');
+    navigate('/');
 
   } catch (error) {
     if (axios.isAxiosError(error) && (error.response?.status === 401 || error.response?.status === 403)) {
@@ -48,42 +49,38 @@ const handleLogout = async (): Promise<void> => {
 };
 
   return (
-    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-      <nav className="hidden w-full flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-        <NavLink
+    <header className="sticky top-0 flex h-16 items-center gap-4 border-b  px-4 md:px-6" style={{backgroundColor: MainBackGround, boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)"}}>
+      <nav className="hidden w-full flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6 text-white">
+        <Link
           to="/admin/dashboard"
           className="flex items-center gap-2 text-lg font-semibold md:text-base"
         >
           Code-Interview
-        </NavLink>
-        <NavLink
+        </Link>
+        <Link
           to="/admin/dashboard"
-          className="text-foreground transition-colors hover:text-foreground"
-          activeClassName="text-foreground"
+          className="text-white transition-colors hover:text-foreground"
         >
           Dashboard
-        </NavLink>
-        <NavLink
+        </Link>
+        <Link
           to="/admin/interviewee-list"
-          className="text-muted-foreground transition-colors hover:text-foreground"
-          activeClassName="text-foreground"
+          className="text-white  transition-colors hover:text-foreground"
         >
           Interviewee List
-        </NavLink>
-        <NavLink
+        </Link>
+        <Link
           to="/admin/interviewer-list"
-          className="text-muted-foreground transition-colors hover:text-foreground"
-          activeClassName="text-foreground"
+          className="text-white transition-colors hover:text-foreground"
         >
           Interviewer list
-        </NavLink>
-        <NavLink
+        </Link>
+        <Link
           to="/admin/company-list"
-          className="text-muted-foreground transition-colors hover:text-foreground"
-          activeClassName="text-foreground"
+          className="text-white transition-colors hover:text-foreground"
         >
           Company List
-        </NavLink>
+        </Link>
       </nav>
       <Sheet>
         <SheetTrigger asChild>
@@ -94,40 +91,36 @@ const handleLogout = async (): Promise<void> => {
         </SheetTrigger>
         <SheetContent side="left">
           <nav className="grid gap-6 text-lg font-medium">
-            <NavLink
+            <Link
               to="/admin/dashboard"
               className="flex items-center gap-2 text-lg font-semibold md:text-base"
             >
               Code-Interview
-            </NavLink>
-            <NavLink
+            </Link>
+            <Link
               to="/admin/dashboard"
-              className="text-foreground transition-colors hover:text-foreground"
-              activeClassName="text-foreground bg-gray-500"
+              className="text-white transition-colors hover:text-foreground"
             >
               Dashboard
-            </NavLink>
-            <NavLink
+            </Link>
+            <Link
               to="/admin/interviewee-list"
-              className="text-muted-foreground transition-colors hover:text-foreground"
-              activeClassName="text-foreground"
+              className="text-white transition-colors hover:text-foreground"
             >
               Interviewee List
-            </NavLink>
-            <NavLink
+            </Link>
+            <Link
               to="/admin/interviewer-list"
-              className="text-muted-foreground transition-colors hover:text-foreground"
-              activeClassName="text-foreground"
+              className="text-white transition-colors hover:text-foreground"
             >
               Interviewer list
-            </NavLink>
-            <NavLink
+            </Link>
+            <Link
               to="/admin/company-list"
-              className="text-muted-foreground transition-colors hover:text-foreground"
-              activeClassName="text-foreground"
+              className="text-white transition-colors hover:text-foreground"
             >
               Company List
-            </NavLink>
+            </Link>
           </nav>
         </SheetContent>
       </Sheet>

@@ -25,6 +25,10 @@ const QuestionSchema: Schema = new Schema<IQuestion>({
       },
       result:{
         type:String
+      },
+      date:{
+        type:Date,
+        default:Date.now
       }
     },
   ],

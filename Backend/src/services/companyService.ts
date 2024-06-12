@@ -1,6 +1,9 @@
+/* eslint-disable camelcase */
 import Stripe from "stripe";
+import cron from 'node-cron';
 import { ICompany, IInterviewer } from "../interfaces/modelInterface";
 import {
+  getInterviewersQuestionData,
   listInterviewersByCompany,
   paymentDone,
   updateCompanyProfile,
@@ -15,7 +18,7 @@ import { errorResponse } from "../utils/error";
 import { sentOTP } from "../utils/otp";
 import { isEmail, isStrongPassword } from "../utils/validator";
 import bcrypt from "bcrypt";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { sendLink } from "../utils/sendLink";
 import { StatusCode } from "../utils/selectDB";
 
@@ -79,7 +82,10 @@ export const editInterviewerService = async (
   password?: string
 ): Promise<IInterviewer | null> => {
   if (!id || !name) {
-    throw errorResponse(StatusCode.BAD_REQUEST, "Missing required information (ID and name)");
+    throw errorResponse(
+      StatusCode.BAD_REQUEST,
+      "Missing required information (ID and name)"
+    );
   }
   let hashedPassword: string | undefined;
   if (password) {
@@ -135,11 +141,14 @@ export const buyPremiumService = async (
 //<=----------------------Update Profile service----------------------=>//
 export const updateProfileService = async (
   userId: string,
-  name: string,
+  name?: string,
   profilePicture?: string
 ): Promise<ICompany | null> => {
   if (!userId || !name) {
-    throw errorResponse(StatusCode.BAD_REQUEST, "Missing required information (ID and name)");
+    throw errorResponse(
+      StatusCode.BAD_REQUEST,
+      "Missing required information (ID and name)"
+    );
   }
   const updatedCompany = await updateCompanyProfile(
     userId,
@@ -150,8 +159,46 @@ export const updateProfileService = async (
 };
 
 //<=----------------------Sent Mail service----------------------=>//
-export const sentLinkToEmail=async(interviewerEmail:string,intervieweeEmail:string):Promise<void>=>{
-  const link =uuidv4()
- await sendLink(interviewerEmail,link)
- await sendLink(intervieweeEmail,link)
-}
+export const sentLinkToEmail = async (
+  interviewerEmail: string,
+  intervieweeEmail: string,
+  date: string,
+  time: string
+): Promise<void> => {
+  const link = uuidv4();
+
+  if (!date ||!time) {
+    throw new Error("Date And Time Missing");
+  }
+
+  const datenum = new Date(date);
+  const istDate = new Date(datenum.getTime() + (330 * 60000));
+
+  const dateStringOnly = istDate.toISOString().split('T')[0];
+  const timeComponent = time.split(':')[0]; 
+
+  const minuteComponent = time.split(':')[1];
+  const dat = new Date(`${dateStringOnly}T${timeComponent}:${minuteComponent}:00`);
+
+  dat.setMinutes(dat.getMinutes() - 5);
+  const cronExpression = `${dat.getMinutes()} ${dat.getHours()} ${dat.getDate()} ${dat.getMonth() + 1} *`;
+
+  cron.schedule(cronExpression, async () => {
+    try {
+      await sendLink(interviewerEmail, link);
+      await sendLink(intervieweeEmail, link);
+      console.log('Links sent successfully.');
+    } catch (error) {
+      console.error('Error sending links:', error);
+    }
+  });
+  console.log(`Scheduled to send links at: ${dat.toLocaleString()}`);
+};
+
+
+
+export const getInterviewDataService = async (id: string) => {
+  const data = await getInterviewersQuestionData(id);
+  const filteredData = data.filter((d) => d.attentedInterviewees.length > 0);
+  return filteredData;
+};

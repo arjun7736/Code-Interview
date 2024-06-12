@@ -15,13 +15,16 @@ import {
 } from "@/redux/slices/companySlice";
 import { RootState } from "@/redux/store";
 import axios, { AxiosError } from "axios";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { PulseLoader } from "react-spinners";
 import { toast } from "sonner";
 import { useNavigate } from 'react-router-dom';
+import DateAndTime from "@/components/company/DateAndTime";
+import PreviousInterviewData from "@/components/company/PreviousInterviewData";
+import { Light, MainBackGround, ThirdBG } from "@/lib/Color";
 
 
 interface Interviewer {
@@ -32,6 +35,7 @@ interface Interviewer {
 }
 
 const CompanyHome = () => {
+  const [interviewData,setInterviewData]=useState([])
   const navigate =useNavigate()
   const { interviewers, loading,companyData } = useSelector(
     (state: RootState) => state.company
@@ -97,8 +101,14 @@ const CompanyHome = () => {
     }
   };
 
-  const handleInterviewerClick = (interviewer: Interviewer) => {
+  const handleInterviewerClick = async(interviewer: Interviewer) => {
     setSelectedInterviewer(interviewer);
+   await axios.get(`/api/company/getInterviewDataAndQuestions/${interviewer._id}`).then((data)=>{
+     console.log(data)
+     setInterviewData(data.data)
+   }).catch((err)=>{
+    console.log(err)
+   })
   };
 
   useEffect(() => {
@@ -109,28 +119,20 @@ const CompanyHome = () => {
   const [selectedOption, setSelectedOption] = useState('');
   const [email, setEmail] = useState('');
 
-  const handleSelectChange = (event) => {
+  const handleSelectChange = (event: { target: { value: SetStateAction<string>; }; }) => {
     setSelectedOption(event.target.value);
   };
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: { target: { value: SetStateAction<string>; }; }) => {
     setEmail(event.target.value);
   };
 
-  const handleButtonClick = async() => {
-    try {
-      await axios.post("/api/company/createMeeting",{intervieweeEmail:email,interviewerEmail:selectedOption})
-      toast("Link Sent Successfully")
-    } catch (error) {
-      console.log(error)
-    }
-  };
   return (
     <>
       <CompanyNavbar />
-      <div className="md:ml-20 md:gap-10 md:grid md:justify-end md:mt-20 justify-center mt-10 grid-cols-1 md:grid-cols-2  p-5 md:p-0">
+      <div className="md:pl-20 md:gap-10 md:grid md:justify-end md:pt-20 justify-center pt-10 grid-cols-1 md:grid-cols-2  p-5 md:p-0" style={{backgroundColor:ThirdBG}}>
         <div className=" md:w-96">
-          <Card className="py-4">
+          <Card className="py-4" style={{backgroundColor:Light}}> 
             <CardHeader className="pb-0 pt-2 px-4 flex-col items-center">
               <h4 className="font-bold text-large">Interviewers</h4>
             </CardHeader>
@@ -138,14 +140,14 @@ const CompanyHome = () => {
               {loading ? (
                 <PulseLoader size={10} />
               ) : interviewers?.length > 0 ? (
-                <TableBody>
+                <TableBody className="bg-gray-300">
                   {interviewers?.map((interviewer) => (
                     <TableRow key={interviewer?._id}
                     onClick={() => handleInterviewerClick(interviewer)}>
-                      <TableCell>
+                      <TableCell className="rounded-l-xl">
                         <div className="font-medium">{interviewer?.name}</div>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="rounded-r-xl">
                         <div className="hidden text-sm text-muted-foreground md:inline">
                          {interviewer?.email}
                         </div>
@@ -157,24 +159,26 @@ const CompanyHome = () => {
                 <p>No interviewers available.</p>
               )}
             </Table>
-            <Button onClick={openPopup} variant={"ghost"} className="ml-28 mt-5">Add Interviewer</Button>
+            <Button onClick={openPopup} className="ml-28 mt-5" style={{backgroundColor:MainBackGround}}>Add Interviewer</Button>
           </Card>
         </div>
         <div>
-      <select className="w-96 my-5" value={selectedOption} onChange={handleSelectChange}>
+      <select className="w-96 my-5 h-10 rounded-lg" style={{backgroundColor:Light}} value={selectedOption} onChange={handleSelectChange}>
         {interviewers?.map((value)=>(
           <option value={value.email}>{value.email}</option>
         ))
        }
       </select>
       <Input
-      className="my-5"
+      className=" w-96"
         type="email"
         placeholder="Enter the Interviewee Email"
         value={email}
         onChange={handleInputChange}
       />
-      <Button onClick={handleButtonClick}>Schedule an Interview</Button>
+      <div className="my-2">
+      <DateAndTime email ={email} selectedOption={selectedOption} />
+      </div>
     </div>
         <div className="md:block order-last md:order-first mt-10 md:mt-0">
           {selectedInterviewer ? (
@@ -206,12 +210,12 @@ const CompanyHome = () => {
                   </div>
                 </CardHeader>
                 <CardDescription>
-                  <p>Previous Interview Data</p>
+                 <PreviousInterviewData data ={interviewData || null}/>
                 </CardDescription>
               </Card>
             </>
           ) : (
-            <p>
+            <p className="text-xl">
               Welcome To The Company Home Page You are Logged in as{" "}
               {companyData?.name}
             </p>

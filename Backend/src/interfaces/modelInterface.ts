@@ -58,6 +58,7 @@ interface IIndividualQuestion {
 interface IAttendees{
   interviewee:mongoose.Types.ObjectId
   result:string
+  date:Date
 }
 export interface IQuestion extends Document {
   questionSet: number;

@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { logout } from '@/redux/slices/adminSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { MainBackGround } from '@/lib/Color';
 
 
 const Popup: React.FC<PopupProps> = ({ isOpen, onClose, message, id, role,fun }) => {
@@ -37,6 +38,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, message, id, role,fun })
             </p>
             <div className="">
               <Button
+              style={{ backgroundColor: MainBackGround }}
                 className="m-3"
                 onClick={() => {
                   handleAction(message, id, role);
@@ -45,7 +47,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, message, id, role,fun })
               >
                 Continue
               </Button>
-              <Button onClick={onClose}>Close</Button>
+              <Button onClick={onClose} style={{ backgroundColor: MainBackGround }}>Close</Button>
             </div>
           </div>
         </div>

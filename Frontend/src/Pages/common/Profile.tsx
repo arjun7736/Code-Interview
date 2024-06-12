@@ -15,11 +15,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Light, MainBackGround, ThirdBG } from "@/lib/Color";
 
 const Profile = () => {
   const{companyData}=useSelector((state:RootState)=>state.company)
 const {intervieweeData} =useSelector((state:RootState)=>state.interviewee)
-const {interviewerData}=useSelector((state:RootState)=>state.interviewer)
 
 let data:null |string =null
 if(companyData){
@@ -94,71 +94,80 @@ if(companyData){
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-      await axios.post(`/api/${data}/updateProfile`, formData).then((data)=>{
-        setUserData(data.data)
+      await axios.post(`/api/${data}/updateProfile`, formData).then((res)=>{
+        setUserData(res.data)
         toast("Profile Updated Successfully");
+        setFormData({})
+        navigate(`/${data}`)
       }).catch((error)=>{
         console.log(error);
       })
   };
   
   return (
-  <>
-  <h1 className="text-2xl absolute top-10 left-64 font-serif">{userData?.name}Profie</h1>
-  <div className="max-w-4xl flex items-center h-auto lg:h-screen flex-wrap mx-auto my-32 lg:my-0 shadow-xl relative">
-    <div
-      id="profile"
-      className="w-full  rounded-lg  shadow-2xl bg-white opacity-75 mx-6 lg:mx-0 relative"
-    >
-      <form onSubmit={handleSubmit}>
-        <input
-          ref={fileRef}
-          type="file"
-          hidden
-          accept="image/*"
-          onChange={(e) => {
-            setImage(e?.target?.files?.[0]);
-          }}
-        />
-        <div className="p-4 md:p-12 text-center ">
-          <Avatar
-            className="block  rounded-full shadow-xl mx-auto -mt-16 h-48 w-48 bg-cover bg-center"
-            onClick={() => fileRef?.current?.click?.()}
-          >
-            <AvatarImage
-              className="cursor-pointer"
-              src={formData.profile_picture || userData?.profile_picture}
+  <div style={{ backgroundColor: ThirdBG }} className="flex justify-center items-center min-h-screen">
+  <div className="text-center">
+    <div className="max-w-4xl h-auto flex-wrap mx-auto my-32 lg:my-0" style={{ backgroundColor: ThirdBG }}>
+      <div
+        style={{ backgroundColor: Light }}
+        id="profile"
+        className=" rounded-lg shadow-2xl bg-white opacity-75 mx-6 lg:mx-0 w-[50vw]"
+      >
+        <form onSubmit={handleSubmit}>
+          <input
+            ref={fileRef}
+            type="file"
+            hidden
+            accept="image/*"
+            onChange={(e) => {
+              setImage(e?.target?.files?.[0]);
+            }}
+          />
+          <div className="p-4 md:p-12 text-center">
+            <Avatar
+              className="block rounded-full shadow-xl mx-auto -mt-16 h-48 w-48 bg-cover bg-center"
+              onClick={() => fileRef?.current?.click?.()}
+            >
+              <AvatarImage
+                className="cursor-pointer"
+                src={formData.profile_picture || userData?.profile_picture}
+              />
+            </Avatar>
+            <Input
+              onChange={handleChange}
+              className="w-72 mt-2 mx-auto"
+              value={formData?.name || userData?.name || ""}
+              type="username"
+              name="name"
+              id="name"
             />
-          </Avatar>
-          <Input
-            onChange={handleChange}
-            className="w-72 mt-2 ml-40"
-            value={formData?.name || userData?.name || ""}
-            type="username"
-            name="name"
-            id="name"
-          />
-          <Input
-            readOnly
-            value={userData?.email || ""}
-            className="w-72 mt-2 ml-40"
-            type="email"
-            name="email"
-            id="email"
-          />
-          {userData?.isPremium?(<Input
-            readOnly
-            className="w-72 mt-2 ml-40"
-            value={userData?.isPremium ?"Premium User": "Normal User" ||""}
-          />):""}
-          <div className="pt-12 pb-8">
-            <Button type="submit">{Object.keys(formData).length > 0 ? "Update" : "Edit"}</Button>
+            <Input
+              readOnly
+              value={userData?.email || ""}
+              className="w-72 mt-2 mx-auto"
+              type="email"
+              name="email"
+              id="email"
+            />
+            {userData?.isPremium && (
+              <Input
+                readOnly
+                className="w-72 mt-2 mx-auto"
+                value={userData?.isPremium ? "Premium User" : "Normal User" || ""}
+              />
+            )}
+            <div className="pt-12 pb-8">
+              <Button type="submit" style={{ backgroundColor: MainBackGround }}>
+                {Object.keys(formData).length > 0 ? "Update" : "Edit"}
+              </Button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
-  </>
+</div>
+
    )
 }
 

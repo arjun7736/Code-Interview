@@ -1,13 +1,11 @@
 import { setQuestion } from "@/redux/slices/tempSlice";
-import { RootState } from "@/redux/store";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch,  } from "react-redux";
 import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:3000');
 
 const Question = () => {
-  const question= useSelector((state:RootState)=>state.temp.question)
 
   const dispatch =useDispatch()
   const [message,setMessage]=useState("")

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable camelcase */
 import mongoose,{Schema} from "mongoose"
 import { IInterviewee } from "../interfaces/modelInterface"
 

@@ -18,14 +18,16 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useState } from "react";
 import UpdateIndividualQuestionSet from "@/components/interviewer/UpdateIndividualQuestionSet"
+import AddMultiChoiceQuestions from "./AddMultiChoiceQuestions";
+import { Light } from "@/lib/Color";
 
 const IndividualQuestionTable = ({ questionsData,select }) => {
+  const[showAddQuestions,setShowAddQuestions]=useState(false)
 
   const [editItem, setEditItem] = useState(null);
  const handleDelete=async(id:string)=>{
   try{
-   const data = await axios.delete(`/api/interviewer/deleteQuestion/${id}`)
-   console.log(data,"data")
+    await axios.delete(`/api/interviewer/deleteQuestion/${id}`)
     select(null)
     toast("Question Deleted")
   }catch{
@@ -33,11 +35,13 @@ const IndividualQuestionTable = ({ questionsData,select }) => {
   }
  }
 
-
+ const toggleAddQuestions = () => {
+  setShowAddQuestions(!showAddQuestions);
+};
 
   return (
     <>
-      <Card className="shadow-2xl border border-gray-300 w-[50vw] max-h-[65vh] overflow-x-auto">
+      <Card className="shadow-2xl border border-gray-300 w-[50vw] max-h-[65vh] overflow-x-auto"style={{backgroundColor:Light}}> 
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <div>
@@ -53,9 +57,8 @@ const IndividualQuestionTable = ({ questionsData,select }) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-                <DropdownMenuItem onClick={()=>handleDelete(questionsData?._id)}>Delete</DropdownMenuItem>
-                <DropdownMenuItem>Add Questions</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer" onClick={()=>setShowAddQuestions(!showAddQuestions)}>Add Questions</DropdownMenuItem>
+                <DropdownMenuItem onClick={()=>handleDelete(questionsData?._id)} className="bg-red-300 cursor-pointer">Delete</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             </div>
@@ -65,7 +68,14 @@ const IndividualQuestionTable = ({ questionsData,select }) => {
         {editItem && (
           <div className="absolute inset-0 flex items-center justify-center z-10">
             <div className="bg-white rounded-lg shadow-2xl z-20">
-              <UpdateIndividualQuestionSet onClose={setEditItem} data={editItem}/>
+              <UpdateIndividualQuestionSet onClose={setEditItem} data={editItem} select={select}/>
+            </div>
+          </div>
+        )}
+        {showAddQuestions && (
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <div className="bg-white rounded-lg shadow-2xl z-20">
+              <AddMultiChoiceQuestions onClose={toggleAddQuestions} questionSet={questionsData?.questionSet}/>
             </div>
           </div>
         )}
@@ -103,8 +113,8 @@ const IndividualQuestionTable = ({ questionsData,select }) => {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuItem onClick={()=>setEditItem(questionData)}>Edit</DropdownMenuItem>
-                              <DropdownMenuItem onClick={()=>handleDelete(questionData?._id)}>Delete</DropdownMenuItem>
+                              <DropdownMenuItem onClick={()=>setEditItem(questionData)} className="cursor-pointer">Edit</DropdownMenuItem>
+                              <DropdownMenuItem onClick={()=>handleDelete(questionData?._id)}className="bg-red-300 cursor-pointer" >Delete</DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </td>

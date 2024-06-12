@@ -14,6 +14,7 @@ import { logout, setIntervieweeData } from "@/redux/slices/adminSlice";
 import { toast } from "sonner";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ThirdBG } from "@/lib/Color";
 
 const IntervieweeList = () => {
 const dispatch =useDispatch()
@@ -43,7 +44,7 @@ const navigate =useNavigate()
     <>
       <div className="flex min-h-screen w-full flex-col">
         <AdminHeader />
-        <Card>
+        <Card style={{backgroundColor:ThirdBG}} className='min-h-[90vh]'>
           <CardHeader>
             <CardTitle>Interviewees</CardTitle>
             <CardDescription>

@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { ThirdBG } from '@/lib/Color';
 
 
 const InterviewerList = () => {
@@ -36,7 +37,7 @@ const InterviewerList = () => {
   return (
     <div className="flex min-h-screen w-full flex-col">
     <AdminHeader />
-    <Card>
+    <Card style={{backgroundColor:ThirdBG}} className='min-h-[90vh]'>
       <CardHeader>
         <CardTitle>Interviewers</CardTitle>
         <CardDescription>

@@ -1,7 +1,9 @@
+/* eslint-disable camelcase */
 
 import mongoose from "mongoose";
 import { ICompany } from "../interfaces/modelInterface";
 import CompanyDB from "../models/companyModel";
+import QuestionDB from "../models/questionModel";
 
 export async function findUserByName(name: string): Promise<ICompany | null> {
   return await CompanyDB.findOne({ name: name });
@@ -81,13 +83,33 @@ export async function listInterviewersByCompany(id: string) {
   return await CompanyDB.aggregate(pipeline);
 }
 
-export async function updateCompanyProfile(id: string, name?: string, profile_picture?: string): Promise<ICompany | null> {
+export async function updateCompanyProfile(
+  id: string,
+  name?: string,
+  profile_picture?: string
+): Promise<ICompany | null> {
   return CompanyDB.findByIdAndUpdate(
     { _id: id },
     { $set: { name: name, profile_picture: profile_picture } }
   );
 }
 
-export async function paymentDone(id:string):Promise<ICompany|null>{
-  return  CompanyDB.findByIdAndUpdate({_id:id},{isPremium:true},{new:true})
+export async function paymentDone(id: string): Promise<ICompany | null> {
+  return CompanyDB.findByIdAndUpdate(
+    { _id: id },
+    { isPremium: true },
+    { new: true }
+  );
 }
+
+export const getInterviewersQuestionData = async (id: string) => {
+  const objectId = new mongoose.Types.ObjectId(id);
+  const data = await QuestionDB.find({ author: objectId })
+    .populate({
+      path: "attentedInterviewees.interviewee",
+      model: "interviewee",
+      select: "name"
+    })
+    .exec();
+  return data;
+};

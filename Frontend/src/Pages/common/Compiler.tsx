@@ -7,6 +7,7 @@ import { hourglass } from "ldrs";
 import Question from "@/components/Question";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { MainBackGround } from "@/lib/Color";
 hourglass.register();
 
 
@@ -61,8 +62,8 @@ const Compiler = () => {
   };
   return (
     <>
-      {question?<Question />:""}
-      <div className="w-full h-full">
+      <Question />
+      <div className="w-full h-full" >
         <div className=" mt-16 h-[100vh] sm:flex">
           <div className="w-full h-[50%] border border-black sm:w-[50%] sm:h-[100%] bg-white">
             <div className="h-[10vh] border flex justify-between items-center">
@@ -85,7 +86,7 @@ const Compiler = () => {
                   </h1>{" "}
                 </>
               )}
-              <Button className="" onClick={runCode}>
+              <Button className="" onClick={runCode} style={{backgroundColor:MainBackGround}}>
                 Run
               </Button>
             </div>
@@ -103,7 +104,7 @@ const Compiler = () => {
           </div>
           <div className="w-full h-[50%] border border-black sm:w-[50%] sm:h-[100%] ">
             <div className="h-[10vh] flex justify-end items-center">
-              <Button onClick={clearOut}>Clear</Button>
+              <Button onClick={clearOut} style={{backgroundColor:MainBackGround}}>Clear</Button>
             </div>
             <div
               className="bg-[#1E1E1E] h-[90vh]"

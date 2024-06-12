@@ -6,6 +6,7 @@ import {
   getInterviewerQuestions,
   setMeetingLinkService,
   updateInterviewerService,
+  updateQuestionService,
 } from "../services/interviewerService";
 import { errorResponse } from "../utils/error";
 import { clearPassword } from "../services/authServices";
@@ -35,9 +36,9 @@ export const updateProfile = async (req: Request, res: Response) => {
 
 export const addQuestion = async (req: Request, res: Response) => {
   try {
-    const { questions } = req.body;
+    const { questions,questionSet } = req.body;
     const id = req?.user._id;
-    const data = await addQuestions(questions, id);
+    const data = await addQuestions(questions, id,questionSet);
     res.json(data);
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
@@ -86,9 +87,11 @@ export const deleteQuestion = async (req: Request, res: Response) => {
   }
 };
 
-export const updateQuestionSet = (req: Request, res: Response) => {
+export const updateQuestionSet = async(req: Request, res: Response) => {
   try {
-    res.json("succcess")
+    const{question,options,rightOption,id}=req.body
+    const updatedData = await updateQuestionService(question,options,rightOption,id)
+    res.json(updatedData)
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;

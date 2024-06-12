@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { toast } from "sonner";
 
 const DeleteAndEdit: React.FC<Props> = ({
