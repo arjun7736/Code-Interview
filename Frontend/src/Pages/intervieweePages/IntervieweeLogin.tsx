@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import  { ChangeEvent, FormEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {  AuthError, UserCredential, signInWithPopup } from "firebase/auth";
+import {   UserCredential, signInWithPopup } from "firebase/auth";
 import { toast } from "sonner";
 import { auth, provider } from "@/google/authentication";
 import axios from "axios";
@@ -43,7 +43,7 @@ const IntervieweeLogin = () => {
     password: "",
   });
 
-  const { error, loading,intervieweeData } = useSelector(
+  const { error, loading } = useSelector(
     (state: RootState) => state.interviewee
   );
 

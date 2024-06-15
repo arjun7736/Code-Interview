@@ -13,13 +13,14 @@ import axios from "axios";
 import { toast } from "sonner";
 
 interface MultiChoiceProps {
-  onClose: () => void;
+  onClose: any,
   data: {
     question: string;
     options: string[];
     rightOption: string;
     _id?: string;
   };
+  select: (value: null | []) => void; 
 }
 
 const UpdateIndividualQuestionSet: React.FC<MultiChoiceProps> = ({

@@ -2,7 +2,7 @@ import AdminHeader from "@/components/admin/AdminHeader";
 import DataCard from "@/components/admin/DataCard";
 import DataTable from "@/components/admin/DataTable";
 import { AdminState } from "@/interface/userStateInterface";
-import { MainBackGround, ThirdBG } from "@/lib/Color";
+import {  ThirdBG } from "@/lib/Color";
 import { setCompanyData, setIntervieweeData, setInterviewerData, setPremiumCompanies } from "@/redux/slices/adminSlice";
 import { RootState } from "@/redux/store";
 import axios from "axios";

@@ -38,7 +38,11 @@ const InterviewerLogin = () => {
        navigate("/interviewer");
      })
     } catch (error) {
-      dispatch(loginError(error?.response?.data || "Login Failed"));
+      if(axios.isAxiosError(error)){
+        dispatch(loginError(error?.response?.data || "Login Failed"));
+      }else{
+        dispatch(loginError("Login Failed"));
+      }
     }
   };
   useEffect(() => {

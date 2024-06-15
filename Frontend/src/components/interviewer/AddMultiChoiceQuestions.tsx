@@ -12,7 +12,7 @@ const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose,questionSe
         questionSet=null
     }
     const [question, setQuestion] = useState('');
-    const [options, setOptions] = useState([]);
+    const [options, setOptions] = useState<string[]>([]);
     const [rightOption, setSelectedOption] = useState('');
     const [addedQuestions, setAddedQuestions] = useState<AddedQuestion[]>([]);
 

@@ -44,10 +44,18 @@ const AdminLogin = () => {
         ...formData,
         role: "admin",
       });
-      dispatch(loginSuccess(response.data));
-      navigate("/admin/dashboard");
-    } catch (error) {
-      dispatch(loginError(error?.response?.data));
+      if (response.data) {
+        dispatch(loginSuccess(response.data));
+        navigate("/admin/dashboard");
+      } else {
+        dispatch(loginError("An error occurred during login"));
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response && error.response.data) {
+        dispatch(loginError(error.response.data));
+      } else {
+        dispatch(loginError("An error occurred during login"));
+      }
       console.log(error);
     }
   };

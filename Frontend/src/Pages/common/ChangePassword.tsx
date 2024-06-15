@@ -14,8 +14,6 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-// import { FcGoogle } from "react-icons/fc";
-// import { Link } from "react-router-dom";
 
 const ChangePassword = () => {
 const{userRole}=useSelector((state:RootState)=>state.temp)
@@ -25,7 +23,7 @@ const{userRole}=useSelector((state:RootState)=>state.temp)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
       const response = await axios.patch("/api/auth/changePassword", { ...formData, ...userRole });

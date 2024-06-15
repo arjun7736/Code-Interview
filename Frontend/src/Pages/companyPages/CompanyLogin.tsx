@@ -33,12 +33,19 @@ const CompanyLogin = () => {
     dispatch(loginStart());
 
     try {
-      const response = await axios.post("/api/auth/login", { ...formData, role: "company" });
+      const response = await axios.post("/api/auth/login", {
+        ...formData,
+        role: "company",
+      });
       dispatch(loginSuccess(response.data));
       navigate("/company");
     } catch (error) {
-      console.log(error)
-      dispatch(loginError(error?.response?.data)); 
+      console.log(error);
+      if (axios.isAxiosError(error)) {
+        dispatch(loginError(error.response?.data));
+      } else {
+        dispatch(loginError("An unexpected error occurred"));
+      }
     }
   };
 

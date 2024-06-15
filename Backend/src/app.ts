@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 dotenv.config();
 import cookieParser from "cookie-parser";
 import authRoute from "./routes/authRoute";
-// import adminRoute from "./routes/adminRoute";
 import AdminRouter from "./routes/adminRoute"
 import companyRoute from "./routes/companyRoute";
 import interviewerRoute from "./routes/interviewerRoute";

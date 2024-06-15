@@ -28,27 +28,27 @@ const adminSlice = createSlice({
       state.error = null;
     },
     loginError: (state, action: PayloadAction<string>) => {
-      (state.loading = false), 
-      (state.adminData = null);
+      state.loading = false;
+      state.adminData = null;
       state.error = action.payload;
     },
-    setCompanyData: (state, action: PayloadAction<CompanyData>) => {
+    setCompanyData: (state, action: PayloadAction<CompanyData[]>) => {
       state.loading = false;
       state.companyData = action.payload;
       state.error = null;
     },
-    setInterviewerData: (state, action: PayloadAction<InterviewerData>) => {
+    setInterviewerData: (state, action: PayloadAction<InterviewerData[]>) => {
       state.interviewerData = action.payload;
       state.loading = false;
       state.error = null;
     },
-    setIntervieweeData: (state, action: PayloadAction<IntervieweeData>) => {
+    setIntervieweeData: (state, action: PayloadAction<IntervieweeData[]>) => {
       state.intervieweeData = action.payload;
       state.loading = false;
       state.error = null;
     },
-    setPremiumCompanies:(state,action:PayloadAction<CompanyData>)=>{
-      state.premiumCompanies=action.payload
+    setPremiumCompanies: (state, action: PayloadAction<CompanyData[]>) => {
+      state.premiumCompanies = action.payload;
       state.loading = false;
       state.error = null;
     },

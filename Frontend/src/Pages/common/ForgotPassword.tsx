@@ -38,22 +38,30 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     try {
-      await axios.post("/api/auth/forgotPassword", formData).then((data)=>{
-        console.log(data);
-        dispatch(setUserRole({role:formData.role,email:formData.email}))
-      navigate("/forgotPassword-otp");
-      toast("OTP Sent To the E-Mail");
-      }).catch((error)=>{
-        console.log(error);
-        setError(error.response.data);
-      })
+      await axios
+        .post("/api/auth/forgotPassword", formData)
+        .then((data) => {
+          console.log(data);
+          dispatch(setUserRole({ role: formData.role, email: formData.email }));
+          navigate("/forgotPassword-otp");
+          toast("OTP Sent To the E-Mail");
+        })
+        .catch((error) => {
+          console.log(error);
+          if (axios.isAxiosError(error)) {
+            console.log(error);
+            setError(error?.response?.data);
+          } else {
+            setError('An unexpected error occurred');
+          }
+        });
     } catch (error) {
-      if (error.response) {
-        setError(error.response.data.message);
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+        setError(error?.response?.data?.message);
       } else {
-        setError("An error occurred. Please try again later.");
+        setError('An unexpected error occurred');
       }
-      console.error(error);
     }
   };
 

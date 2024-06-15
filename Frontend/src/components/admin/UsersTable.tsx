@@ -24,6 +24,11 @@ const UsersTable: React.FC<usersData> = ({ data, fun }) => {
   const [user, setUser] = useState<string | null>(null);
   const [message, setMessage] = useState<string>("");
 
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 5;
+
+  const totalPages = data ? Math.ceil(data.length / itemsPerPage) : 1;
+
   const openPopup = (message: string, id: string, user: string) => {
     setIsPopupOpen(true);
     setPopupId(id);
@@ -38,9 +43,20 @@ const UsersTable: React.FC<usersData> = ({ data, fun }) => {
     setMessage("");
   };
 
+  const handlePageChange = (page: number) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const currentData = data?.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <>
-      <Table style={{ backgroundColor: Light }} className="rounded-lg ">
+      <Table style={{ backgroundColor: Light }} className="rounded-lg">
         <TableHeader>
           <TableRow>
             <TableHead className="hidden w-[100px] sm:table-cell">
@@ -56,8 +72,8 @@ const UsersTable: React.FC<usersData> = ({ data, fun }) => {
           </TableRow>
         </TableHeader>
 
-        {data?.map((value) => (
-          <TableBody>
+        {currentData?.map((value) => (
+          <TableBody key={value._id}>
             <TableRow>
               <TableCell className="hidden sm:table-cell">
                 <Avatar>
@@ -70,7 +86,10 @@ const UsersTable: React.FC<usersData> = ({ data, fun }) => {
               </TableCell>
               <TableCell className="font-medium">{value?.name}</TableCell>
               <TableCell>
-                <Badge variant="outline" className={value?.isBlocked ? 'text-red-500' : 'text-green-500'}>
+                <Badge
+                  variant="outline"
+                  className={value?.isBlocked ? 'text-red-500' : 'text-green-500'}
+                >
                   {value?.isBlocked ? "Blocked" : "Active"}
                 </Badge>
               </TableCell>
@@ -94,6 +113,29 @@ const UsersTable: React.FC<usersData> = ({ data, fun }) => {
           </TableBody>
         ))}
       </Table>
+
+      <div className="flex justify-center mt-4">
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          style={{ backgroundColor: MainBackGround }}
+          className="mr-2"
+        >
+          Previous
+        </Button>
+        <span className="self-center">
+          Page {currentPage} of {totalPages}
+        </span>
+        <Button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          style={{ backgroundColor: MainBackGround }}
+          className="ml-2"
+        >
+          Next
+        </Button>
+      </div>
+
       <Popup
         isOpen={isPopupOpen}
         onClose={closePopup}
@@ -110,5 +152,5 @@ export default UsersTable;
 
 interface usersData {
   data: CompanyData[] | InterviewerData[] | IntervieweeData[] | null;
-  fun;
+  fun: () => void;
 }

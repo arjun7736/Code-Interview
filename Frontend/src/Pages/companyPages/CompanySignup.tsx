@@ -50,7 +50,12 @@ const CompanySignup = () => {
       })
     } catch (error) {
       console.log(error)
-      dispatch(signupError(error?.response?.data || "Signup Failed"));
+      if(axios.isAxiosError(error)){
+        dispatch(signupError(error?.response?.data));
+      }else
+      {
+        dispatch(signupError("Signup Failed"));
+      }
     }
   };
   useEffect(() => {

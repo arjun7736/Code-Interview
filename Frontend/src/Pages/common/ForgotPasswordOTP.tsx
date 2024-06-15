@@ -1,8 +1,23 @@
 // import { Button } from "@/components/ui/button"
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp"
-import { otpVerificationError, otpVerificationStart, otpVerified } from "@/redux/slices/tempSlice";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import {
+  otpVerificationError,
+  otpVerificationStart,
+  otpVerified,
+} from "@/redux/slices/tempSlice";
 import { RootState } from "@/redux/store";
 import axios from "axios";
 import { useState } from "react";
@@ -12,27 +27,34 @@ import { ScaleLoader } from "react-spinners";
 import { toast } from "sonner";
 
 const ForgotPasswordOTP = () => {
-
-  const { error, loading,userRole } = useSelector((state: RootState) => state.temp);
+  const { error, loading, userRole } = useSelector(
+    (state: RootState) => state.temp
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [otp, setOtp] = useState("");
-  
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(otpVerificationStart());
 
     try {
-      const response = await axios.post("/api/auth/verify-forgotPassword-otp", { otp, ...userRole });
+      const response = await axios.post("/api/auth/verify-forgotPassword-otp", {
+        otp,
+        ...userRole,
+      });
       console.log(response.data);
       dispatch(otpVerified());
       toast("OTP Verified Successfully");
       navigate("/changePassword");
     } catch (error) {
-      if (error.response) {
-        dispatch(otpVerificationError(error.response.data.message));
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+        dispatch(otpVerificationError(error?.response?.data?.message));
       } else {
-        dispatch(otpVerificationError("An error occurred. Please try again later."));
+        dispatch(
+          otpVerificationError("An error occurred. Please try again later.")
+        );
       }
       console.error(error);
     }
@@ -60,7 +82,6 @@ const ForgotPasswordOTP = () => {
     setTimer(30);
     countDown();
   };
-
 
   return (
     <Card className="mx-auto max-w-sm shadow-lg mt-20">
@@ -110,8 +131,8 @@ const ForgotPasswordOTP = () => {
           }
         </form>
       </CardContent>
-    </Card> 
-  )
-}
+    </Card>
+  );
+};
 
-export default ForgotPasswordOTP
+export default ForgotPasswordOTP;

@@ -94,7 +94,7 @@ const CompanyHome = () => {
   };
 
   const renderPopup = () => {
-    if (interviewers?.length >= 2 && !companyData?.isPremium) {
+    if (interviewers&&interviewers?.length >= 2 && !companyData?.isPremium) {
       return <UpgradePlan isOpen={isPopupOpen} onClose={closePopup} />;
     } else {
       return <AddInterviewer isOpen={isPopupOpen} onClose={closePopup} />;
@@ -139,9 +139,9 @@ const CompanyHome = () => {
             <Table>
               {loading ? (
                 <PulseLoader size={10} />
-              ) : interviewers?.length > 0 ? (
+              ) :interviewers && interviewers?.length > 0 ? (
                 <TableBody className="bg-gray-300">
-                  {interviewers?.map((interviewer) => (
+                  {interviewers?.map((interviewer:any) => (
                     <TableRow key={interviewer?._id}
                     onClick={() => handleInterviewerClick(interviewer)}>
                       <TableCell className="rounded-l-xl">
@@ -164,7 +164,7 @@ const CompanyHome = () => {
         </div>
         <div>
       <select className="w-96 my-5 h-10 rounded-lg" style={{backgroundColor:Light}} value={selectedOption} onChange={handleSelectChange}>
-        {interviewers?.map((value)=>(
+        {interviewers?.map((value:any)=>(
           <option value={value.email}>{value.email}</option>
         ))
        }

@@ -5,15 +5,12 @@ import Editor from "@monaco-editor/react";
 import axiosInstance from "@/intersepters/axiosIntersepter";
 import { hourglass } from "ldrs";
 import Question from "@/components/Question";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
 import { MainBackGround } from "@/lib/Color";
 hourglass.register();
 
 
 
 const Compiler = () => {
-  const question= useSelector((state:RootState)=>state.temp.question)
 
   
   const [languageId, setLanguageId] = useState<number>(63);
@@ -36,7 +33,7 @@ const Compiler = () => {
     languages();
   }, []);
 
-  const mount = (editor) => {
+  const mount = (editor: any) => {
     editorRef.current = editor;
     editor.focus();
   };
@@ -98,7 +95,7 @@ const Compiler = () => {
                 defaultValue="console.log('Welcome to Code-Interview')"
                 onMount={mount}
                 value={code}
-                onChange={(value) => setCode(value)}
+                onChange={(value) => value !== undefined && setCode(value)}
               />
             </div>
           </div>

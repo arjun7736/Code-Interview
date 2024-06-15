@@ -13,13 +13,13 @@ const DeleteAndEdit: React.FC<Props> = ({
   fetchData,
   setSelectedInterviewer,
 }) => {
-  const [formData, setFormData] = useState<Partial<Interviewer>>({}); 
+  const [formData, setFormData] = useState<Partial<Interviewer>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
       await axios.post("/api/company/edit-interviewer", {
@@ -28,13 +28,17 @@ const DeleteAndEdit: React.FC<Props> = ({
       });
       setIsEditModalOpen(false);
       toast("Interviewer Edited Successfully");
-    } catch (error: AxiosError) {
+    } catch (error) {
       console.log(error);
-      toast(error.message); 
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        toast("Error Occured try Login Agian");
-        localStorage.removeItem("company_token");
-        window.location.href = "/";
+      if (axios.isAxiosError(error)) {
+        toast(error.response?.data.message);
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          toast("Error Occured try Login Agian");
+          localStorage.removeItem("company_token");
+          window.location.href = "/";
+        }
+      } else {
+        toast("unexpected Error Occures");
       }
     }
   };
@@ -57,9 +61,13 @@ const DeleteAndEdit: React.FC<Props> = ({
       fetchData();
       setSelectedInterviewer(null);
       toast("Interviewer Deleted");
-    } catch (error: AxiosError) {
+    } catch (error) {
       console.log(error);
-      toast(error.message);
+      if(axios.isAxiosError(error)){
+        toast(error.message);
+      }else{
+        toast("unexpected Error Occures");
+      }
     }
   };
 
@@ -224,7 +232,7 @@ interface Props {
   onCancel: () => void;
   selectedInterviewer: Interviewer | null;
   fetchData: () => Promise<void>;
-  setSelectedInterviewer: Interviewer | null;
+  setSelectedInterviewer: (interviewer: Interviewer | null) => void;
 }
 interface Interviewer {
   _id: string;

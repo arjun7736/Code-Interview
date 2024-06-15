@@ -18,7 +18,7 @@ import {
 import { setUserRole } from "@/redux/slices/tempSlice";
 import { RootState } from "@/redux/store";
 import axios from "axios";
-import { GoogleAuthProvider, UserCredential, signInWithPopup } from "firebase/auth";
+import {  UserCredential, signInWithPopup } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,11 +57,17 @@ const IntervieweeSignup = () => {
       dispatch(setUserRole({role:"interviewee",email:formData.email}))
       navigate("/otp");
     } catch (error) {
-      dispatch(signupError(error?.response?.data || "Signup Failed"));
+      if(axios.isAxiosError(error)){
+        dispatch(signupError(error?.response?.data));
+      }else{
+        dispatch(signupError("Signup Failed"));
+      }
     }
   };
 
-  const handleGoogle = async (e) => {
+  const handleGoogle = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ): Promise<void> => {
     e.preventDefault();
     try {
       const result: UserCredential = await signInWithPopup(auth, provider);

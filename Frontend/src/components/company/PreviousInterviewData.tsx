@@ -7,8 +7,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import React from 'react';
 
-const PreviousInterviewData = ({ data }) => {
+const PreviousInterviewData = ({
+  data,
+}: {
+  data: {
+    questionSet: string;
+    attentedInterviewees: {
+      date: string;
+      interviewee?: { name: string };
+      result: string;
+    }[];
+  }[];
+}) => {
   return (
     <div>
       <Table>
@@ -23,16 +35,22 @@ const PreviousInterviewData = ({ data }) => {
         </TableHeader>
         <TableBody>
           {data?.map((result) => (
-            <TableRow>
+            <TableRow key={result.questionSet}>
               <TableCell>{result.questionSet}</TableCell>
               {result.attentedInterviewees.map((innerValue) => (
-                <>
-                  <TableCell>{new Date(innerValue.date).toLocaleDateString()}</TableCell>
+                <React.Fragment
+                  key={`${innerValue.date}-${innerValue.interviewee?.name}`}
+                >
+                  <TableCell>
+                    {new Date(innerValue.date).toLocaleDateString()}
+                  </TableCell>
                   <TableCell className="font-medium">
                     {innerValue.interviewee?.name}
                   </TableCell>
-                  <TableCell className="text-right">{innerValue.result}</TableCell>
-                </>
+                  <TableCell className="text-right">
+                    {innerValue.result}
+                  </TableCell>
+                </React.Fragment>
               ))}
             </TableRow>
           ))}

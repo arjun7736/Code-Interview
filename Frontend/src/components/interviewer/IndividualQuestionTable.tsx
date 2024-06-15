@@ -21,7 +21,7 @@ import UpdateIndividualQuestionSet from "@/components/interviewer/UpdateIndividu
 import AddMultiChoiceQuestions from "./AddMultiChoiceQuestions";
 import { Light } from "@/lib/Color";
 
-const IndividualQuestionTable = ({ questionsData,select }) => {
+const IndividualQuestionTable = ({ questionsData, select }: { questionsData: any, select: any }) => {
   const[showAddQuestions,setShowAddQuestions]=useState(false)
 
   const [editItem, setEditItem] = useState(null);
@@ -80,7 +80,7 @@ const IndividualQuestionTable = ({ questionsData,select }) => {
           </div>
         )}
           <Accordion type="single" collapsible className="w-full">
-            {questionsData?.questions?.map((questionData, index) => (
+            {questionsData?.questions?.map((questionData:any, index:any) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger>{questionData.question}</AccordionTrigger>
                 <AccordionContent className="flex items-center justify-between">
@@ -94,7 +94,7 @@ const IndividualQuestionTable = ({ questionsData,select }) => {
                     <tbody>
                       <tr>
                         <td>
-                          {questionData?.options.map((option) => (
+                          {questionData?.options.map((option:any) => (
                             <p className="my-2 font-serif">{option}</p>
                           ))}
                         </td>

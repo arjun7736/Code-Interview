@@ -74,7 +74,7 @@ const VideoCall = () => {
 
   const { roomId } = useParams<{ roomId?: string }>();
   const room = roomId || "123";
-  const myMeeting = async (element): Promise<void> => {
+  const myMeeting = async (element: HTMLDivElement): Promise<void> => {
     const appID: number = 383066241;
     const serverSecret = import.meta.env.VITE_ZEGOCLOUD_SERVER_SECRET;
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(

@@ -28,7 +28,7 @@ const AddInterviewer: React.FC<Props> = ({ isOpen, onClose }) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
        await axios.post(
@@ -39,12 +39,16 @@ const AddInterviewer: React.FC<Props> = ({ isOpen, onClose }) => {
       dispatch(setUserRole({role:"interviewer",email:formData.email}))
       navigate("/otp");
     } catch (error) {
-      toast(error.response.data)
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        toast("Error Occured try Login Agian");
-        navigate("/")
-      } else {
-        console.error(error);
+      if(axios.isAxiosError(error)){
+        toast(error?.response?.data)
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          toast("Error Occured try Login Agian");
+          navigate("/")
+        } else {
+          console.error(error);
+        }
+      }else{
+        toast("unexpected Error Occured")
       }
     }
   };

@@ -126,7 +126,6 @@ export const updateProfile = async (req: Request, res: Response) => {
 export const createMeetingLink = (req: Request, res: Response) => {
   try {
     const { interviewerEmail, intervieweeEmail,date,time } = req.body;
-    console.log(date,time,"con")
     sentLinkToEmail(interviewerEmail, intervieweeEmail,date,time);
     res.json({ Message: "Email sent Successfully" });
   } catch (error: unknown) {
