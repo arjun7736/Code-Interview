@@ -8,6 +8,8 @@ dotenv.config();
 const URI: string | undefined = process.env.MONGO_URI;
 const PORT: string | undefined = process.env.PORT;
 
+console.log(URI,PORT)
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
