@@ -2,6 +2,8 @@ import http from 'http';
 import app from './app';
 import { Server } from 'socket.io';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const URI: string | undefined = process.env.MONGO_URI;
 const PORT: string | undefined = process.env.PORT;
