@@ -20,6 +20,7 @@
 #     - '**/*'
 #   discard-paths: no
 #   base-directory: Frontend/dist
+
 version: 0.2
 
 phases:
@@ -31,10 +32,15 @@ phases:
       - cd Frontend
       - npm install
       - echo "Done installing dependencies"
+  pre_build:
+    commands:
+      - echo "Loading environment variables"
+      - export $(cat .env | xargs) 
+      - echo "Environment variables loaded"
   build:
     commands:
-      - echo "Running build script"
-      - ./load-env-and-build.sh
+      - echo "Building the React Project"
+      - npm run build
       - echo "Done building the project"
 
 artifacts:
