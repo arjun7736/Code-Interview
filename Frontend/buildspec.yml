@@ -20,6 +20,7 @@
 #     - '**/*'
 #   discard-paths: no
 #   base-directory: Frontend/dist
+
 version: 0.2
 
 phases:
@@ -34,7 +35,7 @@ phases:
   pre_build:
     commands:
       - echo "Loading environment variables"
-      - export $(cat .env | xargs)
+      - export $(cat .env | xargs) 
       - echo "Environment variables loaded"
   build:
     commands:
