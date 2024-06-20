@@ -34,7 +34,6 @@ phases:
   build:
     commands:
       - echo "Running build script"
-      - cd Frontend
       - ./load-env-and-build.sh
       - echo "Done building the project"
 
