@@ -1,7 +1,7 @@
 import NavBar from "@/components/NavBar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MainBackGround, ThirdBG } from "@/lib/Color";
+import { MainBackGround } from "@/lib/Color";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -31,7 +31,7 @@ const Landing = () => {
       <NavBar />
       <div
         className="min-h-[90vh] flex flex-col justify-center items-start space-y-12 px-4"
-        style={{ backgroundColor: ThirdBG }}
+        style={{ backgroundColor: "black" }}
       >
         <div className="w-full gap-5 flex  justify-center ">
           <div className="flex flex-col text-center justify-center items-center">
