@@ -23,10 +23,10 @@ jobs:
         
     - name: Install dependencies
       run: |
-        cd Backend
+        cd Code-Interview/Backend
         npm ci
     
     - name: Build application
       run: |
-        cd Backend
+        cd Code-Interview/Backend
         npm run build
