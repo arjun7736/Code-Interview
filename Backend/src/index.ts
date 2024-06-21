@@ -15,6 +15,7 @@ const io = new Server(server, {
   cors: {
     origin: '*',
     methods: ['GET', 'POST', 'PUT',"PATCH", 'DELETE'], 
+    allowedHeaders: ['Content-Type', 'Authorization'],
   }
 });
 
