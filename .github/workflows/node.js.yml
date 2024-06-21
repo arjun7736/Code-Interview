@@ -1,33 +1,50 @@
-name: Node.js CI
+# name: Node.js CI
+
+# on:
+#   push:
+#     branches: [ "master" ]
+
+# jobs:
+#   build:
+#     runs-on: self-hosted
+
+#     strategy:
+#       matrix:
+#         node-version: [ 18.x ]
+#         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+#     steps:
+#     - uses: actions/checkout@v4
+    
+#     - name: Use Node.js ${{ matrix.node-version }}
+#       uses: actions/setup-node@v3
+#       with:
+#         node-version: ${{ matrix.node-version }}
+#         cache: 'npm'
+    
+#     - name: Install dependencies
+#       run: |
+#         cd Backend
+#         npm ci
+name: Print Current Directory
 
 on:
   push:
     branches: [ "master" ]
 
 jobs:
-  build:
+  print-cwd:
     runs-on: self-hosted
-
-    strategy:
-      matrix:
-        node-version: [ 18.x ]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    
-    - name: Install dependencies
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Print current directory
       run: |
-        cd Backend
-        npm ci
+        pwd
+
     
-    - name: Build application
-      run: |
-        cd Backend
-        npm run build
+#     - name: Build application
+#       run: |
+#         cd Backend
+#         npm run build
