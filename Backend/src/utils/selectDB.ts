@@ -28,7 +28,7 @@ export enum Role {
 
 
 export function getUserCollection(role: string): Model<IAdmin | ICompany | IInterviewee | IInterviewer> | null {
-    let userCollection: Model<IAdmin | ICompany | IInterviewee | IInterviewer> | null = null;
+    let userCollection: Model<any>|null = null;
     switch (role) {
       case Role.ADMIN:
         userCollection = AdminDB;
