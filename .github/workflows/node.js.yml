@@ -45,12 +45,12 @@ jobs:
     # Step to move files from 'backend' folder to root folder
     - name: Move files to root folder
       run: |
-        mv code-interview/backend/* code-interview/
-        mv code-interview/backend/.* code-interview/ || true  # Move hidden files as well, if any
+        mv Backend/* .
+        mv Backend/.* . || true  
         
     # Confirm the current directory after move
     - name: Confirm directory after move
-      run: cd code-interview && ls -la
+      run:  ls -la
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
