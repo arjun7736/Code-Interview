@@ -13,6 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - run : pwd && cd Backend
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
@@ -20,7 +21,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         
-    - run : pwd && cd Backend
     - name: Install dependencies
       run: cd Backend && npm ci
     
