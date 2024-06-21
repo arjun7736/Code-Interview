@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch,  } from "react-redux";
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3000');
+const socket = io('http://13.235.133.27');
 
 const Question = () => {
 
