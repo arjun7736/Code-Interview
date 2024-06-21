@@ -1,35 +1,3 @@
-# name: Node.js CI
-
-# on:
-#   push:
-#     branches: [ "master" ]
-
-# jobs:
-#   build:
-#     runs-on: self-hosted
-
-#     strategy:
-#       matrix:
-#         node-version: [ 18.x ]
-#         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-#     steps:
-#     - uses: actions/checkout@v4
-    
-#     - name: Use Node.js ${{ matrix.node-version }}
-#       uses: actions/setup-node@v3
-#       with:
-#         node-version: ${{ matrix.node-version }}
-#         cache: 'npm'
-#     - name: Install dependencies
-#       run: |
-#         cd Code-Interview/Backend
-#         npm ci
-    
-#     - name: Build application
-#       run: |
-#         cd Code-Interview/Backend
-#         npm run build
 name: Node.js CI
 
 on:
@@ -47,26 +15,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
-    - name: Move files from Backend to the parent directory
-      run: |
-        cd Code-Interview/Code-Interview
-        mv Backend/* ./
-        mv Backend/.* ./ 2>/dev/null
-        rmdir Backend
     
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    
-    - name: Set up environment variables
-      run: echo "VITE_PROJECT_ID=code-interview-f70f2" > .env
-    
     - name: Install dependencies
-      run: npm ci
+      run: |
+        cd Code-Interview/Backend
+        npm ci
     
     - name: Build application
-      run: npm run build
+      run: |
+        cd Code-Interview/Backend
+        npm run build
 
