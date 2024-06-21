@@ -1,9 +1,9 @@
-import { ErrorResponse } from "@/interfaces/errorInterface";
+import { ErrorResponse } from "../interfaces/errorInterface";
 import { ICompany } from "../interfaces/modelInterface";
 import AdminRepository from "../repositories/adminRepository";
 import { getPremiumCompanies } from "../repositories/companyRepository";
-import { errorResponse } from "@/utils/error";
-import { StatusCode } from "@/utils/selectDB";
+import { errorResponse } from "../utils/error";
+import { StatusCode } from "../utils/selectDB";
 
 class AdminService {
   private adminRepo = new AdminRepository();
