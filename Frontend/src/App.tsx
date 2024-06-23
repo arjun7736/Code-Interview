@@ -26,6 +26,7 @@ import PaymentDone from "./components/company/PaymentDone";
 import VideoCall from "./Pages/common/VideoCall";
 import Compiler from "./Pages/common/Compiler";
 import QandAsession from "./Pages/intervieweePages/QandAsession"
+import PageNotFound from "./Pages/common/PageNotFound";
 
 function App() {
 
@@ -68,6 +69,8 @@ const {intervieweeData}= useSelector((state:RootState)=>state.interviewee as int
           <Route path ="/videocall/:roomId" element={<VideoCall/>}/>
           <Route path ="/compiler"element={<Compiler/>}/>
           <Route path ="/q&a/:questionId"element={<QandAsession/>}/>
+
+          <Route path="*" element={<PageNotFound />} /> 
         </Routes>
       </BrowserRouter>
       <Toaster className="bg-black" />
