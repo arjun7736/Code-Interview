@@ -58,7 +58,7 @@ const UpdateIndividualQuestionSet: React.FC<MultiChoiceProps> = ({
       id: data._id,
     };
     try {
-      await axios.put("/api/interviewer/updateQuestionSet", updatedData);
+      await axios.put("http://13.201.15.170/api/interviewer/updateQuestionSet", updatedData);
       toast("Question Updated Successfully");
       select(null)
     } catch (err) {

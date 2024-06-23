@@ -26,7 +26,7 @@ const{userRole}=useSelector((state:RootState)=>state.temp)
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
-      const response = await axios.patch("/api/auth/changePassword", { ...formData, ...userRole });
+      const response = await axios.patch("http://13.201.15.170/api/auth/changePassword", { ...formData, ...userRole });
       console.log(response.data);
       toast("Password Reset Successfully");
       navigate("/")

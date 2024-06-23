@@ -19,7 +19,7 @@ const IntervieweeHome = () => {
   const checkLink = useCallback(async () => {
     try {
       const response = await axios.get(
-        `/api/interviewee/getQuestionSet/${value}`
+        `http://13.201.15.170/api/interviewee/getQuestionSet/${value}`
       );
       return response?.data;
     } catch (error) {
@@ -35,7 +35,7 @@ const IntervieweeHome = () => {
         navigate(`/videocall/${value}`);
       }
       const response = await axios.get(
-        `/api/interviewee/getQAQuestions/${questionSet}`
+        `http://13.201.15.170/api/interviewee/getQAQuestions/${questionSet}`
       );
       const data = response.data;
 

@@ -39,7 +39,7 @@ const ForgotPasswordOTP = () => {
     dispatch(otpVerificationStart());
 
     try {
-      const response = await axios.post("/api/auth/verify-forgotPassword-otp", {
+      const response = await axios.post("http://13.201.15.170/api/auth/verify-forgotPassword-otp", {
         otp,
         ...userRole,
       });
@@ -74,7 +74,7 @@ const ForgotPasswordOTP = () => {
 
   const resentOTP = async () => {
     try {
-      const response = await axios.post("/api/auth/resent-otp", userRole);
+      const response = await axios.post("http://13.201.15.170/api/auth/resent-otp", userRole);
       console.log(response.data);
     } catch (error) {
       console.error(error);

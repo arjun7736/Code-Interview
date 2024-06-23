@@ -32,7 +32,7 @@ const AddInterviewer: React.FC<Props> = ({ isOpen, onClose }) => {
     e.preventDefault();
     try {
        await axios.post(
-        "/api/company/add-interviewer",
+        "http://13.201.15.170/api/company/add-interviewer",
         requestData
       );
       toast("OTP Sent Successfully");

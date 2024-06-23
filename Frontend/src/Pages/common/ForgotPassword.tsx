@@ -39,7 +39,7 @@ const ForgotPassword = () => {
 
     try {
       await axios
-        .post("/api/auth/forgotPassword", formData)
+        .post("http://13.201.15.170/api/auth/forgotPassword", formData)
         .then((data) => {
           console.log(data);
           dispatch(setUserRole({ role: formData.role, email: formData.email }));

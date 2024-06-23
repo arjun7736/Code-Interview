@@ -36,7 +36,7 @@ const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose,questionSe
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault()
-        await axios.post("/api/interviewer/addQuestions",{questions:addedQuestions,questionSet}).then(()=>{
+        await axios.post("http://13.201.15.170/api/interviewer/addQuestions",{questions:addedQuestions,questionSet}).then(()=>{
             toast("Questions Added")
         }).catch((error)=>{
             console.log(error)

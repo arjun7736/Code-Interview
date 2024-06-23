@@ -32,7 +32,7 @@ useEffect(()=>{
 const handleLogout = async (): Promise<void> => {
   try {
     dispatch(logout())
-    await axios.get('/api/auth/logout'); 
+    await axios.get('http://13.201.15.170/api/auth/logout'); 
     toast('Logout Successful');
     navigate('/');
 
