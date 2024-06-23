@@ -33,7 +33,7 @@ const InterviewerLogin = () => {
     dispatch(loginStart());
 
     try {
-     await axios.post("http://13.233.85.129//api/auth/login", { ...formData, role: "interviewer" }).then((data)=>{
+     await axios.post("http://13.233.85.129/api/auth/login", { ...formData, role: "interviewer" }).then((data)=>{
        dispatch(loginSuccess(data.data));
        navigate("/interviewer");
      })
