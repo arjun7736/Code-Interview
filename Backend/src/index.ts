@@ -4,10 +4,15 @@ import { Server } from 'socket.io';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 dotenv.config();
+import cors from "cors";
 
 const URI: string | undefined = process.env.MONGO_URI;
 const PORT: string | undefined = process.env.PORT;
-
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 console.log(URI,PORT)
 
 const server = http.createServer(app);
