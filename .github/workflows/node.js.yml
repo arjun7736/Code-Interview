@@ -40,3 +40,6 @@ jobs:
 
     - name: Restart application
       run : pm2 restart dist/src/index.js
+      
+    - name: Restart NGINX
+      run: sudo systemctl restart nginx

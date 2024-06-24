@@ -28,6 +28,8 @@ import { StatusCode } from "../utils/selectDB";
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password, role } = req.body;
+    if(!email || !password) throw errorResponse(400, "Email or Password is required");
+
     const user = await userLoginService(email, password, role);
 
     const token = createToken(user._id, user.isBlocked);

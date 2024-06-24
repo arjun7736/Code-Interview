@@ -49,7 +49,6 @@ export const userLoginService = async (
   role: string
 ) => {
   try {
-    if(!email || !password) throw errorResponse(400, "Email or Password is required");
     validateLoginData(email, password);
 
     const user = await findUser(email, role);
