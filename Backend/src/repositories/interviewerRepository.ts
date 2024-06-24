@@ -5,8 +5,8 @@ import QuestionDB from "../models/questionModel";
 import LinkDB from "../models/linkModel";
 import mongoose from "mongoose";
 import { ErrorResponse } from "@/interfaces/errorInterface";
-import { StatusCode } from "@/utils/selectDB";
-import { errorResponse } from "@/utils/error";
+import { StatusCode } from "../utils/selectDB";
+import { errorResponse } from "../utils/error";
 
 export async function createInterviewer(
   email: string,

@@ -4,7 +4,7 @@ import { StatusCode, getUserCollection } from "../utils/selectDB";
 import { ICompany, IInterviewee, IInterviewer, IOtp } from "../interfaces/modelInterface";
 import mongoose from "mongoose";
 import { ErrorResponse } from "@/interfaces/errorInterface";
-import { errorResponse } from "@/utils/error";
+import { errorResponse } from "../utils/error";
 
 export async function findUser(email: string, role: string) {
   try {

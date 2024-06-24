@@ -5,8 +5,8 @@ import { IInterviewee } from "../interfaces/modelInterface";
 import IntervieweeDB from "../models/intervieweeModel";
 import LinkDB from "../models/linkModel";
 import QuestionDB from "../models/questionModel";
-import { StatusCode } from "@/utils/selectDB";
-import { errorResponse } from "@/utils/error";
+import { StatusCode } from "../utils/selectDB";
+import { errorResponse } from "../utils/error";
 
 export async function findInterviewee(
   email: string

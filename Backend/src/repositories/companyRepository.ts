@@ -5,8 +5,8 @@ import { ICompany } from "../interfaces/modelInterface";
 import CompanyDB from "../models/companyModel";
 import QuestionDB from "../models/questionModel";
 import { ErrorResponse } from "@/interfaces/errorInterface";
-import { StatusCode } from "@/utils/selectDB";
-import { errorResponse } from "@/utils/error";
+import { StatusCode } from "../utils/selectDB";
+import { errorResponse } from "../utils/error";
 
 export async function findUserByName(name: string): Promise<ICompany | null> {
   try {
