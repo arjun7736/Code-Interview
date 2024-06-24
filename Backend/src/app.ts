@@ -18,7 +18,7 @@ app.use(cors());
 
 const adminRouter = new AdminRouter();
 
-app.use("/api/auth", authRoute);
+app.use("/auth", authRoute);
 app.use("/api/admin", adminRouter.getRouter());
 app.use("/api/company", companyRoute);
 app.use("/api/interviewer", interviewerRoute);
