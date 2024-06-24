@@ -1,0 +1,39 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Move files to root folder
+      run: |
+        mv Backend/* .
+        mv Backend/.* . || true  
+        
+    - name: Confirm directory after move
+      run:  ls -la
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Create .env file from secrets
+      run: echo "${{ secrets.ENV_FILE_CONTENT }}" > .env
+
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build application
+      run: npm run build
