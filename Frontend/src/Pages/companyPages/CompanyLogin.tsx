@@ -33,7 +33,7 @@ const CompanyLogin = () => {
     dispatch(loginStart());
 
     try {
-      const response = await axios.post("http://13.235.95.144/api/auth/login", {
+      const response = await axios.post("/api/auth/login", {
         ...formData,
         role: "company",
       });

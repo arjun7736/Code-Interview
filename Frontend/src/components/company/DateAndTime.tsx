@@ -24,7 +24,7 @@ const DateAndTime = ({email, selectedOption}: { email: string, selectedOption: s
     };
     const handleButtonClick = async() => {
         try {
-          await axios.post("http://13.235.95.144/api/company/createMeeting",{intervieweeEmail:email,interviewerEmail:selectedOption,date:date,time:time})
+          await axios.post("/api/company/createMeeting",{intervieweeEmail:email,interviewerEmail:selectedOption,date:date,time:time})
           toast("Link Sent Successfully")
           console.log(date,time)
         } catch (error) {

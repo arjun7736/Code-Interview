@@ -5,13 +5,13 @@ import { defineConfig } from "vite"
 export default defineConfig({
   plugins: [react()],
   server: {
-    // proxy: {
-    //   '/api': {
-    //     target: 'http://13.235.95.144',
-    //     changeOrigin:true,
-    //     secure: false,
-    //   }
-    // }
+    proxy: {
+      '/api': {
+        target: 'http://13.233.229.71',
+        changeOrigin:true,
+        secure: false,
+      }
+    }
   },
   resolve: {
     alias: {

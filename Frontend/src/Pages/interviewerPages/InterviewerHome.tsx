@@ -46,7 +46,7 @@ const InterviewerHome = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     axios
-      .get("http://13.235.95.144/api/interviewer/getQuestions")
+      .get("/api/interviewer/getQuestions")
       .then((response) => {
         setQuestionSets(response.data);
         console.log(response.data)
@@ -71,7 +71,7 @@ const InterviewerHome = () => {
     async (selectedQuestionSetId: string | null) => {
       setShowSelectQuestionModal(false);
       if (value) {
-        const data = await axios.post("http://13.235.95.144/api/interviewer/setMeetingLink", {
+        const data = await axios.post("/api/interviewer/setMeetingLink", {
           link: value,
           questionSet: selectedQuestionSetId,
         });

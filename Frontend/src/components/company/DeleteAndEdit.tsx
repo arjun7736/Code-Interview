@@ -22,7 +22,7 @@ const DeleteAndEdit: React.FC<Props> = ({
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      await axios.post("http://13.235.95.144/api/company/edit-interviewer", {
+      await axios.post("/api/company/edit-interviewer", {
         ...formData,
         id: selectedInterviewer?._id,
       });

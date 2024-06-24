@@ -48,7 +48,7 @@ const IntervieweeSignup = () => {
     e.preventDefault();
     dispatch(signupStart());
     try {
-       await axios.post("http://13.235.95.144/api/auth/signup", {
+       await axios.post("/api/auth/signup", {
         ...formData,
         role: "interviewee",
       });
@@ -72,7 +72,7 @@ const IntervieweeSignup = () => {
     try {
       const result: UserCredential = await signInWithPopup(auth, provider);
       const response = await axios.post(
-        "http://13.235.95.144/api/auth/google-signin",
+        "/api/auth/google-signin",
         result.user.providerData[0]
       );
       toast("Login Successfully");

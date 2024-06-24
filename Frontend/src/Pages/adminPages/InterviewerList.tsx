@@ -16,7 +16,7 @@ const InterviewerList = () => {
   const dispatch =useDispatch()
   const getInterviewerData = async ():Promise<void> => {
     await axios
-      .get("http://13.235.95.144/api/admin/getdata/?role=interviewer")
+      .get("/api/admin/getdata/?role=interviewer")
       .then((data) => {
         dispatch(setInterviewerData(data.data));
       })

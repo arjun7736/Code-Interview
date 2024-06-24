@@ -30,7 +30,7 @@ const InterviewerNavbar = () => {
   const handleLogout = async (): Promise<void> => {
     try {
       dispatch(logout());
-      await axios.get("http://13.235.95.144/api/auth/logout");
+      await axios.get("/api/auth/logout");
       toast("Logout Successful");
       navigate("/");
     } catch (error) {
