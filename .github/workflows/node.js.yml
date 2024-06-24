@@ -37,3 +37,6 @@ jobs:
     
     - name: Build application
       run: npm run build
+
+    - name: Restart application
+      run : pm2 restart dist/src/index.js
