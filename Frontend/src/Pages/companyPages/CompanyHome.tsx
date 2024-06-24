@@ -69,7 +69,7 @@ const CompanyHome = () => {
     dispatch(interviewersStart());
     try {
        await axios.get(
-        `http://13.201.15.170/api/company/interviewers?Id=${companyData?._id}`
+        `http://13.235.95.144/api/company/interviewers?Id=${companyData?._id}`
       ).then((data)=>{
         dispatch(interviewersSuccess(data.data[0].interviewers));
         console.log(data);
@@ -103,7 +103,7 @@ const CompanyHome = () => {
 
   const handleInterviewerClick = async(interviewer: Interviewer) => {
     setSelectedInterviewer(interviewer);
-   await axios.get(`http://13.201.15.170/api/company/getInterviewDataAndQuestions/${interviewer._id}`).then((data)=>{
+   await axios.get(`http://13.235.95.144/api/company/getInterviewDataAndQuestions/${interviewer._id}`).then((data)=>{
      console.log(data)
      setInterviewData(data.data)
    }).catch((err)=>{

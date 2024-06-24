@@ -40,7 +40,7 @@ const AdminLogin = () => {
     e.preventDefault();
     dispatch(loginStart());
     try {
-      const response = await axios.post("http://13.201.15.170/api/auth/login", {
+      const response = await axios.post("http://13.235.95.144/api/auth/login", {
         ...formData,
         role: "admin",
       });

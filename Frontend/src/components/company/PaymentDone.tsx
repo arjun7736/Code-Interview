@@ -9,7 +9,7 @@ const dispatch =useDispatch()
     const updateCompany = async (): Promise<void> => { 
 
         try {
-         await axios.get("http://13.201.15.170/api/auth/getData").then((data)=>{
+         await axios.get("http://13.235.95.144/api/auth/getData").then((data)=>{
           dispatch(loginSuccess(data.data))
          }).catch((error)=>{
           console.log(error);

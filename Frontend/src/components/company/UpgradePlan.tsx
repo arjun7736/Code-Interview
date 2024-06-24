@@ -18,7 +18,7 @@ const{companyData}=useSelector((state:RootState)=>state.company)
   const makePayment = async () => {
     try {
       const stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY);
-      const response = await axios.post("http://13.201.15.170/api/company/buy-premium", companyData);
+      const response = await axios.post("http://13.235.95.144/api/company/buy-premium", companyData);
 
       const sessionId = response.data.sessionId;
 

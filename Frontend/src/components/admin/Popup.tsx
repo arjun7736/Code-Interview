@@ -13,7 +13,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, message, id, role,fun })
 
   const handleAction = async (message: string, id:string|null, role: string|null): Promise<void> => {
     try {
-      const response = await axios.post(`http://13.201.15.170/api/admin/${message}`, { id, role });
+      const response = await axios.post(`http://13.235.95.144/api/admin/${message}`, { id, role });
       toast(response.data.message); 
       fun()
     } catch (error) {

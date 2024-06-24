@@ -39,7 +39,7 @@ const OTP = () => {
     dispatch(otpVerificationStart());
     try {
       await axios
-        .post("http://13.201.15.170/api/auth/verify-otp", {
+        .post("http://13.235.95.144/api/auth/verify-otp", {
           otp,
           ...userRole,
         })
@@ -91,7 +91,7 @@ const OTP = () => {
   // };
   const resentOTP = async () => {
     try {
-      await axios.post("http://13.201.15.170/api/auth/resent-otp", userRole).then((data) => {
+      await axios.post("http://13.235.95.144/api/auth/resent-otp", userRole).then((data) => {
         console.log(data);
         toast("OTP Resent To the Mail ID");
       });
