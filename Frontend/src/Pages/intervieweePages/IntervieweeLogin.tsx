@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
-import  { ChangeEvent, FormEvent, useState } from "react";
+import  { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {   UserCredential, signInWithPopup } from "firebase/auth";
 import { toast } from "sonner";
@@ -84,6 +84,15 @@ const IntervieweeLogin = () => {
       }
     }
   };
+  useEffect(() => {
+    if (error) {
+      const timeoutId = setTimeout(() => {
+        dispatch(loginError(""));
+      }, 5000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [error, dispatch]);
+
   return (
     <Card className="mx-auto max-w-sm shadow-lg mt-20">
       <CardHeader>
