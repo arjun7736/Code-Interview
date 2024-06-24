@@ -19,15 +19,33 @@ class AdminService {
   }
 
   async blockUserService(role: string, id: string): Promise<void> {
-    await this.adminRepo.blockUser(role, id);
+    try {
+      await this.adminRepo.blockUser(role, id);
+    } catch (error) {
+      const customError = error as ErrorResponse;
+      const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+      throw errorResponse(statusCode, "Error While Blocking");
+    }
   }
 
   async unBlockUserService(role: string, id: string): Promise<void> {
-    await this.adminRepo.unBlockUser(role, id);
+    try {
+      await this.adminRepo.unBlockUser(role, id); 
+    } catch (error) {
+      const customError = error as ErrorResponse;
+      const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+      throw errorResponse(statusCode, "Error While Blocking UnBlock User");
+    }
   }
 
   async getPremiumCompanyListService(): Promise<ICompany[] | null> {
-    return await getPremiumCompanies();
+    try {
+      return await getPremiumCompanies();
+    } catch (error) {
+      const customError = error as ErrorResponse;
+      const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+      throw errorResponse(statusCode, "Error While Fetching Data");
+    }
   }
 }
 
