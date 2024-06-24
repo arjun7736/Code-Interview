@@ -21,6 +21,7 @@ import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 import { sendLink } from "../utils/sendLink";
 import { StatusCode } from "../utils/selectDB";
+import { ErrorResponse } from "@/interfaces/errorInterface";
 
 //<=----------------------Create Interviewer service----------------------=>//
 export const addInterviewerService = async (
@@ -28,36 +29,49 @@ export const addInterviewerService = async (
   password: string,
   companyId: string
 ): Promise<void> => {
-  if (!email || !password) {
-    throw errorResponse(StatusCode.BAD_REQUEST, "Fill all the fields");
+  try {
+    if (!email || !password) {
+      throw errorResponse(StatusCode.BAD_REQUEST, "Fill all the fields");
+    }
+  
+    if (!isEmail(email)) {
+      throw errorResponse(StatusCode.UNOTHERIZED, "Enter a valid email");
+    }
+  
+    if (!isStrongPassword(password)) {
+      throw errorResponse(StatusCode.UNOTHERIZED, "Weak password");
+    }
+  
+    const existingUser = await findUserByEmail(email);
+    if (existingUser) {
+      throw errorResponse(StatusCode.NOT_FOUND, "Interviewer already exists");
+    }
+  
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    await sentOTP(email, otp);
+  
+    const role = "interviewer";
+    await createOTPuser(otp, hashedPassword, email, role, companyId);
+    
+  } catch (error) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    throw errorResponse(statusCode, "Error While Create Interviewer");
   }
-
-  if (!isEmail(email)) {
-    throw errorResponse(StatusCode.UNOTHERIZED, "Enter a valid email");
-  }
-
-  if (!isStrongPassword(password)) {
-    throw errorResponse(StatusCode.UNOTHERIZED, "Weak password");
-  }
-
-  const existingUser = await findUserByEmail(email);
-  if (existingUser) {
-    throw errorResponse(StatusCode.NOT_FOUND, "Interviewer already exists");
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const otp = Math.floor(100000 + Math.random() * 900000);
-  await sentOTP(email, otp);
-
-  const role = "interviewer";
-  await createOTPuser(otp, hashedPassword, email, role, companyId);
 };
 
 //<=----------------------Delete Interviewer service----------------------=>//
 export const deleteInterviewerService = async (id: string): Promise<void> => {
-  const deletedInterviewer = await findByIdAndDelete(id);
-  if (!deletedInterviewer) {
-    throw errorResponse(StatusCode.NOT_FOUND, "Interviewer Not Found");
+  try {
+    const deletedInterviewer = await findByIdAndDelete(id);
+    if (!deletedInterviewer) {
+      throw errorResponse(StatusCode.NOT_FOUND, "Interviewer Not Found");
+    }
+  } catch (error) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    throw errorResponse(statusCode, "Error While Deleting Interviewer"); 
   }
 };
 
@@ -66,12 +80,18 @@ export const deleteInterviewerService = async (id: string): Promise<void> => {
 export const listInterviewersService = async (
   companyId: string | undefined
 ): Promise<IInterviewer[]> => {
-  if (!companyId || typeof companyId !== "string") {
-    throw errorResponse(StatusCode.BAD_REQUEST, "Invalid Company ID");
+  try {
+    if (!companyId || typeof companyId !== "string") {
+      throw errorResponse(StatusCode.BAD_REQUEST, "Invalid Company ID");
+    }
+  
+    const interviewers = await listInterviewersByCompany(companyId);
+    return interviewers;
+  } catch (error) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    throw errorResponse(statusCode, "Error While List Interviewer"); 
   }
-
-  const interviewers = await listInterviewersByCompany(companyId);
-  return interviewers;
 };
 
 //<=----------------------Edit Interviewer service----------------------=>//
@@ -81,22 +101,29 @@ export const editInterviewerService = async (
   name: string,
   password?: string
 ): Promise<IInterviewer | null> => {
-  if (!id || !name) {
-    throw errorResponse(
-      StatusCode.BAD_REQUEST,
-      "Missing required information (ID and name)"
-    );
-  }
-  let hashedPassword: string | undefined;
-  if (password) {
-    if (!isStrongPassword(password)) {
-      throw errorResponse(StatusCode.UNOTHERIZED, "Weak password");
+  try {
+    if (!id || !name) {
+      throw errorResponse(
+        StatusCode.BAD_REQUEST,
+        "Missing required information (ID and name)"
+      );
     }
-    hashedPassword = await bcrypt.hash(password, 10);
+    let hashedPassword: string | undefined;
+    if (password) {
+      if (!isStrongPassword(password)) {
+        throw errorResponse(StatusCode.UNOTHERIZED, "Weak password");
+      }
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+  
+    const updatedInterviewer = await updateInterviewer(id, name, hashedPassword);
+    return updatedInterviewer;
+    
+  } catch (error) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    throw errorResponse(statusCode, "Error While resend OTP"); 
   }
-
-  const updatedInterviewer = await updateInterviewer(id, name, hashedPassword);
-  return updatedInterviewer;
 };
 
 //<=----------------------Buy Premium service----------------------=>//
@@ -104,38 +131,45 @@ export const buyPremiumService = async (
   email: string,
   userId: string
 ): Promise<string> => {
-  if (!process.env.STRIPE_KEY) {
-    throw new Error("Stripe key not provided");
-  }
-
-  const stripe = new Stripe(process.env.STRIPE_KEY);
-
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    line_items: [
-      {
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: "Premium Subscription",
+  try {
+    if (!process.env.STRIPE_KEY) {
+      throw new Error("Stripe key not provided");
+    }
+  
+    const stripe = new Stripe(process.env.STRIPE_KEY);
+  
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "Premium Subscription",
+            },
+            unit_amount: 1999 * 100,
           },
-          unit_amount: 1999 * 100,
+          quantity: 1,
         },
-        quantity: 1,
+      ],
+      mode: "payment",
+      success_url: "http://localhost:5173/paymentSuccess",
+      cancel_url: "http://localhost:5173/company",
+      customer_email: email,
+      billing_address_collection: "auto",
+      shipping_address_collection: {
+        allowed_countries: ["US", "CA", "GB", "IN"],
       },
-    ],
-    mode: "payment",
-    success_url: "http://localhost:5173/paymentSuccess",
-    cancel_url: "http://localhost:5173/company",
-    customer_email: email,
-    billing_address_collection: "auto",
-    shipping_address_collection: {
-      allowed_countries: ["US", "CA", "GB", "IN"],
-    },
-  });
-  await paymentDone(userId);
-
-  return session.id;
+    });
+    await paymentDone(userId);
+  
+    return session.id;
+    
+  } catch (error) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    throw errorResponse(statusCode, "Error While Payment"); 
+  }
 };
 
 //<=----------------------Update Profile service----------------------=>//
@@ -144,18 +178,25 @@ export const updateProfileService = async (
   name?: string,
   profilePicture?: string
 ): Promise<ICompany | null> => {
-  if (!userId || !name) {
-    throw errorResponse(
-      StatusCode.BAD_REQUEST,
-      "Missing required information (ID and name)"
-    );
+  try {
+    
+      if (!userId || !name) {
+        throw errorResponse(
+          StatusCode.BAD_REQUEST,
+          "Missing required information (ID and name)"
+        );
+      }
+      const updatedCompany = await updateCompanyProfile(
+        userId,
+        name,
+        profilePicture
+      );
+      return updatedCompany;
+  } catch (error) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    throw errorResponse(statusCode, "Error While Update Profile"); 
   }
-  const updatedCompany = await updateCompanyProfile(
-    userId,
-    name,
-    profilePicture
-  );
-  return updatedCompany;
 };
 
 //<=----------------------Sent Mail service----------------------=>//
@@ -165,40 +206,53 @@ export const sentLinkToEmail = async (
   date: string,
   time: string
 ): Promise<void> => {
-  const link = uuidv4();
-
-  if (!date ||!time) {
-    throw new Error("Date And Time Missing");
-  }
-
-  const datenum = new Date(date);
-  const istDate = new Date(datenum.getTime() + (330 * 60000));
-
-  const dateStringOnly = istDate.toISOString().split('T')[0];
-  const timeComponent = time.split(':')[0]; 
-
-  const minuteComponent = time.split(':')[1];
-  const dat = new Date(`${dateStringOnly}T${timeComponent}:${minuteComponent}:00`);
-
-  dat.setMinutes(dat.getMinutes() - 5);
-  const cronExpression = `${dat.getMinutes()} ${dat.getHours()} ${dat.getDate()} ${dat.getMonth() + 1} *`;
-
-  cron.schedule(cronExpression, async () => {
-    try {
-      await sendLink(interviewerEmail, link);
-      await sendLink(intervieweeEmail, link);
-      console.log('Links sent successfully.');
-    } catch (error) {
-      console.error('Error sending links:', error);
+  try {
+    const link = uuidv4();
+  
+    if (!date ||!time) {
+      throw new Error("Date And Time Missing");
     }
-  });
-  console.log(`Scheduled to send links at: ${dat.toLocaleString()}`);
+  
+    const datenum = new Date(date);
+    const istDate = new Date(datenum.getTime() + (330 * 60000));
+  
+    const dateStringOnly = istDate.toISOString().split('T')[0];
+    const timeComponent = time.split(':')[0]; 
+  
+    const minuteComponent = time.split(':')[1];
+    const dat = new Date(`${dateStringOnly}T${timeComponent}:${minuteComponent}:00`);
+  
+    dat.setMinutes(dat.getMinutes() - 5);
+    const cronExpression = `${dat.getMinutes()} ${dat.getHours()} ${dat.getDate()} ${dat.getMonth() + 1} *`;
+  
+    cron.schedule(cronExpression, async () => {
+      try {
+        await sendLink(interviewerEmail, link);
+        await sendLink(intervieweeEmail, link);
+        console.log('Links sent successfully.');
+      } catch (error) {
+        console.error('Error sending links:', error);
+      }
+    });
+    console.log(`Scheduled to send links at: ${dat.toLocaleString()}`);
+    
+  } catch (error) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    throw errorResponse(statusCode, "Error While Link sent "); 
+  }
 };
 
 
 
 export const getInterviewDataService = async (id: string) => {
-  const data = await getInterviewersQuestionData(id);
-  const filteredData = data.filter((d) => d.attentedInterviewees.length > 0);
-  return filteredData;
+  try {
+    const data = await getInterviewersQuestionData(id);
+    const filteredData = data.filter((d) => d.attentedInterviewees.length > 0);
+    return filteredData;   
+  } catch (error) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    throw errorResponse(statusCode, "Error While resend OTP"); 
+  }
 };
