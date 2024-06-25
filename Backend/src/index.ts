@@ -11,6 +11,7 @@ const PORT: string | undefined = process.env.PORT;
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
@@ -19,6 +20,7 @@ const io = new Server(server, {
   cors: {
     origin: '*',
     methods: ['GET', 'POST', 'PUT',"PATCH", 'DELETE'], 
+    credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
   }
 });
