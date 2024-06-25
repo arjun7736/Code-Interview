@@ -32,7 +32,7 @@ const IntervieweeNavbar = () => {
         dispatch(logout())
         navigate("/")
       } else {
-        console.error('Unexpected error:', error); 
+        toast('Error Occurred, try logging in again');
       }
     }
   };

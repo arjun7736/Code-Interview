@@ -22,7 +22,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, message, id, role,fun })
         dispatch(logout())
         navigate("/admin/login")
       } else {
-        console.error('Unexpected error:', error); 
+        toast('Error Occurred, try logging in again');
       }
     }
   };

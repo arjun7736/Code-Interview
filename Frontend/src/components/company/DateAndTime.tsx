@@ -26,9 +26,8 @@ const DateAndTime = ({email, selectedOption}: { email: string, selectedOption: s
         try {
           await axios.post("/api/company/createMeeting",{intervieweeEmail:email,interviewerEmail:selectedOption,date:date,time:time})
           toast("Link Sent Successfully")
-          console.log(date,time)
         } catch (error) {
-          console.log(error)
+          toast("Error While Sending Link")
         }
       };
   return (

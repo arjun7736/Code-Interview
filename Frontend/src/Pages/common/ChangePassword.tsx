@@ -26,12 +26,11 @@ const{userRole}=useSelector((state:RootState)=>state.temp)
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
-      const response = await axios.patch("/api/auth/changePassword", { ...formData, ...userRole });
-      console.log(response.data);
+      await axios.patch("/api/auth/changePassword", { ...formData, ...userRole });
       toast("Password Reset Successfully");
       navigate("/")
       } catch (error) {
-      console.error(error);
+        toast("Unexpected Error Occured");
     }
   };
 

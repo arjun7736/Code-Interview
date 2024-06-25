@@ -45,7 +45,7 @@ const AddInterviewer: React.FC<Props> = ({ isOpen, onClose }) => {
           toast("Error Occured try Login Agian");
           navigate("/")
         } else {
-          console.error(error);
+          toast("Error Occured try Login Agian");
         }
       }else{
         toast("unexpected Error Occured")

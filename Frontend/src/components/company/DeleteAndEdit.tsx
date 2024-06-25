@@ -29,7 +29,6 @@ const DeleteAndEdit: React.FC<Props> = ({
       setIsEditModalOpen(false);
       toast("Interviewer Edited Successfully");
     } catch (error) {
-      console.log(error);
       if (axios.isAxiosError(error)) {
         toast(error.response?.data.message);
         if (error.response?.status === 401 || error.response?.status === 403) {
@@ -62,7 +61,6 @@ const DeleteAndEdit: React.FC<Props> = ({
       setSelectedInterviewer(null);
       toast("Interviewer Deleted");
     } catch (error) {
-      console.log(error);
       if(axios.isAxiosError(error)){
         toast(error.message);
       }else{

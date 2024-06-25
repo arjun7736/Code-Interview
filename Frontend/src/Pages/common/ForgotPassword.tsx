@@ -40,16 +40,13 @@ const ForgotPassword = () => {
     try {
       await axios
         .post("/api/auth/forgotPassword", formData)
-        .then((data) => {
-          console.log(data);
+        .then(() => {
           dispatch(setUserRole({ role: formData.role, email: formData.email }));
           navigate("/forgotPassword-otp");
           toast("OTP Sent To the E-Mail");
         })
         .catch((error) => {
-          console.log(error);
           if (axios.isAxiosError(error)) {
-            console.log(error);
             setError(error?.response?.data);
           } else {
             setError('An unexpected error occurred');
@@ -57,7 +54,6 @@ const ForgotPassword = () => {
         });
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error);
         setError(error?.response?.data?.message);
       } else {
         setError('An unexpected error occurred');

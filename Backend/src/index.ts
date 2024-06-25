@@ -13,7 +13,6 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
-console.log(URI,PORT)
 
 const server = http.createServer(app);
 const io = new Server(server, {

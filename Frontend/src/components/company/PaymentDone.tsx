@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const PaymentDone = () => {
 const dispatch =useDispatch()
@@ -12,10 +13,10 @@ const dispatch =useDispatch()
          await axios.get("/api/auth/getData").then((data)=>{
           dispatch(loginSuccess(data.data))
          }).catch((error)=>{
-          console.log(error);
+          toast(error)
          })
         } catch (error) {
-          console.error(error);
+          toast("unable to update")
         }
       };
     

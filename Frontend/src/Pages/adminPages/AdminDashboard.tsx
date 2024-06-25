@@ -38,11 +38,8 @@ const premium = async () => {
   //   e.preventDefault();
   //   try {
   //     const response = await axios.get(`/api/admin/search/${searchValue}`);
-  //     console.log("Search result:", response.data);
   //   } catch (error) {
-  //     console.error("Error searching:", error);
   //   }
-  //   console.log("Search value:", searchValue);
   // };
   return (
     <>

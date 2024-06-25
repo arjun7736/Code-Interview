@@ -39,24 +39,21 @@ const ForgotPasswordOTP = () => {
     dispatch(otpVerificationStart());
 
     try {
-      const response = await axios.post("/api/auth/verify-forgotPassword-otp", {
+       await axios.post("/api/auth/verify-forgotPassword-otp", {
         otp,
         ...userRole,
       });
-      console.log(response.data);
       dispatch(otpVerified());
       toast("OTP Verified Successfully");
       navigate("/changePassword");
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error);
         dispatch(otpVerificationError(error?.response?.data?.message));
       } else {
         dispatch(
           otpVerificationError("An error occurred. Please try again later.")
         );
       }
-      console.error(error);
     }
   };
 
@@ -74,10 +71,9 @@ const ForgotPasswordOTP = () => {
 
   const resentOTP = async () => {
     try {
-      const response = await axios.post("/api/auth/resent-otp", userRole);
-      console.log(response.data);
+      await axios.post("/api/auth/resent-otp", userRole);
     } catch (error) {
-      console.error(error);
+      toast("An error occurred. Please try again later.");
     }
     setTimer(30);
     countDown();

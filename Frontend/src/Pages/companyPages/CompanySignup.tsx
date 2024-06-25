@@ -49,7 +49,6 @@ const CompanySignup = () => {
         navigate("/otp");
       })
     } catch (error) {
-      console.log(error)
       if(axios.isAxiosError(error)){
         dispatch(signupError(error?.response?.data));
       }else

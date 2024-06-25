@@ -229,12 +229,12 @@ export const sentLinkToEmail = async (
       try {
         await sendLink(interviewerEmail, link);
         await sendLink(intervieweeEmail, link);
-        console.log('Links sent successfully.');
       } catch (error) {
-        console.error('Error sending links:', error);
+        const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    throw errorResponse(statusCode, "Error While Link sent "); 
       }
     });
-    console.log(`Scheduled to send links at: ${dat.toLocaleString()}`);
     
   } catch (error) {
     const customError = error as ErrorResponse;

@@ -31,9 +31,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     if(!email || !password) throw errorResponse(400, "Email or Password is required");
 
     const user = await userLoginService(email, password, role);
-console.log(user)
     const token = createToken(user._id, user.isBlocked);
-    console.log(token)
     const expire = new Date(Date.now() + 3600000);
 
     res

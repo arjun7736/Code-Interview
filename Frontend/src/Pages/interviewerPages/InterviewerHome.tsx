@@ -49,11 +49,10 @@ const InterviewerHome = () => {
       .get("/api/interviewer/getQuestions")
       .then((response) => {
         setQuestionSets(response.data);
-        console.log(response.data)
         dispatch(interviewersQuestions(response?.data));
       })
-      .catch((error) => {
-        console.error(error);
+      .catch(() => {
+        toast("Unexpected  error Occures");
       });
   }, [selectedQuestionSet, dispatch, showAddQuestions]);
 

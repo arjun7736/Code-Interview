@@ -60,7 +60,6 @@ const OTP = () => {
         dispatch(
           otpVerificationError("An error occurred. Please try again later.")
         );
-      console.error(error);
     }
   };
 
@@ -76,31 +75,17 @@ const OTP = () => {
     }
   }
 
-  // const resentOTP = async () => {
-  //   try {
-  //    await axios.post("/api/auth/resent-otp", userRole).then((data)=>{
-  //     console.log(data)
-  //      toast("OTP Resent To the Mail ID");
-  //    })
-  //   } catch (error) {
-  //     console.log(error)
-  //     dispatch(otpVerificationError(error.response.data));
-  //   }
-  //   setTimer(30);
-  //   countDown();
-  // };
+  
   const resentOTP = async () => {
     try {
-      await axios.post("/api/auth/resent-otp", userRole).then((data) => {
-        console.log(data);
+      await axios.post("/api/auth/resent-otp", userRole).then(() => {
         toast("OTP Resent To the Mail ID");
       });
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error);
         dispatch(otpVerificationError(error.response?.data));
       } else {
-        console.error('An unexpected error occurred:', error);
+        toast('An unexpected error occurred');
       }
     }
     setTimer(30);

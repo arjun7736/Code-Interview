@@ -61,9 +61,8 @@ const IntervieweeLogin = () => {
       toast("Login Successfully");
       navigate("/interviewee");
       dispatch(loginSuccess(response.data));
-      console.log(response.data);
     } catch (error) {
-      console.log(error);
+      toast("Unexpected error Occures");
     }
   };
 
@@ -78,7 +77,6 @@ const IntervieweeLogin = () => {
       dispatch(loginSuccess(response.data));
       navigate("/interviewee");
     } catch (error) {
-      console.log(error)
       if (axios.isAxiosError(error)) {
         dispatch(loginError(error?.response?.data));
       }

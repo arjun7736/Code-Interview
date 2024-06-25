@@ -7,6 +7,7 @@ import axios from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import Swal from "sweetalert2";
 
 const IntervieweeHome = () => {
@@ -23,7 +24,7 @@ const IntervieweeHome = () => {
       );
       return response?.data;
     } catch (error) {
-      console.log(error);
+      toast("Unexpected error Occured");
     }
   }, [value]);
 

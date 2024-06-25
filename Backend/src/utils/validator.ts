@@ -26,7 +26,6 @@ export const isEmail = (mail:string):boolean => {
             return false
         }
     } catch (error) {
-        console.log(error)
         return false
     }
 }
@@ -75,7 +74,6 @@ export const isPhoneNumber = (number:number):boolean => {
         }
         return false
     } catch (error) {
-        console.log(error)
         return false
     }
 }

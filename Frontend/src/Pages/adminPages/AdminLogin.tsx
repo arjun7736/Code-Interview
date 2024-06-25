@@ -56,7 +56,6 @@ const AdminLogin = () => {
       } else {
         dispatch(loginError("An error occurred during login"));
       }
-      console.log(error);
     }
   };
 

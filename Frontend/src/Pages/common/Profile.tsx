@@ -51,11 +51,10 @@ const Profile = () => {
       setUserData(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error);
         toast("Error Occurred. Please Login Again");
         navigate("/");
       } else {
-        console.error("An unexpected error occurred:", error);
+        toast("An unexpected error occurred");
       }
     }
   };
@@ -79,20 +78,17 @@ const Profile = () => {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log(Math.round(progress));
       },
-      (error) => {
-        console.error(error);
+      () => {
+        toast("error occured");
       },
       async () => {
         try {
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          console.log(downloadURL);
           setFormData({ ...formData, profilePicture: downloadURL });
         } catch (error) {
-          console.error(error);
+          toast("error occured");
         }
       }
     );
@@ -112,8 +108,8 @@ const Profile = () => {
         setFormData({});
         navigate(`/${data}`);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        toast("Unexpected error Occured");
       });
   };
 

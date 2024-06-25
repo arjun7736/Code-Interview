@@ -23,5 +23,8 @@ app.use("/api/admin", adminRouter.getRouter());
 app.use("/api/company", companyRoute);
 app.use("/api/interviewer", interviewerRoute);
 app.use("/api/interviewee", intervieweeRoute);
+app.use("/test",(req,res)=>{
+    res.send("hello world")
+})
 
 export default app;

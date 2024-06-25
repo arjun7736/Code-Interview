@@ -6,6 +6,7 @@ import axiosInstance from "@/intersepters/axiosIntersepter";
 import { hourglass } from "ldrs";
 import Question from "@/components/Question";
 import { MainBackGround } from "@/lib/Color";
+import { toast } from "sonner";
 hourglass.register();
 
 
@@ -26,7 +27,7 @@ const Compiler = () => {
       const data = await axiosInstance.get("/languages");
       setLanguage(data?.data);
     } catch (error) {
-      console.log(error);
+      toast("Error Occured While Fetching Languages");
     }
   };
   useEffect(() => {
@@ -47,9 +48,7 @@ const Compiler = () => {
       setResponse(test?.data?.stdout);
       test?.data?.stderr ? setError(test?.data?.stderr) : setError("");
       setLoading(false);
-      console.log(test)
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };

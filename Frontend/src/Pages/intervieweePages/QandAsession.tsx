@@ -39,12 +39,11 @@ const QandAsession = () => {
     axios
       .get(`/api/interviewee/getQAQuestions/${questionId}`)
       .then((response) => {
-        console.log(response.data);
         setData(response.data);
         setQuestionLength(response.data.questions.length);
       })
-      .catch((error) => {
-        console.error(error);
+      .catch(() => {
+        toast("Unexpected error Occures");
       });
   }, []);
 
@@ -113,7 +112,6 @@ const QandAsession = () => {
         handleNavigation();
       }
     });
-    console.log(`Correct Count: ${correctCount} length:${questionsLength}`);
   };
 
   const handleNavigation = async () => {
@@ -129,7 +127,7 @@ const QandAsession = () => {
         );
         navigate(`/videocall/${link?.data?.meetingLink}`);
       } catch (error) {
-        console.error("Failed to get meeting link", error);
+        toast("Failed to get meeting link");
       }
     } else {
       await axios.post("/api/interviewee/updateQuestionSet", {

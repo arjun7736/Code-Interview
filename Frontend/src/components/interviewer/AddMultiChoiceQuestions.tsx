@@ -38,8 +38,8 @@ const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose,questionSe
         e.preventDefault()
         await axios.post("/api/interviewer/addQuestions",{questions:addedQuestions,questionSet}).then(()=>{
             toast("Questions Added")
-        }).catch((error)=>{
-            console.log(error)
+        }).catch(()=>{
+            toast("error occured")
         })
         onClose()
     }

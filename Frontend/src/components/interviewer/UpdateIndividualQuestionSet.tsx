@@ -63,7 +63,6 @@ const UpdateIndividualQuestionSet: React.FC<MultiChoiceProps> = ({
       select(null)
     } catch (err) {
       toast("Error While Updating ");
-      console.log(err);
     }
     onClose();
   };
