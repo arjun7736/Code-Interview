@@ -54,7 +54,7 @@ export const userLoginService = async (
     const user = await findUser(email, role);
 
     if (!user)
-     return errorResponse(
+     throw errorResponse(
         StatusCode.UNOTHERIZED,
         "No Account Found Check Credentials"
       );
@@ -81,7 +81,7 @@ export const userLoginService = async (
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Login");
+    throw errorResponse(statusCode,  customError.message || "Error While Login");
   }
 };
 
