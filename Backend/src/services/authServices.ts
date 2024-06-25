@@ -54,7 +54,7 @@ export const userLoginService = async (
     const user = await findUser(email, role);
 
     if (!user)
-      throw errorResponse(
+     return errorResponse(
         StatusCode.UNOTHERIZED,
         "No Account Found Check Credentials"
       );
