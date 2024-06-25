@@ -4,15 +4,15 @@ import { defineConfig } from "vite"
 
 export default defineConfig({
   plugins: [react()],
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://13.233.229.71',
-        changeOrigin:true,
-        secure: false,
-      }
-    }
-  },
+  // server: {
+  //   proxy: {
+  //     '/api': {
+  //       target: 'http://13.233.229.71',
+  //       changeOrigin:true,
+  //       secure: false,
+  //     }
+  //   }
+  // },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
