@@ -18,7 +18,7 @@ app.use(cors({
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: 'http://codeinterview.s3-website.ap-south-1.amazonaws.com',
     methods: ['GET', 'POST', 'PUT',"PATCH", 'DELETE'], 
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
