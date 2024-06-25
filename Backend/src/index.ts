@@ -4,16 +4,9 @@ import { Server } from 'socket.io';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 dotenv.config();
-import cors from "cors";
 
 const URI: string | undefined = process.env.MONGO_URI;
 const PORT: string | undefined = process.env.PORT;
-app.use(cors({
-  origin: 'http://codeinterview.s3-website.ap-south-1.amazonaws.com',
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
 
 const server = http.createServer(app);
 const io = new Server(server, {
