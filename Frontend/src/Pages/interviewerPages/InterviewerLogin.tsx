@@ -39,7 +39,7 @@ const InterviewerLogin = () => {
       ).then((data)=>{
         dispatch(loginSuccess(data.data.user));
         const token =data.data.interviewer_token
-        Cookies.set('interviewer_token', token, { expires: new Date(Date.now() + 3600000), secure: false, sameSite: 'Lax' });
+        // Cookies.set('interviewer_token', token, { expires: new Date(Date.now() + 3600000), secure: false, sameSite: 'Lax' });
         navigate("/interviewer");
       })
       } catch (error) {
