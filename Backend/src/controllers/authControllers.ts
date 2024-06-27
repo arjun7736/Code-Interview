@@ -34,10 +34,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const user = await userLoginService(email, password, role);
     const token = createToken(user._id, user.isBlocked);
     const expire = new Date(Date.now() + 3600000);
-
+    const response = {
+      user,
+      [`${role}_token`]: token,
+    };
     res
       .cookie(`${role}_token`, token, { httpOnly: true, expires: expire})
-      .json({ user, interviewer_token: token });
+      .json(response);
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;

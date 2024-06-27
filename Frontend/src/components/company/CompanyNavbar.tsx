@@ -15,6 +15,7 @@ import { logout } from "@/redux/slices/companySlice";
 import axios from "axios";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { MainBackGround } from "@/lib/Color";
+import Cookies from 'js-cookie';
 
 const CompanyNavbar = () => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const CompanyNavbar = () => {
     try {
       dispatch(logout());
       await axios.get("/api/auth/logout");
+      Cookies.remove('company_token', { sameSite: 'Lax' });
       toast("Logout Successful");
       navigate("/company/login");
     } catch (error) {

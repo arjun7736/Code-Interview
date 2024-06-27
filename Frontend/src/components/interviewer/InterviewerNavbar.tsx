@@ -15,6 +15,7 @@ import { logout } from "@/redux/slices/interviewerSlice";
 import { toast } from "sonner";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { MainBackGround } from "@/lib/Color";
+import Cookies from 'js-cookie';
 
 const InterviewerNavbar = () => {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ const InterviewerNavbar = () => {
     try {
       dispatch(logout());
       await axios.get("/api/auth/logout");
+      Cookies.remove('interviewer_token', { sameSite: 'Lax' });
       toast("Logout Successful");
       navigate("/");
     } catch (error) {

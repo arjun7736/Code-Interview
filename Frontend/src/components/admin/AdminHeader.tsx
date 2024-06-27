@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { logout } from "@/redux/slices/adminSlice";
 import { MainBackGround } from "@/lib/Color";
+import Cookies from 'js-cookie';
 
 const AdminHeader = () => {
   const navigate =useNavigate()
@@ -33,6 +34,7 @@ const handleLogout = async (): Promise<void> => {
   try {
     dispatch(logout())
     await axios.get('/api/auth/logout'); 
+    Cookies.remove('admin_token', { sameSite: 'Lax' });
     toast('Logout Successful');
     navigate('/');
 
