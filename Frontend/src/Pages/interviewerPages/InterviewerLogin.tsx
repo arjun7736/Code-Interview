@@ -36,6 +36,7 @@ const InterviewerLogin = () => {
      await axios.post("http://13.233.229.71/api/auth/login", { ...formData, role: "interviewer" }
      ).then((data)=>{
        dispatch(loginSuccess(data.data));
+       console.log(data.headers)
        navigate("/interviewer");
      })
     } catch (error) {
