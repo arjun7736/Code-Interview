@@ -38,7 +38,7 @@ const InterviewerLogin = () => {
       await axios.post("http://13.233.229.71/api/auth/login", { ...formData, role: "interviewer" }
       ).then((data)=>{
         dispatch(loginSuccess(data.data.user));
-        const token =data.data.interviewer_token
+        // const token =data.data.interviewer_token
         // Cookies.set('interviewer_token', token, { expires: new Date(Date.now() + 3600000), secure: false, sameSite: 'Lax' });
         navigate("/interviewer");
       })
