@@ -35,7 +35,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const expire = new Date(Date.now() + 3600000);
 
     res
-      .cookie(`${role}_token`, token, { httpOnly: true, expires: expire ,sameSite: 'lax'})
+      .cookie(`${role}_token`, token, { httpOnly: true, expires: expire ,sameSite: 'none'})
       .json(user);
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
