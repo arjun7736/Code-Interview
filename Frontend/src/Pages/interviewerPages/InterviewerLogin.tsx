@@ -30,27 +30,27 @@ const InterviewerLogin = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    dispatch(loginStart());
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      dispatch(loginStart());
 
-    try {
-     await axios.post("http://13.233.229.71/api/auth/login", { ...formData, role: "interviewer" }
-     ).then((data)=>{
-       dispatch(loginSuccess(data.data.user));
-       const token =data.data.interviewer_token
-       Cookies.set('interviewer_token', token, { expires: new Date(Date.now() + 3600000), secure: false, sameSite: 'None' });
-       console.log(data.data.interviewer_token)
-       navigate("/interviewer");
-     })
-    } catch (error) {
-      if(axios.isAxiosError(error)){
-        dispatch(loginError(error?.response?.data || "Login Failed"));
-      }else{
-        dispatch(loginError("Login Failed"));
+      try {
+      await axios.post("http://13.233.229.71/api/auth/login", { ...formData, role: "interviewer" }
+      ).then((data)=>{
+        dispatch(loginSuccess(data.data.user));
+        const token =data.data.interviewer_token
+        Cookies.set('interviewer_token', token, { expires: new Date(Date.now() + 3600000), secure: false, sameSite: 'none' });
+        console.log(data.data.interviewer_token)
+        navigate("/interviewer");
+      })
+      } catch (error) {
+        if(axios.isAxiosError(error)){
+          dispatch(loginError(error?.response?.data || "Login Failed"));
+        }else{
+          dispatch(loginError("Login Failed"));
+        }
       }
-    }
-  };
+    };
   useEffect(() => {
     if (error) {
       const timeoutId = setTimeout(() => {
