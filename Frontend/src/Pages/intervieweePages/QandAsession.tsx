@@ -38,7 +38,7 @@ const QandAsession = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/interviewee/getQAQuestions/${questionId}`)
+      .get(`http://13.233.229.71/api/interviewee/getQAQuestions/${questionId}`)
       .then((response) => {
         setData(response.data);
         setQuestionLength(response.data.questions.length);
@@ -118,20 +118,20 @@ const QandAsession = () => {
   const handleNavigation = async () => {
     if (correctCount >= Math.floor(questionsLength / 2)) {
       try {
-        await axios.post("/api/interviewee/updateQuestionSet", {
+        await axios.post("http://13.233.229.71/api/interviewee/updateQuestionSet", {
           result: "Pass",
           questionSet: questionId,
           interviewee: intervieweeData?._id,
         });
         const link = await axios.get(
-          `/api/interviewee/getMeetingLink/${questionId}`
+          `http://13.233.229.71/api/interviewee/getMeetingLink/${questionId}`
         );
         navigate(`/videocall/${link?.data?.meetingLink}`);
       } catch (error) {
         toast("Failed to get meeting link");
       }
     } else {
-      await axios.post("/api/interviewee/updateQuestionSet", {
+      await axios.post("http://13.233.229.71/api/interviewee/updateQuestionSet", {
         result: "Fail",
         questionSet: questionId,
         interviewee: intervieweeData?._id,

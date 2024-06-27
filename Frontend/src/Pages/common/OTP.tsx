@@ -39,7 +39,7 @@ const OTP = () => {
     dispatch(otpVerificationStart());
     try {
       await axios
-        .post("/api/auth/verify-otp", {
+        .post("http://13.233.229.71/api/auth/verify-otp", {
           otp,
           ...userRole,
         })
@@ -78,7 +78,7 @@ const OTP = () => {
   
   const resentOTP = async () => {
     try {
-      await axios.post("/api/auth/resent-otp", userRole).then(() => {
+      await axios.post("http://13.233.229.71/api/auth/resent-otp", userRole).then(() => {
         toast("OTP Resent To the Mail ID");
       });
     } catch (error) {

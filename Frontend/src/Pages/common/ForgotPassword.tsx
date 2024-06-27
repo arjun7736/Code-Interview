@@ -39,7 +39,7 @@ const ForgotPassword = () => {
 
     try {
       await axios
-        .post("/api/auth/forgotPassword", formData)
+        .post("http://13.233.229.71/api/auth/forgotPassword", formData)
         .then(() => {
           dispatch(setUserRole({ role: formData.role, email: formData.email }));
           navigate("/forgotPassword-otp");

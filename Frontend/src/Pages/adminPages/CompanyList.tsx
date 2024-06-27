@@ -23,7 +23,7 @@ const CompanyList = () => {
 
   const getCompanyData = async ():Promise<void> => {
     await axios
-      .get("/api/admin/getdata/?role=company")
+      .get("http://13.233.229.71/api/admin/getdata/?role=company")
       .then((data) => {
         dispatch(setCompanyData(data.data));
       })
