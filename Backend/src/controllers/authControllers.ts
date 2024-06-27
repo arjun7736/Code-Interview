@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Request, Response } from "express";
 import {
   IInterviewee,
@@ -36,7 +37,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     res
       .cookie(`${role}_token`, token, { httpOnly: true, expires: expire ,sameSite: 'none'})
-      .json(user);
+      .json({ user, interviewer_token: token });
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
