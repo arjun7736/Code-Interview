@@ -8,21 +8,28 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { loginError, loginStart, loginSuccess } from "@/redux/slices/companySlice";
+import {
+  loginError,
+  loginStart,
+  loginSuccess,
+} from "@/redux/slices/companySlice";
 import { RootState } from "@/redux/store";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
+import Cookies from 'js-cookie';
 
 const CompanyLogin = () => {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { error, loading, } = useSelector((state: RootState) => state.company);
+  const { error, loading } = useSelector((state: RootState) => state.company);
 
-  const [formData, setformData] = useState<LoginForm>({ email: "", password: "" });
+  const [formData, setformData] = useState<LoginForm>({
+    email: "",
+    password: "",
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setformData({ ...formData, [e.target.id]: e.target.value });
@@ -37,7 +44,13 @@ const CompanyLogin = () => {
         ...formData,
         role: "company",
       });
-      dispatch(loginSuccess(response.data));
+      dispatch(loginSuccess(response.data.user));
+      const token = response.data.company_token;
+      Cookies.set("company_token", token, {
+        expires: new Date(Date.now() + 3600000),
+        secure: false,
+        sameSite: "Lax",
+      });
       navigate("/company");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -70,7 +83,7 @@ const CompanyLogin = () => {
           <div className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
-              <Input  id="email" type="email" onChange={handleChange} />
+              <Input id="email" type="email" onChange={handleChange} />
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
@@ -85,7 +98,7 @@ const CompanyLogin = () => {
               <Input id="password" type="password" onChange={handleChange} />
             </div>
             <p className="text-red-500 font-serif">{error ? error : ""}</p>
-            <Button type="submit" className="w-full" >
+            <Button type="submit" className="w-full">
               {loading ? <ScaleLoader color="white" /> : "Login"}
             </Button>
           </div>
@@ -103,8 +116,7 @@ const CompanyLogin = () => {
 
 export default CompanyLogin;
 
-
-interface LoginForm{
-  email:string,
-  password:string
+interface LoginForm {
+  email: string;
+  password: string;
 }

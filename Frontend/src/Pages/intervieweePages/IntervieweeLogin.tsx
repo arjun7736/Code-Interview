@@ -23,6 +23,7 @@ import { ScaleLoader } from "react-spinners";
 import { FcGoogle } from "react-icons/fc";
 import { Label } from "@/components/ui/label";
 import { RootState } from "@/redux/store";
+import Cookies from 'js-cookie';
 
 
 
@@ -74,7 +75,9 @@ const IntervieweeLogin = () => {
         ...formData,
         role: "interviewee",
       });
-      dispatch(loginSuccess(response.data));
+      dispatch(loginSuccess(response.data.user));
+      const token =response.data.interviewee_token
+      Cookies.set('interviewee_token', token, { expires: new Date(Date.now() + 3600000), secure: false, sameSite: 'Lax' });
       navigate("/interviewee");
     } catch (error) {
       if (axios.isAxiosError(error)) {
