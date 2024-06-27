@@ -8,12 +8,14 @@ import cors from "cors"
 
 const URI: string | undefined = process.env.MONGO_URI;
 const PORT: string | undefined = process.env.PORT;
+
 const corsOptions = {
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 };
+app.options('*', cors(corsOptions));
 
 app.use(cors(corsOptions));
 
