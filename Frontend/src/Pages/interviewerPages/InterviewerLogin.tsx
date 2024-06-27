@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 
 
 const InterviewerLogin = () => {
