@@ -15,6 +15,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
+import Cookies from 'js-cookie';
+
 
 const InterviewerLogin = () => {
 
@@ -35,7 +37,9 @@ const InterviewerLogin = () => {
     try {
      await axios.post("http://13.233.229.71/api/auth/login", { ...formData, role: "interviewer" }
      ).then((data)=>{
-       dispatch(loginSuccess(data.data));
+       dispatch(loginSuccess(data.data.user));
+       const token =data.data.interviewer_token
+       Cookies.set('interviewer_token', token, { expires: new Date(Date.now() + 3600000), secure: false, sameSite: 'None' });
        console.log(data)
        navigate("/interviewer");
      })
