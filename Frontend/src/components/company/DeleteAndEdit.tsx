@@ -55,7 +55,7 @@ const DeleteAndEdit: React.FC<Props> = ({
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `/api/company/delete-interviewer/${selectedInterviewer?._id}`
+        `http://13.233.229.71/api/company/delete-interviewer/${selectedInterviewer?._id}`
       );
       fetchData();
       setSelectedInterviewer(null);
