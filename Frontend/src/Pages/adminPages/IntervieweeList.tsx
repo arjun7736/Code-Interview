@@ -22,7 +22,7 @@ const navigate =useNavigate()
 
   const getIntervieweeData = async ():Promise<void> => {
     await axios
-      .get("https://electronix.today/api/admin/getdata/?role=interviewee")
+      .get("/api/admin/getdata/?role=interviewee")
       .then((data) => {
         dispatch(setIntervieweeData(data.data));
       })

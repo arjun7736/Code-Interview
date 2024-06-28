@@ -41,7 +41,7 @@ const AdminLogin = () => {
     e.preventDefault();
     dispatch(loginStart());
     try {
-      const response = await axios.post("https://electronix.today/api/auth/login", {
+      const response = await axios.post("/api/auth/login", {
         ...formData,
         role: "admin",
       });

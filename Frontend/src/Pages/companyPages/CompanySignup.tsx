@@ -42,7 +42,7 @@ const CompanySignup = () => {
     e.preventDefault();
     dispatch(signupStart());
     try {
-      await axios.post("https://electronix.today/api/auth/signup", { ...formData, role: "company" }).then(()=>{
+      await axios.post("/api/auth/signup", { ...formData, role: "company" }).then(()=>{
         dispatch(signupSuccess());
         toast("OTP Sent to the Registered E-mail");
         dispatch(setUserRole({role:"company",email:formData.email}))

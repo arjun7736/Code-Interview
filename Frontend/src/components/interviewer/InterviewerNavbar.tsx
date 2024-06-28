@@ -31,7 +31,7 @@ const InterviewerNavbar = () => {
   const handleLogout = async (): Promise<void> => {
     try {
       dispatch(logout());
-      await axios.get("https://electronix.today/api/auth/logout");
+      await axios.get("/api/auth/logout");
       Cookies.remove('interviewer_token', { sameSite: 'Lax' });
       toast("Logout Successful");
       navigate("/");

@@ -39,7 +39,7 @@ const ForgotPassword = () => {
 
     try {
       await axios
-        .post("https://electronix.today/api/auth/forgotPassword", formData)
+        .post("/api/auth/forgotPassword", formData)
         .then(() => {
           dispatch(setUserRole({ role: formData.role, email: formData.email }));
           navigate("/forgotPassword-otp");

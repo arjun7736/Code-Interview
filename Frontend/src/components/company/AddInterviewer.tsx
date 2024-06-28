@@ -32,7 +32,7 @@ const AddInterviewer: React.FC<Props> = ({ isOpen, onClose }) => {
     e.preventDefault();
     try {
        await axios.post(
-        "https://electronix.today/api/company/add-interviewer",
+        "/api/company/add-interviewer",
         requestData
       );
       toast("OTP Sent Successfully");

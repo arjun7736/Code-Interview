@@ -7,7 +7,7 @@ export default defineConfig({
   // server: {
   //   proxy: {
   //     '/api': {
-  //       target: 'https://electronix.today',
+  //       target: '',
   //       changeOrigin:true,
   //       secure: false,
   //     }

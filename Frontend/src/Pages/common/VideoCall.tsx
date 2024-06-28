@@ -10,7 +10,7 @@ import { FaLocationArrow } from "react-icons/fa";
 import { setQuestion } from "@/redux/slices/tempSlice";
 import { io } from 'socket.io-client';
 
-const socket = io('https://electronix.today');
+const socket = io('');
 
 
 const VideoCall = () => {
