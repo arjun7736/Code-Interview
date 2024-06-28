@@ -27,7 +27,7 @@ const IndividualQuestionTable = ({ questionsData, select }: { questionsData: any
   const [editItem, setEditItem] = useState(null);
  const handleDelete=async(id:string)=>{
   try{
-    await axios.delete(`http://13.233.229.71/api/interviewer/deleteQuestion/${id}`)
+    await axios.delete(`https://electronix.today/api/interviewer/deleteQuestion/${id}`)
     select(null)
     toast("Question Deleted")
   }catch{

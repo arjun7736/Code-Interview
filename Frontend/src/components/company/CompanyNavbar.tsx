@@ -29,7 +29,7 @@ const CompanyNavbar = () => {
   const handleLogout = async (): Promise<void> => {
     try {
       dispatch(logout());
-      await axios.get("http://13.233.229.71/api/auth/logout");
+      await axios.get("https://electronix.today/api/auth/logout");
       Cookies.remove('company_token', { sameSite: 'Lax' });
       toast("Logout Successful");
       navigate("/company/login");

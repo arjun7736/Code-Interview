@@ -40,7 +40,7 @@ const CompanyLogin = () => {
     dispatch(loginStart());
 
     try {
-      const response = await axios.post("http://13.233.229.71/api/auth/login", {
+      const response = await axios.post("https://electronix.today/api/auth/login", {
         ...formData,
         role: "company",
       });

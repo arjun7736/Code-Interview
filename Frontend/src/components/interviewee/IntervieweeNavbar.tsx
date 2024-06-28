@@ -23,7 +23,7 @@ const IntervieweeNavbar = () => {
   const handleLogout = async (): Promise<void> => {
     try {
       dispatch(logout())
-      await axios.get('http://13.233.229.71/api/auth/logout'); 
+      await axios.get('https://electronix.today/api/auth/logout'); 
       Cookies.remove('interviewee_token', { sameSite: 'Lax' });
       toast('Logout Successful');
       navigate("/");

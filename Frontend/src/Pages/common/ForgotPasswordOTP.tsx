@@ -39,7 +39,7 @@ const ForgotPasswordOTP = () => {
     dispatch(otpVerificationStart());
 
     try {
-       await axios.post("http://13.233.229.71/api/auth/verify-forgotPassword-otp", {
+       await axios.post("https://electronix.today/api/auth/verify-forgotPassword-otp", {
         otp,
         ...userRole,
       });
@@ -71,7 +71,7 @@ const ForgotPasswordOTP = () => {
 
   const resentOTP = async () => {
     try {
-      await axios.post("http://13.233.229.71/api/auth/resent-otp", userRole);
+      await axios.post("https://electronix.today/api/auth/resent-otp", userRole);
     } catch (error) {
       toast("An error occurred. Please try again later.");
     }

@@ -26,7 +26,7 @@ const{userRole}=useSelector((state:RootState)=>state.temp)
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
-      await axios.patch("http://13.233.229.71/api/auth/changePassword", { ...formData, ...userRole });
+      await axios.patch("https://electronix.today/api/auth/changePassword", { ...formData, ...userRole });
       toast("Password Reset Successfully");
       navigate("/")
       } catch (error) {

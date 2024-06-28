@@ -46,7 +46,7 @@ const InterviewerHome = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     axios
-      .get("http://13.233.229.71/api/interviewer/getQuestions")
+      .get("https://electronix.today/api/interviewer/getQuestions")
       .then((response) => {
         setQuestionSets(response.data);
         dispatch(interviewersQuestions(response?.data));
@@ -70,7 +70,7 @@ const InterviewerHome = () => {
     async (selectedQuestionSetId: string | null) => {
       setShowSelectQuestionModal(false);
       if (value) {
-        const data = await axios.post("http://13.233.229.71/api/interviewer/setMeetingLink", {
+        const data = await axios.post("https://electronix.today/api/interviewer/setMeetingLink", {
           link: value,
           questionSet: selectedQuestionSetId,
         });

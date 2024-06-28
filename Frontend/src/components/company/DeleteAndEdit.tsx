@@ -22,7 +22,7 @@ const DeleteAndEdit: React.FC<Props> = ({
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      await axios.post("http://13.233.229.71/api/company/edit-interviewer", {
+      await axios.post("https://electronix.today/api/company/edit-interviewer", {
         ...formData,
         id: selectedInterviewer?._id,
       });
@@ -55,7 +55,7 @@ const DeleteAndEdit: React.FC<Props> = ({
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `http://13.233.229.71/api/company/delete-interviewer/${selectedInterviewer?._id}`
+        `https://electronix.today/api/company/delete-interviewer/${selectedInterviewer?._id}`
       );
       fetchData();
       setSelectedInterviewer(null);
