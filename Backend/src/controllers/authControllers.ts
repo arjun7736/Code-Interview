@@ -12,7 +12,7 @@ import {
   createToken,
   forgotPasswordOTPService,
   getIndividualUserService,
-  logoutService,
+  // logoutService,
   otpService,
   resendOtpService,
   signUpService,
@@ -81,11 +81,11 @@ export const verifyOTP = async (req: Request, res: Response): Promise<void> => {
 //<=----------------------LogOut----------------------=>//
 export const logout = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tokenCookieName = await logoutService(req);
-    res.clearCookie(tokenCookieName);
+    // const tokenCookieName = await logoutService(req);
+    // res.clearCookie(tokenCookieName);
     res
       .status(200)
-      .json({ message: "Logged out successfully!", user: tokenCookieName });
+      .json({ message: "Logged out successfully!"});
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
