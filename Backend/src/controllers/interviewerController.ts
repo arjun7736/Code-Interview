@@ -14,7 +14,7 @@ import { StatusCode } from "../utils/selectDB";
 
 export const updateProfile = async (req: Request, res: Response) => {
   try {
-    const id = req?.params._id;
+    const id = req?.params.id;
     const { name, profilePicture } = req.body;
 
     const updatedInterviewer = await updateInterviewerService(
@@ -37,7 +37,7 @@ export const updateProfile = async (req: Request, res: Response) => {
 export const addQuestion = async (req: Request, res: Response) => {
   try {
     const { questions,questionSet } = req.body;
-    const id = req?.params._id;
+    const id = req?.params.id;
     const data = await addQuestions(questions, id,questionSet);
     res.json(data);
   } catch (error: unknown) {
@@ -49,7 +49,7 @@ export const addQuestion = async (req: Request, res: Response) => {
 
 export const getQuestions = async (req: Request, res: Response) => {
   try {
-    const id = req?.params._id;
+    const id = req?.params.id;
     const questions = await getInterviewerQuestions(id);
     res.json(questions);
   } catch (error: unknown) {
