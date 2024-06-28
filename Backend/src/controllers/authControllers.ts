@@ -21,7 +21,7 @@ import {
 } from "../services/authServices";
 import { errorResponse } from "../utils/error";
 import { StatusCode } from "../utils/selectDB";
-import { getUser } from "@/repositories/userRepository";
+import { getUser } from "../repositories/userRepository";
 
 
 
