@@ -229,6 +229,7 @@ export const sentLinkToEmail = async (
       try {
         await sendLink(interviewerEmail, link);
         await sendLink(intervieweeEmail, link);
+        console.log("Link sent to both interviewer and interviewee");
       } catch (error) {
         const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
