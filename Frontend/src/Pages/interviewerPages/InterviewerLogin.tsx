@@ -19,8 +19,6 @@ import { ScaleLoader } from "react-spinners";
 
 
 const InterviewerLogin = () => {
-  
-  axios.defaults.withCredentials = true;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
