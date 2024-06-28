@@ -39,7 +39,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       [`${role}_token`]: token,
     };
     res
-      .cookie(`${role}_token`, token, { httpOnly: true, expires: expire,secure:false,sameSite:"lax" ,path: "/api" })
+      .cookie(`${role}_token`, token, { httpOnly: true, expires: expire,secure:true,sameSite:"lax" ,path: "/api" })
       .json(response);
   } catch (error: unknown) {
     const customError = error as ErrorResponse;
