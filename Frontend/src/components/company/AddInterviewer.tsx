@@ -8,6 +8,7 @@ import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { setUserRole } from "@/redux/slices/tempSlice";
+import { Light, MainBackGround } from "@/lib/Color";
 
 const AddInterviewer: React.FC<Props> = ({ isOpen, onClose }) => {
   const dispatch =useDispatch()
@@ -94,14 +95,15 @@ const AddInterviewer: React.FC<Props> = ({ isOpen, onClose }) => {
                 <div className=" px-4 py-3 text-right">
                   <Button
                     type="submit"
-                    className="py-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700 mr-2"
+                    className="py-2 px-4  text-white rounded mr-2" style={{backgroundColor:Light}}
                     onClick={onClose}
                   >
                  Cancel
                   </Button>
                   <Button
-                    className="py-2 px-4 bg-blue-500 text-white rounded font-medium hover:bg-blue-700 mr-2 transition duration-500"
+                    className="py-2 px-4  text-white rounded font-medium  mr-2 transition duration-500"
                     onClick={handleSubmit}
+                    style={{backgroundColor:MainBackGround}}
                     type="button"
                   >
                    Create
