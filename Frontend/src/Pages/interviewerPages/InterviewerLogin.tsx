@@ -35,7 +35,7 @@ const InterviewerLogin = () => {
       dispatch(loginStart());
 
       try {
-      await axios.post("http://13.233.229.71/api/auth/login", { ...formData, role: "interviewer" }
+      await axios.post("http://13.233.229.71/api/auth/login", { ...formData, role: "interviewer" },{withCredentials: true}
       ).then((data)=>{
         dispatch(loginSuccess(data.data.user));
         // const token =data.data.interviewer_token
