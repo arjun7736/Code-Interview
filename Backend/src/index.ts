@@ -18,6 +18,13 @@ const corsOptions = {
 app.options('*', cors(corsOptions));
 
 app.use(cors(corsOptions));
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://codeinterview.s3-website.ap-south-1.amazonaws.com');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE')
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 
 const server = http.createServer(app);
