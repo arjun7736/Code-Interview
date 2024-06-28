@@ -39,13 +39,14 @@ const CompanyLogin = () => {
     dispatch(loginStart());
 
     try {
-      const response = await axios.post("https://electronix.today/api/auth/login", {
-        ...formData,
-        role: "company",
-      });
+      const response = await axios.post(
+        "https://electronix.today/api/auth/login",
+        {
+          ...formData,
+          role: "company",
+        }
+      );
       dispatch(loginSuccess(response.data.user));
-      const token = response.data.company_token;
-      localStorage.setItem("company_token",token)
       navigate("/company");
     } catch (error) {
       if (axios.isAxiosError(error)) {

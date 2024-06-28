@@ -46,8 +46,6 @@ const AdminLogin = () => {
       });
       if (response.data) {
         dispatch(loginSuccess(response.data.user));
-        const token =response.data.admin_token
-        localStorage.setItem("admin_token",token)
         navigate("/admin/dashboard");
       } else {
         dispatch(loginError("An error occurred during login"));

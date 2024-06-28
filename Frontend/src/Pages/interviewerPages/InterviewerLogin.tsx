@@ -38,8 +38,6 @@ const InterviewerLogin = () => {
       await axios.post("https://electronix.today/api/auth/login", { ...formData, role: "interviewer" }
       ).then((data)=>{
         dispatch(loginSuccess(data.data.user));
-        const token =data.data.interviewer_token
-       localStorage.setItem("interviewer_token",token)
         navigate("/interviewer");
       })
       } catch (error) {

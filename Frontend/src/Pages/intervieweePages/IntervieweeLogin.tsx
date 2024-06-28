@@ -75,8 +75,6 @@ const IntervieweeLogin = () => {
         role: "interviewee",
       });
       dispatch(loginSuccess(response.data.user));
-      const token =response.data.interviewee_token
-      localStorage.setItem("interviewee_token",token)
       navigate("/interviewee");
     } catch (error) {
       if (axios.isAxiosError(error)) {
