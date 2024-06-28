@@ -35,7 +35,7 @@ const InterviewerLogin = () => {
       dispatch(loginStart());
 
       try {
-      await axios.post("/api/auth/login", { ...formData, role: "interviewer" }
+      await axios.post("https://electronix.today/api/auth/login", { ...formData, role: "interviewer" }
       ).then((data)=>{
         dispatch(loginSuccess(data.data.user));
         // const token =data.data.interviewer_token

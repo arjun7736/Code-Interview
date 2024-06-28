@@ -19,10 +19,10 @@ const premium = async () => {
 
   // const [searchValue, setSearchValue] = useState<string>("");
 
-    const premiumCompany = await axios.get("/api/admin/premium-companies")
-    const totalInterviewers = await axios.get("/api/admin/getdata/?role=interviewer");
-    const totalInterviewees = await axios.get("/api/admin/getdata/?role=interviewee");
-    const companyList = await axios.get("/api/admin/getdata/?role=company");
+    const premiumCompany = await axios.get("https://electronix.today/api/admin/premium-companies")
+    const totalInterviewers = await axios.get("https://electronix.today/api/admin/getdata/?role=interviewer");
+    const totalInterviewees = await axios.get("https://electronix.today/api/admin/getdata/?role=interviewee");
+    const companyList = await axios.get("https://electronix.today/api/admin/getdata/?role=company");
 
     dispatch(setPremiumCompanies(premiumCompany.data));
     dispatch(setInterviewerData(totalInterviewers.data));

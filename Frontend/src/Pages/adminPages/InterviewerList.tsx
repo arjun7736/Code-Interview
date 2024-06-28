@@ -16,7 +16,7 @@ const InterviewerList = () => {
   const dispatch =useDispatch()
   const getInterviewerData = async ():Promise<void> => {
     await axios
-      .get("/api/admin/getdata/?role=interviewer")
+      .get("https://electronix.today/api/admin/getdata/?role=interviewer")
       .then((data) => {
         dispatch(setInterviewerData(data.data));
       })

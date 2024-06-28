@@ -56,7 +56,7 @@ const IntervieweeLogin = () => {
     try {
       const result: UserCredential = await signInWithPopup(auth, provider);
       const response = await axios.post(
-        "/api/auth/google-signin",
+        "https://electronix.today/api/auth/google-signin",
         result.user.providerData[0]
       );
       toast("Login Successfully");
@@ -71,7 +71,7 @@ const IntervieweeLogin = () => {
     e.preventDefault();
     dispatch(loginStart());
     try {
-      const response = await axios.post("/api/auth/login", {
+      const response = await axios.post("https://electronix.today/api/auth/login", {
         ...formData,
         role: "interviewee",
       });

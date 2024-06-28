@@ -47,7 +47,7 @@ const Profile = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get(`/api/auth/getData`);
+      const response = await axios.get(`https://electronix.today/api/auth/getData`);
       setUserData(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -101,7 +101,7 @@ const Profile = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await axios
-      .post(`/api/${data}/updateProfile`, formData)
+      .post(`https://electronix.today/api/${data}/updateProfile`, formData)
       .then((res) => {
         setUserData(res.data);
         toast("Profile Updated Successfully");

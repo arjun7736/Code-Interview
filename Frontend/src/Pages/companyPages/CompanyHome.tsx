@@ -69,7 +69,7 @@ const CompanyHome = () => {
     dispatch(interviewersStart());
     try {
        await axios.get(
-        `/api/company/interviewers?Id=${companyData?._id}`
+        `https://electronix.today/api/company/interviewers?Id=${companyData?._id}`
       ).then((data)=>{
         dispatch(interviewersSuccess(data.data[0].interviewers));
       })
@@ -102,7 +102,7 @@ const CompanyHome = () => {
 
   const handleInterviewerClick = async(interviewer: Interviewer) => {
     setSelectedInterviewer(interviewer);
-   await axios.get(`/api/company/getInterviewDataAndQuestions/${interviewer._id}`).then((data)=>{
+   await axios.get(`https://electronix.today/api/company/getInterviewDataAndQuestions/${interviewer._id}`).then((data)=>{
      setInterviewData(data.data)
    }).catch(()=>{
 toast("Unexpected Error Occured")

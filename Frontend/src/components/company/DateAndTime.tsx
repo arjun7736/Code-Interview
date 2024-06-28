@@ -24,7 +24,7 @@ const DateAndTime = ({email, selectedOption}: { email: string, selectedOption: s
     };
     const handleButtonClick = async() => {
         try {
-          await axios.post("/api/company/createMeeting",{intervieweeEmail:email,interviewerEmail:selectedOption,date:date,time:time})
+          await axios.post("https://electronix.today/api/company/createMeeting",{intervieweeEmail:email,interviewerEmail:selectedOption,date:date,time:time})
           toast("Link Sent Successfully")
         } catch (error) {
           toast("Error While Sending Link")

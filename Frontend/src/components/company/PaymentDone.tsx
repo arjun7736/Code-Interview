@@ -10,7 +10,7 @@ const dispatch =useDispatch()
     const updateCompany = async (): Promise<void> => { 
 
         try {
-         await axios.get("/api/auth/getData").then((data)=>{
+         await axios.get("https://electronix.today/api/auth/getData").then((data)=>{
           dispatch(loginSuccess(data.data))
          }).catch((error)=>{
           toast(error)
