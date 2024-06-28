@@ -3,7 +3,7 @@ import { addQuestion, deleteQuestion, getQuestions, setMeetingLink, updateProfil
 const router =express.Router()
 
 router.post("/updateProfile/:id",updateProfile)
-router.post("/addQuestions",addQuestion)
+router.post("/addQuestions/:id",addQuestion)
 router.get("/getQuestions/:id",getQuestions)
 router.post("/setMeetingLink",setMeetingLink)
 router.delete("/deleteQuestion/:id",deleteQuestion)
