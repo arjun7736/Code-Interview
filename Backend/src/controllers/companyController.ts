@@ -106,7 +106,7 @@ export const buyPremium = async (
 //<=------------------------Update Company Profle--------------------------=>//
 export const updateProfile = async (req: Request, res: Response) => {
   try {
-    const id = req?.user._id;
+    const id = req?.params.id;
     const { name, profilePicture } = req.body;
     const updatedCompany = await updateProfileService(id, name, profilePicture);
 

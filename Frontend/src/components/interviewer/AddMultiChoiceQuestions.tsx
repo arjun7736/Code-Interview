@@ -6,6 +6,8 @@ import { Label } from "../ui/label"
 import axios from "axios"
 import { toast } from "sonner"
 import { MainBackGround } from "@/lib/Color"
+import { useSelector } from "react-redux"
+import { RootState } from "@/redux/store"
 
 const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose,questionSet }) => {
     if (!questionSet){
@@ -32,11 +34,11 @@ const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose,questionSe
         newOptions[index] = e.target.value;
         setOptions(newOptions);
     };
-    
+    const{interviewerData} =useSelector((state:RootState)=>state.interviewer)
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault()
-        await axios.post("https://electronix.today/api/interviewer/addQuestions",{questions:addedQuestions,questionSet}).then(()=>{
+        await axios.post(`https://electronix.today/api/interviewer/addQuestions/${interviewerData?._id}`,{questions:addedQuestions,questionSet}).then(()=>{
             toast("Questions Added")
         }).catch(()=>{
             toast("error occured")

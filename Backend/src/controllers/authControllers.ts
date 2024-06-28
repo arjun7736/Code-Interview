@@ -21,6 +21,7 @@ import {
 } from "../services/authServices";
 import { errorResponse } from "../utils/error";
 import { StatusCode } from "../utils/selectDB";
+import { getUser } from "@/repositories/userRepository";
 
 
 
@@ -209,8 +210,8 @@ export const getIndividualData = async (
   res: Response
 ): Promise<void> => {
   try {
-    const role: string | undefined = req?.userType;
-    const id: string | undefined = req?.user?._id;
+    const id: string | undefined = req?.params?.id;
+    const role =await getUser(id)
     if (!role || !id) {
       throw errorResponse(StatusCode.SERVER_ERROR, 'Cant Find ID');
     }

@@ -1,5 +1,4 @@
 import express from "express";
-import { verifyToken } from "../utils/verify";
 import  AdminController  from "../controllers/adminController"; 
 
 class AdminRouter {
@@ -13,13 +12,13 @@ class AdminRouter {
   initRoutes() {
     const adminController = new AdminController();
 
-    this.router.get("/getdata", verifyToken, adminController.getData.bind(adminController));
+    this.router.get("/getdata",  adminController.getData.bind(adminController));
 
-    this.router.post("/block", verifyToken, adminController.block.bind(adminController));
+    this.router.post("/block",  adminController.block.bind(adminController));
 
-    this.router.post("/unblock", verifyToken, adminController.unBlock.bind(adminController));
+    this.router.post("/unblock",  adminController.unBlock.bind(adminController));
 
-    this.router.get("/premium-companies", verifyToken, adminController.premiumCompanyList.bind(adminController));
+    this.router.get("/premium-companies",  adminController.premiumCompanyList.bind(adminController));
   }
 
   getRouter(): express.Router {

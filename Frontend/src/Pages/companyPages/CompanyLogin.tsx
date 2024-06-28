@@ -19,7 +19,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
-import Cookies from 'js-cookie';
 
 const CompanyLogin = () => {
   const navigate = useNavigate();
@@ -46,11 +45,7 @@ const CompanyLogin = () => {
       });
       dispatch(loginSuccess(response.data.user));
       const token = response.data.company_token;
-      Cookies.set("company_token", token, {
-        expires: new Date(Date.now() + 3600000),
-        secure: false,
-        sameSite: "Lax",
-      });
+      localStorage.setItem("company_token",token)
       navigate("/company");
     } catch (error) {
       if (axios.isAxiosError(error)) {

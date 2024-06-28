@@ -20,7 +20,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
-import Cookies from 'js-cookie';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -48,7 +47,7 @@ const AdminLogin = () => {
       if (response.data) {
         dispatch(loginSuccess(response.data.user));
         const token =response.data.admin_token
-        Cookies.set('admin_token', token, { expires: new Date(Date.now() + 3600000), secure: false, sameSite: 'Lax' });
+        localStorage.setItem("admin_token",token)
         navigate("/admin/dashboard");
       } else {
         dispatch(loginError("An error occurred during login"));

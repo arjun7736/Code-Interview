@@ -16,20 +16,28 @@ import { RootState } from "@/redux/store";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Light, MainBackGround, ThirdBG } from "@/lib/Color";
+import { interviewerState } from "@/interface/userStateInterface";
 
 const Profile = () => {
+
+const {interviewerData}=useSelector((state:RootState)=>state.interviewer as interviewerState)
+
   const { companyData } = useSelector((state: RootState) => state.company);
   const { intervieweeData } = useSelector(
     (state: RootState) => state.interviewee
   );
 
   let data: null | string = null;
+  let id: any;
   if (companyData) {
     data = "company";
+    id = companyData._id;
   } else if (intervieweeData) {
     data = "interviewee";
+    id =intervieweeData._id
   } else {
     data = "interviewer";
+    id=interviewerData?._id
   }
   const navigate = useNavigate();
   const [formData, setFormData] = useState<{
@@ -47,7 +55,7 @@ const Profile = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get(`https://electronix.today/api/auth/getData`);
+      const response = await axios.get(`https://electronix.today/api/auth/getData/${id}`);
       setUserData(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -101,7 +109,7 @@ const Profile = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await axios
-      .post(`https://electronix.today/api/${data}/updateProfile`, formData)
+      .post(`https://electronix.today/api/${data}/updateProfile/${id}`, formData)
       .then((res) => {
         setUserData(res.data);
         toast("Profile Updated Successfully");

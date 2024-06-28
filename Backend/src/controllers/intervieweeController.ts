@@ -7,7 +7,7 @@ import { StatusCode } from "../utils/selectDB";
 
 export const updateProfile = async (req: Request, res: Response) => {
   try {
-    const id = req?.user._id;
+    const id = req?.params._id;
     const { name, profilePicture } = req.body;
 
     const updatedInterviewee = await updateIntervieweeService(

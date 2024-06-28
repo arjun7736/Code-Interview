@@ -9,8 +9,9 @@ import AddMultiChoiceQuestions from "@/components/interviewer/AddMultiChoiceQues
 import { toast } from "sonner";
 import IndividualQuestionTable from "@/components/interviewer/IndividualQuestionTable";
 import { interviewersQuestions } from "@/redux/slices/tempSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Light, MainBackGround, ThirdBG } from "@/lib/Color";
+import { RootState } from "@/redux/store";
 
 export interface Question {
   questionSet: string;
@@ -31,6 +32,7 @@ export interface Question {
   ];
 }
 const InterviewerHome = () => {
+  const {interviewerData}=useSelector((state:RootState)=>state.interviewer)
   const [selectedQuestionSet, SetSelectQuestionSet] = useState<
     Question[] | null
   >(null);
@@ -46,7 +48,7 @@ const InterviewerHome = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     axios
-      .get("https://electronix.today/api/interviewer/getQuestions")
+      .get(`https://electronix.today/api/interviewer/getQuestions/${interviewerData?._id}`)
       .then((response) => {
         setQuestionSets(response.data);
         dispatch(interviewersQuestions(response?.data));

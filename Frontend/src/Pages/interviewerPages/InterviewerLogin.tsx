@@ -38,8 +38,8 @@ const InterviewerLogin = () => {
       await axios.post("https://electronix.today/api/auth/login", { ...formData, role: "interviewer" }
       ).then((data)=>{
         dispatch(loginSuccess(data.data.user));
-        // const token =data.data.interviewer_token
-        // Cookies.set('interviewer_token', token, { expires: new Date(Date.now() + 3600000), secure: false, sameSite: 'Lax' });
+        const token =data.data.interviewer_token
+       localStorage.setItem("interviewer_token",token)
         navigate("/interviewer");
       })
       } catch (error) {
