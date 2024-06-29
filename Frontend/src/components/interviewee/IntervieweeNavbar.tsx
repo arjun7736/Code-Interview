@@ -3,23 +3,30 @@ import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { logout } from "@/redux/slices/intervieweeSlice";
 import { toast } from "sonner";
 import axios from "axios";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { MainBackGround } from "@/lib/Color";
 import Cookies from 'js-cookie';
+import 'ldrs/dotStream'
+
 
 const IntervieweeNavbar = () => {
+  const [loading, setLoading] = useState(true);
+
   const navigate =useNavigate()
   const dispatch =useDispatch()
   const {intervieweeData}=useSelector((state:RootState)=>state.interviewee)
-  useEffect(()=>{
-    if(!intervieweeData){
-      navigate("/interviewee/login")
+  
+  useEffect(() => {
+    if (!intervieweeData) {
+      navigate("/interviewee/login");
     }
-  },[])
+    setLoading(false);
+  }, [intervieweeData, navigate]);
+
   const handleLogout = async (): Promise<void> => {
     try {
       dispatch(logout())
@@ -38,6 +45,18 @@ const IntervieweeNavbar = () => {
       }
     }
   };
+  if (loading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+<l-dot-stream
+  size="60"
+  speed="2.5"
+  color="black" 
+></l-dot-stream>
+      </div>
+    );
+  }
+
   return (
     <>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6" style={{backgroundColor:MainBackGround}}>

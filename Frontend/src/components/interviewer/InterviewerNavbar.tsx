@@ -9,25 +9,31 @@ import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { logout } from "@/redux/slices/interviewerSlice";
 import { toast } from "sonner";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { MainBackGround } from "@/lib/Color";
 import Cookies from 'js-cookie';
+import 'ldrs/dotStream'
+
 
 const InterviewerNavbar = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const { interviewerData } = useSelector(
     (state: RootState) => state.interviewer
   );
+  
   useEffect(() => {
     if (!interviewerData) {
       navigate("/interviewer/login");
     }
-  }, []);
+    setLoading(false);
+  }, [interviewerData, navigate]);
+
   const handleLogout = async (): Promise<void> => {
     try {
       dispatch(logout());
@@ -48,6 +54,17 @@ const InterviewerNavbar = () => {
       }
     }
   };
+  if (loading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+<l-dot-stream
+  size="60"
+  speed="2.5"
+  color="black" 
+></l-dot-stream>
+      </div>
+    );
+  }
   return (
     <>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6" style={{backgroundColor:MainBackGround}}>
