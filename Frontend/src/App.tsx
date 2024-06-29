@@ -25,6 +25,7 @@ import Compiler from "./Pages/common/Compiler";
 import QandAsession from "./Pages/intervieweePages/QandAsession"
 import PageNotFound from "./Pages/common/PageNotFound";
 import useAuth from "./customhooks/useAuth";
+import 'ldrs/dotStream'
 
 
 function App() {
@@ -38,7 +39,11 @@ function App() {
 if (adminLoading || companyLoading || interviewerLoading || intervieweeLoading) {
   return (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-      Loading...
+     <l-dot-stream
+  size="60"
+  speed="2.5"
+  color="black" 
+></l-dot-stream>
     </div>
   );
 }

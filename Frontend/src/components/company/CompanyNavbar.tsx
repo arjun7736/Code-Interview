@@ -16,6 +16,8 @@ import axios from "axios";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { MainBackGround } from "@/lib/Color";
 import Cookies from 'js-cookie';
+import 'ldrs/dotStream'
+
 
 const CompanyNavbar = () => {
   const navigate = useNavigate();
@@ -53,10 +55,15 @@ const CompanyNavbar = () => {
   if (loading) {
     return (
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-        Loading...
+<l-dot-stream
+  size="60"
+  speed="2.5"
+  color="black" 
+></l-dot-stream>
       </div>
     );
   }
+
   return (
     <>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6" style={{backgroundColor:MainBackGround}}>
