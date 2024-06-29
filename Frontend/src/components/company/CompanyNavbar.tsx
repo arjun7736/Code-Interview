@@ -9,7 +9,7 @@ import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { logout } from "@/redux/slices/companySlice";
 import axios from "axios";
@@ -21,11 +21,15 @@ const CompanyNavbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { companyData } = useSelector((state: RootState) => state.company);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (!companyData) {
       navigate("/company/login");
     }
-  }, []);
+    setLoading(false);
+  }, [companyData, navigate]);
+
   const handleLogout = async (): Promise<void> => {
     try {
       dispatch(logout());
@@ -46,6 +50,13 @@ const CompanyNavbar = () => {
       }
     }
   };
+  if (loading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        Loading...
+      </div>
+    );
+  }
   return (
     <>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6" style={{backgroundColor:MainBackGround}}>

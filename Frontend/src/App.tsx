@@ -19,22 +19,29 @@ import CompanySignup from "./Pages/companyPages/CompanySignup";
 import CompanyHome from "./Pages/companyPages/CompanyHome";
 import InterviewerLogin from "./Pages/interviewerPages/InterviewerLogin";
 import InterviewerHome from "./Pages/interviewerPages/InterviewerHome";
-import { useSelector } from "react-redux";
-import { RootState } from "./redux/store";
-import { AdminState, companyState, intervieweeState, interviewerState } from "./interface/userStateInterface";
 import PaymentDone from "./components/company/PaymentDone";
 import VideoCall from "./Pages/common/VideoCall";
 import Compiler from "./Pages/common/Compiler";
 import QandAsession from "./Pages/intervieweePages/QandAsession"
 import PageNotFound from "./Pages/common/PageNotFound";
+import useAuth from "./customhooks/useAuth";
+
 
 function App() {
+  
+  const { userData: adminData, loading: adminLoading } = useAuth("admin");
+  const { userData: companyData, loading: companyLoading } = useAuth("company");
+  const { userData: interviewerData, loading: interviewerLoading } = useAuth("interviewer");
+  const { userData: intervieweeData, loading: intervieweeLoading } = useAuth("interviewee");
 
-const {adminData} = useSelector((state:RootState) => state.admin as AdminState);
-const {companyData}=useSelector((state:RootState)=>state.company as companyState)
-const {interviewerData}=useSelector((state:RootState)=>state.interviewer as interviewerState)
-const {intervieweeData}= useSelector((state:RootState)=>state.interviewee as intervieweeState)
 
+if (adminLoading || companyLoading || interviewerLoading || intervieweeLoading) {
+  return (
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      Loading...
+    </div>
+  );
+}
 
   return (
     <>
