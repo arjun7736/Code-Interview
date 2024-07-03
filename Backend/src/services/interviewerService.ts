@@ -31,7 +31,7 @@ export const updateInterviewerService = async (
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Update Interviewer"); 
+    throw errorResponse(statusCode, customError.message ||"Error While Update Interviewer"); 
   }
 };
 
@@ -53,7 +53,7 @@ export const addQuestions = async (
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While add Questions"); 
+    throw errorResponse(statusCode, customError.message ||"Error While add Questions"); 
   }
 };
 
@@ -65,7 +65,7 @@ export const getInterviewerQuestions = async (id: string) => {
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While get Interviewer Questions"); 
+    throw errorResponse(statusCode, customError.message ||"Error While get Interviewer Questions"); 
   }
 };
 

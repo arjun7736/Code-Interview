@@ -57,7 +57,7 @@ export const addInterviewerService = async (
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Create Interviewer");
+    throw errorResponse(statusCode,customError.message || "Error While Create Interviewer");
   }
 };
 
@@ -71,7 +71,7 @@ export const deleteInterviewerService = async (id: string): Promise<void> => {
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Deleting Interviewer"); 
+    throw errorResponse(statusCode, customError.message ||"Error While Deleting Interviewer"); 
   }
 };
 
@@ -90,7 +90,7 @@ export const listInterviewersService = async (
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While List Interviewer"); 
+    throw errorResponse(statusCode, customError.message ||"Error While List Interviewer"); 
   }
 };
 
@@ -122,7 +122,7 @@ export const editInterviewerService = async (
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While resend OTP"); 
+    throw errorResponse(statusCode, customError.message ||"Error While resend OTP"); 
   }
 };
 
@@ -168,7 +168,7 @@ export const buyPremiumService = async (
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Payment"); 
+    throw errorResponse(statusCode, customError.message ||"Error While Payment"); 
   }
 };
 
@@ -195,7 +195,7 @@ export const updateProfileService = async (
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Update Profile"); 
+    throw errorResponse(statusCode, customError.message ||"Error While Update Profile"); 
   }
 };
 
@@ -229,18 +229,17 @@ export const sentLinkToEmail = async (
       try {
         await sendLink(interviewerEmail, link);
         await sendLink(intervieweeEmail, link);
-        console.log("Link sent to both interviewer and interviewee");
       } catch (error) {
         const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Link sent "); 
+    throw errorResponse(statusCode, customError.message ||"Error While Link sent "); 
       }
     });
     
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Link sent "); 
+    throw errorResponse(statusCode, customError.message ||"Error While Link sent "); 
   }
 };
 

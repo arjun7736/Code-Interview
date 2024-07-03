@@ -45,7 +45,7 @@ export async function findCompany(email: string): Promise<ICompany | null> {
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Find Company"); 
+    throw errorResponse(statusCode,  "Error While Find Company"); 
   }
 }
 

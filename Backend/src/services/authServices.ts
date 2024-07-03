@@ -97,7 +97,7 @@ export const createToken = (id: string, isBlocked?: boolean): string => {
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Creating Token");
+    throw errorResponse(statusCode,customError.message ||"Error While Creating Token");
   }
 };
 
@@ -148,7 +148,7 @@ export const signUpService = async (
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While SignUp");
+    throw errorResponse(statusCode, customError.message ||"Error While SignUp");
   }
 };
 
@@ -193,7 +193,7 @@ export const otpService = async (email: string, role: string, otp: number) => {
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Verify OTP");
+    throw errorResponse(statusCode, customError.message ||"Error While Verify OTP");
   }
 };
 
@@ -214,7 +214,7 @@ export const logoutService = async (req: Request): Promise<string> => {
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Logout");
+    throw errorResponse(statusCode, customError.message ||"Error While Logout");
   }
 };
 
@@ -243,7 +243,7 @@ export const forgotPasswordOTPService = async (
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While forgot password OTP service");
+    throw errorResponse(statusCode,customError.message || "Error While forgot password OTP service");
   }
 };
 
@@ -262,7 +262,7 @@ export const verifyForgotPasswordOTPService = async (
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Verify Forgot Password");
+    throw errorResponse(statusCode, customError.message ||"Error While Verify Forgot Password");
   }
 };
 
@@ -292,7 +292,7 @@ export const createNewPasswordService = async (
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Create a new Password");
+    throw errorResponse(statusCode,customError.message || "Error While Create a new Password");
   }
 };
 
@@ -312,7 +312,7 @@ export const resendOtpService = async (email: string): Promise<void> => {
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While resend OTP");
+    throw errorResponse(statusCode,customError.message || "Error While resend OTP");
   }
 };
 

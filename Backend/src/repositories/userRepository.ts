@@ -28,7 +28,7 @@ export async function findUser(email: string, role: string) {
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Find User");
+    throw errorResponse(statusCode, customError.message ||"Error While Find User");
   }
 }
 
@@ -54,7 +54,7 @@ export async function createOTPuser(
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Create OTP");
+    throw errorResponse(statusCode,"Error While Create OTP");
   }
 }
 

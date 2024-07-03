@@ -26,7 +26,7 @@ export const updateIntervieweeService = async (
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While update Interviewee");
+    throw errorResponse(statusCode, customError.message ||"Error While update Interviewee");
   }
 };
 

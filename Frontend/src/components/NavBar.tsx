@@ -38,7 +38,7 @@ const NavBar = () => {
         <div className="flex w-full items-center justify-end gap-4 md:ml-auto md:gap-2 lg:gap-4">
         {/* <div className="absolute top-0 right-0 mt-4 mr-4"> */}
           <Link to={"/compiler"}>
-            <Button className="mx-10 text-black bg-white font-semibold rounded-md shadow-md focus:outline-none focus:ring-2  focus:ring-opacity-75 transition duration-150 ease-in-out">
+            <Button className="mx-10 text-black bg-white font-semibold rounded-md shadow-md hover:bg-gray-300 transition duration-150 ease-in-out">
               Compiler
             </Button>
           </Link>

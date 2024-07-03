@@ -28,7 +28,7 @@ class AdminRepository {
     } catch (error) {
       const customError = error as ErrorResponse;
       const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-      throw errorResponse(statusCode, "Error While Blocking User");
+      throw errorResponse(statusCode, customError.message || "Error While Blocking User");
     }
   }
 
@@ -44,7 +44,7 @@ class AdminRepository {
     } catch (error) {
       const customError = error as ErrorResponse;
       const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-      throw errorResponse(statusCode, "Error While Fetching Data");
+      throw errorResponse(statusCode,  customError.message ||"Error While Fetching Data");
     }
   }
 }
