@@ -249,9 +249,16 @@ export const sentLinkToEmail = async (
     const cronExpression = `${dat.getMinutes()} ${dat.getHours()} ${dat.getDate()} ${
       dat.getMonth() + 1
     } *`;
+    const links = await getLinks(id)
 
-   const data = await setLinkWithUsers(interviewerEmail,intervieweeEmail,link,dat,id)
-console.log(data)
+    const isDuplicateLink = links.some(existingLink => existingLink.meetingLink == link);
+
+    if (isDuplicateLink) {
+      throw errorResponse(StatusCode.BAD_REQUEST,`Meeting link already exists.`);
+    }
+
+   await setLinkWithUsers(interviewerEmail,intervieweeEmail,link,dat,id)
+   
     cron.schedule(cronExpression, async () => {
       try {
         await sendLink(interviewerEmail, link);
@@ -289,6 +296,7 @@ export const getInterviewDataService = async (id: string) => {
 
 export const getAllLinks =async(id:string)=>{
   try {
+
     return await getLinks(id)
   } catch (error) {
     const customError = error as ErrorResponse;

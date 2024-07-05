@@ -178,6 +178,7 @@ export const getInterviewersQuestionData = async (id: string) => {
 export const setLinkWithUsers=async(interviewerEmail:string,intervieweeEmail:string,link:string,dat:Date,id:string)=>{
   try {
     const expirationTime = new Date(dat.getTime() + 10 * 60000);
+   
   const data = await MeetingLinkDB.create({
     meetingLink: link,
     company: id,
@@ -190,7 +191,7 @@ export const setLinkWithUsers=async(interviewerEmail:string,intervieweeEmail:str
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While Create Link"); 
+    throw errorResponse(statusCode, customError.message||"Error While Create Link"); 
   }
 }
 export const getLinks =async(id:string)=>{
