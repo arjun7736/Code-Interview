@@ -1,11 +1,13 @@
 /* eslint-disable camelcase */
 import Stripe from "stripe";
-import cron from 'node-cron';
+import cron from "node-cron";
 import { ICompany, IInterviewer } from "../interfaces/modelInterface";
 import {
   getInterviewersQuestionData,
+  getLinks,
   listInterviewersByCompany,
   paymentDone,
+  setLinkWithUsers,
   updateCompanyProfile,
 } from "../repositories/companyRepository";
 import {
@@ -33,31 +35,33 @@ export const addInterviewerService = async (
     if (!email || !password) {
       throw errorResponse(StatusCode.BAD_REQUEST, "Fill all the fields");
     }
-  
+
     if (!isEmail(email)) {
       throw errorResponse(StatusCode.UNOTHERIZED, "Enter a valid email");
     }
-  
+
     if (!isStrongPassword(password)) {
       throw errorResponse(StatusCode.UNOTHERIZED, "Weak password");
     }
-  
+
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
       throw errorResponse(StatusCode.NOT_FOUND, "Interviewer already exists");
     }
-  
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const otp = Math.floor(100000 + Math.random() * 900000);
     await sentOTP(email, otp);
-  
+
     const role = "interviewer";
     await createOTPuser(otp, hashedPassword, email, role, companyId);
-    
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode,customError.message || "Error While Create Interviewer");
+    throw errorResponse(
+      statusCode,
+      customError.message || "Error While Create Interviewer"
+    );
   }
 };
 
@@ -71,7 +75,10 @@ export const deleteInterviewerService = async (id: string): Promise<void> => {
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, customError.message ||"Error While Deleting Interviewer"); 
+    throw errorResponse(
+      statusCode,
+      customError.message || "Error While Deleting Interviewer"
+    );
   }
 };
 
@@ -84,13 +91,16 @@ export const listInterviewersService = async (
     if (!companyId || typeof companyId !== "string") {
       throw errorResponse(StatusCode.BAD_REQUEST, "Invalid Company ID");
     }
-  
+
     const interviewers = await listInterviewersByCompany(companyId);
     return interviewers;
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, customError.message ||"Error While List Interviewer"); 
+    throw errorResponse(
+      statusCode,
+      customError.message || "Error While List Interviewer"
+    );
   }
 };
 
@@ -115,14 +125,20 @@ export const editInterviewerService = async (
       }
       hashedPassword = await bcrypt.hash(password, 10);
     }
-  
-    const updatedInterviewer = await updateInterviewer(id, name, hashedPassword);
+
+    const updatedInterviewer = await updateInterviewer(
+      id,
+      name,
+      hashedPassword
+    );
     return updatedInterviewer;
-    
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, customError.message ||"Error While resend OTP"); 
+    throw errorResponse(
+      statusCode,
+      customError.message || "Error While resend OTP"
+    );
   }
 };
 
@@ -135,9 +151,9 @@ export const buyPremiumService = async (
     if (!process.env.STRIPE_KEY) {
       throw new Error("Stripe key not provided");
     }
-  
+
     const stripe = new Stripe(process.env.STRIPE_KEY);
-  
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -162,13 +178,15 @@ export const buyPremiumService = async (
       },
     });
     await paymentDone(userId);
-  
+
     return session.id;
-    
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, customError.message ||"Error While Payment"); 
+    throw errorResponse(
+      statusCode,
+      customError.message || "Error While Payment"
+    );
   }
 };
 
@@ -179,23 +197,25 @@ export const updateProfileService = async (
   profilePicture?: string
 ): Promise<ICompany | null> => {
   try {
-    
-      if (!userId || !name) {
-        throw errorResponse(
-          StatusCode.BAD_REQUEST,
-          "Missing required information (ID and name)"
-        );
-      }
-      const updatedCompany = await updateCompanyProfile(
-        userId,
-        name,
-        profilePicture
+    if (!userId || !name) {
+      throw errorResponse(
+        StatusCode.BAD_REQUEST,
+        "Missing required information (ID and name)"
       );
-      return updatedCompany;
+    }
+    const updatedCompany = await updateCompanyProfile(
+      userId,
+      name,
+      profilePicture
+    );
+    return updatedCompany;
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, customError.message ||"Error While Update Profile"); 
+    throw errorResponse(
+      statusCode,
+      customError.message || "Error While Update Profile"
+    );
   }
 };
 
@@ -204,55 +224,75 @@ export const sentLinkToEmail = async (
   interviewerEmail: string,
   intervieweeEmail: string,
   date: string,
-  time: string
+  time: string,
+  id:string
 ): Promise<void> => {
   try {
     const link = uuidv4();
-  
-    if (!date ||!time) {
+
+    if (!date || !time) {
       throw new Error("Date And Time Missing");
     }
-  
+
     const datenum = new Date(date);
-    const istDate = new Date(datenum.getTime() + (330 * 60000));
-  
-    const dateStringOnly = istDate.toISOString().split('T')[0];
-    const timeComponent = time.split(':')[0]; 
-  
-    const minuteComponent = time.split(':')[1];
-    const dat = new Date(`${dateStringOnly}T${timeComponent}:${minuteComponent}:00`);
-  
+    const istDate = new Date(datenum.getTime() + 330 * 60000);
+
+    const dateStringOnly = istDate.toISOString().split("T")[0];
+    const timeComponent = time.split(":")[0];
+
+    const minuteComponent = time.split(":")[1];
+    const dat = new Date(
+      `${dateStringOnly}T${timeComponent}:${minuteComponent}:00`
+    );
+
     dat.setMinutes(dat.getMinutes() - 5);
-    const cronExpression = `${dat.getMinutes()} ${dat.getHours()} ${dat.getDate()} ${dat.getMonth() + 1} *`;
-  
+    const cronExpression = `${dat.getMinutes()} ${dat.getHours()} ${dat.getDate()} ${
+      dat.getMonth() + 1
+    } *`;
+
+    await setLinkWithUsers(interviewerEmail,intervieweeEmail,link,dat,id)
+
     cron.schedule(cronExpression, async () => {
       try {
         await sendLink(interviewerEmail, link);
         await sendLink(intervieweeEmail, link);
       } catch (error) {
         const customError = error as ErrorResponse;
-    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, customError.message ||"Error While Link sent "); 
+        const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+        throw errorResponse(
+          statusCode,
+          customError.message || "Error While Link sent "
+        );
       }
     });
-    
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, customError.message ||"Error While Link sent "); 
+    throw errorResponse(
+      statusCode,
+      customError.message || "Error While Link sent "
+    );
   }
 };
-
-
 
 export const getInterviewDataService = async (id: string) => {
   try {
     const data = await getInterviewersQuestionData(id);
     const filteredData = data.filter((d) => d.attentedInterviewees.length > 0);
-    return filteredData;   
+    return filteredData;
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
-    throw errorResponse(statusCode, "Error While resend OTP"); 
+    throw errorResponse(statusCode, "Error While resend OTP");
   }
 };
+
+export const getAllLinks =async(id:string)=>{
+  try {
+    return await getLinks(id)
+  } catch (error) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    throw errorResponse(statusCode, "Error While Getting links");
+  }
+}

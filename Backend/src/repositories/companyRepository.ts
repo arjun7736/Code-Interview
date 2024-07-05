@@ -7,6 +7,7 @@ import QuestionDB from "../models/questionModel";
 import { ErrorResponse } from "@/interfaces/errorInterface";
 import { StatusCode } from "../utils/selectDB";
 import { errorResponse } from "../utils/error";
+import MeetingLinkDB from "@/models/meetingModel";
 
 export async function findUserByName(name: string): Promise<ICompany | null> {
   try {
@@ -173,3 +174,30 @@ export const getInterviewersQuestionData = async (id: string) => {
     throw errorResponse(statusCode, "Error While Interviewers Questions"); 
   }
 };
+
+export const setLinkWithUsers=async(interviewerEmail:string,intervieweeEmail:string,link:string,dat:Date,id:string)=>{
+  try {
+    const expirationTime = new Date(dat.getTime() + 10 * 60000);
+  return await MeetingLinkDB.create({
+    meetingLink: link,
+    company: id,
+    Interviewee: intervieweeEmail,
+    Interviewer: interviewerEmail,
+    createdAt: new Date(),
+    expiresAt: expirationTime
+  })
+  } catch (error) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    throw errorResponse(statusCode, "Error While Create Link"); 
+  }
+}
+export const getLinks =async(id:string)=>{
+  try {
+   return await MeetingLinkDB.find({company:id})
+  } catch (error) {
+    const customError = error as ErrorResponse;
+    const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
+    throw errorResponse(statusCode, "Error While Get Link"); 
+  }
+}

@@ -74,3 +74,11 @@ export interface ILink extends Document{
   questionSet:string,
   createdAt:Date
 }
+export interface IMeeting extends Document{
+  meetingLink:string,
+  company:string,
+  Interviewee:string,
+  Interviewer:string,
+  createdAt:Date,
+  expiresAt:Date
+}  

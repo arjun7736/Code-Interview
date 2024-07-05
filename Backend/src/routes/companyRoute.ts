@@ -1,5 +1,5 @@
 import express from "express"
-import { addInterviewer, buyPremium, createMeetingLink, deleteInterviewer, editInterviewer, getInterviewData, listInterviewers, updateProfile } from "../controllers/companyController";
+import { addInterviewer, buyPremium, createMeetingLink, deleteInterviewer, editInterviewer, getCompanyMeetingLink, getInterviewData, listInterviewers, updateProfile } from "../controllers/companyController";
 
 const router = express.Router();
 
@@ -11,4 +11,5 @@ router.post("/buy-premium",buyPremium)
 router.post("/updateProfile/:id",updateProfile)
 router.post("/createMeeting",createMeetingLink)
 router.get("/getInterviewDataAndQuestions/:id",getInterviewData)
+router.get("/getMeetingLink/:id",getCompanyMeetingLink)
 export default router
