@@ -6,8 +6,9 @@ const MeetingSchema: Schema = new Schema<IMeeting>({
   meetingLink: {
     type: String,
   },
-  company: { type: String },
-
+  company: {
+    type: String,
+  },
   Interviewee: {
     type: String,
   },
