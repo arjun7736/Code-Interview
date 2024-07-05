@@ -178,7 +178,7 @@ export const getInterviewersQuestionData = async (id: string) => {
 export const setLinkWithUsers=async(interviewerEmail:string,intervieweeEmail:string,link:string,dat:Date,id:string)=>{
   try {
     const expirationTime = new Date(dat.getTime() + 10 * 60000);
-  return await MeetingLinkDB.create({
+  const data = await MeetingLinkDB.create({
     meetingLink: link,
     company: id,
     Interviewee: intervieweeEmail,
@@ -187,6 +187,7 @@ export const setLinkWithUsers=async(interviewerEmail:string,intervieweeEmail:str
     expiresAt: expirationTime
   })
   console.log("created successfully")
+  return data
   } catch (error) {
     const customError = error as ErrorResponse;
     const statusCode = customError.statusCode || StatusCode.SERVER_ERROR;
