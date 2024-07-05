@@ -7,7 +7,7 @@ import QuestionDB from "../models/questionModel";
 import { ErrorResponse } from "@/interfaces/errorInterface";
 import { StatusCode } from "../utils/selectDB";
 import { errorResponse } from "../utils/error";
-import MeetingLinkDB from "@/models/meetingModel";
+import MeetingLinkDB from "../models/meetingModel";
 
 export async function findUserByName(name: string): Promise<ICompany | null> {
   try {
