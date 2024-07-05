@@ -130,7 +130,7 @@ toast("Unexpected Error Occured")
       <CompanyNavbar />
       <div className="md:pl-20 md:gap-10 md:grid md:justify-end md:pt-20 justify-center pt-10 grid-cols-1 md:grid-cols-2  p-5 md:p-0" style={{backgroundColor:ThirdBG}}>
         <div className=" md:w-96">
-          <Card className="py-4" style={{backgroundColor:Light}}> 
+          <Card className="py-4 overflow-y-scroll h-72" style={{backgroundColor:Light}}> 
             <Table>
               {loading ? (
                 <PulseLoader size={10} />
