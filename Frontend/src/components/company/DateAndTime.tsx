@@ -1,8 +1,6 @@
-
 import * as React from "react"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -13,9 +11,12 @@ import {
 } from "@/components/ui/popover"
 import axios from "axios"
 import { toast } from "sonner"
+import { useSelector } from "react-redux"
+import { RootState } from "@/redux/store"
 
 
 const DateAndTime = ({email, selectedOption}: { email: string, selectedOption: string }) => {
+  const {companyData}=useSelector((state:RootState)=>state.company)
     const [date, setDate] = React.useState<Date>()
     const [time, setTime] = React.useState('00:00');
 
@@ -24,7 +25,7 @@ const DateAndTime = ({email, selectedOption}: { email: string, selectedOption: s
     };
     const handleButtonClick = async() => {
         try {
-          await axios.post("https://electronix.today/api/company/createMeeting",{intervieweeEmail:email,interviewerEmail:selectedOption,date:date,time:time})
+          await axios.post(`https://electronix.today/api/company/createMeeting`,{intervieweeEmail:email,interviewerEmail:selectedOption,date:date,time:time,id:companyData?._id})
           toast("Link Sent Successfully")
         } catch (error) {
           toast("Error While Sending Link")

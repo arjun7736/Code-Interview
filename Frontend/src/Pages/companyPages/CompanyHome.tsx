@@ -3,10 +3,9 @@ import CompanyNavbar from "@/components/company/CompanyNavbar";
 import DeleteAndEdit from "@/components/company/DeleteAndEdit";
 import UpgradePlan from "@/components/company/UpgradePlan";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Table, } from "@/components/ui/table";
 import {
   interviewersError,
   interviewersStart,
@@ -24,7 +23,8 @@ import { toast } from "sonner";
 import { useNavigate } from 'react-router-dom';
 import DateAndTime from "@/components/company/DateAndTime";
 import PreviousInterviewData from "@/components/company/PreviousInterviewData";
-import { Light, MainBackGround, ThirdBG } from "@/lib/Color";
+import { Light,  ThirdBG } from "@/lib/Color";
+import InterviewersList from "@/components/company/InterviewersList";
 
 
 interface Interviewer {
@@ -131,33 +131,15 @@ toast("Unexpected Error Occured")
       <div className="md:pl-20 md:gap-10 md:grid md:justify-end md:pt-20 justify-center pt-10 grid-cols-1 md:grid-cols-2  p-5 md:p-0" style={{backgroundColor:ThirdBG}}>
         <div className=" md:w-96">
           <Card className="py-4" style={{backgroundColor:Light}}> 
-            <CardHeader className="pb-0 pt-2 px-4 flex-col items-center">
-              <h4 className="font-bold text-large">Interviewers</h4>
-            </CardHeader>
             <Table>
               {loading ? (
                 <PulseLoader size={10} />
               ) :interviewers && interviewers?.length > 0 ? (
-                <TableBody className="bg-gray-300">
-                  {interviewers?.map((interviewer:any) => (
-                    <TableRow key={interviewer?._id}
-                    onClick={() => handleInterviewerClick(interviewer)}>
-                      <TableCell className="rounded-l-xl">
-                        <div className="font-medium">{interviewer?.name}</div>
-                      </TableCell>
-                      <TableCell className="rounded-r-xl">
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                         {interviewer?.email}
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
+                <InterviewersList interviewers={interviewers} handleInterviewerClick={handleInterviewerClick} openPopup={openPopup}/>
               ) : (
                 <p>No interviewers available.</p>
               )}
             </Table>
-            <Button onClick={openPopup} className="ml-28 mt-5" style={{backgroundColor:MainBackGround}}>Add Interviewer</Button>
           </Card>
         </div>
         <div>
