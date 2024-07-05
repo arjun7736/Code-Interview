@@ -151,7 +151,8 @@ export const getInterviewData=async(req:Request,res:Response)=>{
 export const getCompanyMeetingLink=async(req:Request,res:Response)=>{
   try {
     const {id}=req.params
-   const links = getAllLinks(id)
+    console.log(id)
+   const links =await  getAllLinks(id)
    res.json(links)
   } catch (error) {
     const customError = error as ErrorResponse;
