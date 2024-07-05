@@ -251,14 +251,14 @@ export const sentLinkToEmail = async (
     } *`;
     const links = await getLinks(id)
 
-    const isDuplicateLink = links.some(existingLink => existingLink.meetingLink == link);
+    const isDuplicateLink = links.filter(existingLink => existingLink.meetingLink == link);
 
-    if (isDuplicateLink) {
+    if (isDuplicateLink.length>0) {
       throw errorResponse(StatusCode.BAD_REQUEST,`Meeting link already exists.`);
     }
 
    await setLinkWithUsers(interviewerEmail,intervieweeEmail,link,dat,id)
-   
+
     cron.schedule(cronExpression, async () => {
       try {
         await sendLink(interviewerEmail, link);
