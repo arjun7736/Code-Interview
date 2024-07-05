@@ -186,7 +186,6 @@ export const setLinkWithUsers=async(interviewerEmail:string,intervieweeEmail:str
     createdAt: new Date(),
     expiresAt: expirationTime
   })
-  console.log("created successfully")
   return data
   } catch (error) {
     const customError = error as ErrorResponse;

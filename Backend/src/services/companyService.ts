@@ -250,8 +250,8 @@ export const sentLinkToEmail = async (
       dat.getMonth() + 1
     } *`;
 
-    await setLinkWithUsers(interviewerEmail,intervieweeEmail,link,dat,id)
-
+   const data = await setLinkWithUsers(interviewerEmail,intervieweeEmail,link,dat,id)
+console.log(data)
     cron.schedule(cronExpression, async () => {
       try {
         await sendLink(interviewerEmail, link);
