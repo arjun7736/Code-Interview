@@ -17,7 +17,7 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { MainBackGround } from "@/lib/Color";
 import Cookies from 'js-cookie';
 import 'ldrs/dotStream'
-
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const CompanyNavbar = () => {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const CompanyNavbar = () => {
   const handleLogout = async (): Promise<void> => {
     try {
       dispatch(logout());
-      await axios.get("https://electronix.today/api/auth/logout");
+      await axiosInstance.get("/api/auth/logout");
       Cookies.remove('company_token', { sameSite: 'Lax' });
       toast("Logout Successful");
       navigate("/company/login");

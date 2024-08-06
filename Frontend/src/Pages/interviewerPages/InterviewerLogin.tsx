@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
-// import Cookies from 'js-cookie';
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 
 const InterviewerLogin = () => {
@@ -35,7 +35,7 @@ const InterviewerLogin = () => {
       dispatch(loginStart());
 
       try {
-      await axios.post("https://electronix.today/api/auth/login", { ...formData, role: "interviewer" }
+      await axiosInstance.post("/api/auth/login", { ...formData, role: "interviewer" }
       ).then((data)=>{
         dispatch(loginSuccess(data.data.user));
         navigate("/interviewer");

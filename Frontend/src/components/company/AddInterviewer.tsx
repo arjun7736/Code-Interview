@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { setUserRole } from "@/redux/slices/tempSlice";
 import { Light, MainBackGround } from "@/lib/Color";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const AddInterviewer: React.FC<Props> = ({ isOpen, onClose }) => {
   const dispatch =useDispatch()
@@ -32,8 +33,8 @@ const AddInterviewer: React.FC<Props> = ({ isOpen, onClose }) => {
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
-       await axios.post(
-        "https://electronix.today/api/company/add-interviewer",
+       await axiosInstance.post(
+        "/api/company/add-interviewer",
         requestData
       );
       toast("OTP Sent Successfully");

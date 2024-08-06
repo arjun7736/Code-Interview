@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Light, MainBackGround, ThirdBG } from "@/lib/Color";
 import { interviewerState } from "@/interface/userStateInterface";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const Profile = () => {
 
@@ -55,7 +56,7 @@ const {interviewerData}=useSelector((state:RootState)=>state.interviewer as inte
 
   const getData = async () => {
     try {
-      const response = await axios.get(`https://electronix.today/api/auth/getData/${id}`);
+      const response = await axiosInstance.get(`/api/auth/getData/${id}`);
       setUserData(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -108,8 +109,8 @@ const {interviewerData}=useSelector((state:RootState)=>state.interviewer as inte
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await axios
-      .post(`https://electronix.today/api/${data}/updateProfile/${id}`, formData)
+    await axiosInstance
+      .post(`/api/${data}/updateProfile/${id}`, formData)
       .then((res) => {
         setUserData(res.data);
         toast("Profile Updated Successfully");

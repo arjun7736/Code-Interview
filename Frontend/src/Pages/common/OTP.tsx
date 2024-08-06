@@ -25,6 +25,7 @@ import {
 } from "@/redux/slices/tempSlice";
 import axios from "axios";
 import { ScaleLoader } from "react-spinners";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const OTP = () => {
   const { error, loading, userRole } = useSelector(
@@ -38,8 +39,8 @@ const OTP = () => {
     e.preventDefault();
     dispatch(otpVerificationStart());
     try {
-      await axios
-        .post("https://electronix.today/api/auth/verify-otp", {
+      await axiosInstance
+        .post("/api/auth/verify-otp", {
           otp,
           ...userRole,
         })
@@ -78,7 +79,7 @@ const OTP = () => {
   
   const resentOTP = async () => {
     try {
-      await axios.post("https://electronix.today/api/auth/resent-otp", userRole).then(() => {
+      await axiosInstance.post("/api/auth/resent-otp", userRole).then(() => {
         toast("OTP Resent To the Mail ID");
       });
     } catch (error) {

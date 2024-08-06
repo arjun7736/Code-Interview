@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const CompanyLogin = () => {
   const navigate = useNavigate();
@@ -39,8 +40,8 @@ const CompanyLogin = () => {
     dispatch(loginStart());
 
     try {
-      const response = await axios.post(
-        "https://electronix.today/api/auth/login",
+      const response = await axiosInstance.post(
+        "/api/auth/login",
         {
           ...formData,
           role: "company",

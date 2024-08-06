@@ -3,12 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MainBackGround, ThirdBG } from "@/lib/Color";
 import { RootState } from "@/redux/store";
-import axios from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const IntervieweeHome = () => {
   const navigate = useNavigate();
@@ -19,8 +19,8 @@ const IntervieweeHome = () => {
 
   const checkLink = useCallback(async () => {
     try {
-      const response = await axios.get(
-        `https://electronix.today/api/interviewee/getQuestionSet/${value}`
+      const response = await axiosInstance.get(
+        `/api/interviewee/getQuestionSet/${value}`
       );
       return response?.data;
     } catch (error) {
@@ -35,8 +35,8 @@ const IntervieweeHome = () => {
       if (!questionSet) {
         navigate(`/videocall/${value}`);
       }
-      const response = await axios.get(
-        `https://electronix.today/api/interviewee/getQAQuestions/${questionSet}`
+      const response = await axiosInstance.get(
+        `/api/interviewee/getQAQuestions/${questionSet}`
       );
       const data = response.data;
 

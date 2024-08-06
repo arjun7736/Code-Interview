@@ -2,10 +2,10 @@ import { RootState } from '@/redux/store';
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { loadStripe } from "@stripe/stripe-js";
-import axios from 'axios';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
 import { CheckIcon } from 'lucide-react';
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 
 const includedFeatures = [
@@ -18,7 +18,7 @@ const{companyData}=useSelector((state:RootState)=>state.company)
   const makePayment = async () => {
     try {
       const stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY);
-      const response = await axios.post("https://electronix.today/api/company/buy-premium", companyData);
+      const response = await axiosInstance.post("/api/company/buy-premium", companyData);
 
       const sessionId = response.data.sessionId;
 

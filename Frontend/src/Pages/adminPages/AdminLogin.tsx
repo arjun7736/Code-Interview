@@ -16,6 +16,7 @@ import {
 } from "@/redux/slices/adminSlice";
 import { RootState } from "@/redux/store";
 import axios from "axios";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -40,7 +41,7 @@ const AdminLogin = () => {
     e.preventDefault();
     dispatch(loginStart());
     try {
-      const response = await axios.post("https://electronix.today/api/auth/login", {
+      const response = await axiosInstance.post("/api/auth/login", {
         ...formData,
         role: "admin",
       });

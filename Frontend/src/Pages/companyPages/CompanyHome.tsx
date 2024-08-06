@@ -13,7 +13,8 @@ import {
   logout,
 } from "@/redux/slices/companySlice";
 import { RootState } from "@/redux/store";
-import axios, { AxiosError } from "axios";
+import  { AxiosError } from "axios";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 import { SetStateAction, useEffect, useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
@@ -68,8 +69,8 @@ const CompanyHome = () => {
   const fetchData = async () => {
     dispatch(interviewersStart());
     try {
-       await axios.get(
-        `https://electronix.today/api/company/interviewers?Id=${companyData?._id}`
+       await axiosInstance.get(
+        `/api/company/interviewers?Id=${companyData?._id}`
       ).then((data)=>{
         dispatch(interviewersSuccess(data.data[0].interviewers));
       })
@@ -102,7 +103,7 @@ const CompanyHome = () => {
 
   const handleInterviewerClick = async(interviewer: Interviewer) => {
     setSelectedInterviewer(interviewer);
-   await axios.get(`https://electronix.today/api/company/getInterviewDataAndQuestions/${interviewer._id}`).then((data)=>{
+   await axiosInstance.get(`/api/company/getInterviewDataAndQuestions/${interviewer._id}`).then((data)=>{
      setInterviewData(data.data)
    }).catch(()=>{
 toast("Unexpected Error Occured")

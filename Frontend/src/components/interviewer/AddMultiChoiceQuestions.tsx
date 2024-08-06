@@ -3,11 +3,11 @@ import { Button } from "../ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
-import axios from "axios"
 import { toast } from "sonner"
 import { MainBackGround } from "@/lib/Color"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose,questionSet }) => {
     if (!questionSet){
@@ -38,7 +38,7 @@ const AddMultiChoiceQuestions:React.FC<MultiChoiceProps> = ({ onClose,questionSe
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault()
-        await axios.post(`https://electronix.today/api/interviewer/addQuestions/${interviewerData?._id}`,{questions:addedQuestions,questionSet}).then(()=>{
+        await axiosInstance.post(`/api/interviewer/addQuestions/${interviewerData?._id}`,{questions:addedQuestions,questionSet}).then(()=>{
             toast("Questions Added")
         }).catch(()=>{
             toast("error occured")

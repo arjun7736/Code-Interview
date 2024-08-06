@@ -1,10 +1,10 @@
 import { loginSuccess } from "@/redux/slices/companySlice";
 import { RootState } from "@/redux/store";
-import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const PaymentDone = () => {
 const dispatch =useDispatch()
@@ -12,7 +12,7 @@ const {companyData} =useSelector((state:RootState)=>state.company)
     const updateCompany = async (): Promise<void> => { 
 
         try {
-         await axios.get(`https://electronix.today/api/auth/getData/${companyData?._id}`).then((data)=>{
+         await axiosInstance.get(`/api/auth/getData/${companyData?._id}`).then((data)=>{
           dispatch(loginSuccess(data.data))
          }).catch((error)=>{
           toast(error)

@@ -4,6 +4,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import axios from "axios";
 import { toast } from "sonner";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const DeleteAndEdit: React.FC<Props> = ({
   isOpen,
@@ -22,7 +23,7 @@ const DeleteAndEdit: React.FC<Props> = ({
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      await axios.post("https://electronix.today/api/company/edit-interviewer", {
+      await axiosInstance.post("/api/company/edit-interviewer", {
         ...formData,
         id: selectedInterviewer?._id,
       });
@@ -54,8 +55,8 @@ const DeleteAndEdit: React.FC<Props> = ({
 
   const handleDelete = async () => {
     try {
-      await axios.delete(
-        `https://electronix.today/api/company/delete-interviewer/${selectedInterviewer?._id}`
+      await axiosInstance.delete(
+        `/api/company/delete-interviewer/${selectedInterviewer?._id}`
       );
       fetchData();
       setSelectedInterviewer(null);

@@ -1,7 +1,6 @@
 import InterviewerNavbar from "@/components/interviewer/InterviewerNavbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import QuestionList from "../../components/interviewer/QuestionList";
@@ -12,6 +11,7 @@ import { interviewersQuestions } from "@/redux/slices/tempSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Light, MainBackGround, ThirdBG } from "@/lib/Color";
 import { RootState } from "@/redux/store";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 export interface Question {
   questionSet: string;
@@ -47,8 +47,8 @@ const InterviewerHome = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
-    axios
-      .get(`https://electronix.today/api/interviewer/getQuestions/${interviewerData?._id}`)
+    axiosInstance
+      .get(`/api/interviewer/getQuestions/${interviewerData?._id}`)
       .then((response) => {
         setQuestionSets(response.data);
         dispatch(interviewersQuestions(response?.data));
@@ -72,7 +72,7 @@ const InterviewerHome = () => {
     async (selectedQuestionSetId: string | null) => {
       setShowSelectQuestionModal(false);
       if (value) {
-        const data = await axios.post("https://electronix.today/api/interviewer/setMeetingLink", {
+        const data = await axiosInstance.post("/api/interviewer/setMeetingLink", {
           link: value,
           questionSet: selectedQuestionSetId,
         });

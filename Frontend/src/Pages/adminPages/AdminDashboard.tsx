@@ -5,10 +5,10 @@ import { AdminState } from "@/interface/userStateInterface";
 import {  ThirdBG } from "@/lib/Color";
 import { setCompanyData, setIntervieweeData, setInterviewerData, setPremiumCompanies } from "@/redux/slices/adminSlice";
 import { RootState } from "@/redux/store";
-import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const AdminDashboard = () => {
   // const navigate =useNavigate()
@@ -19,10 +19,10 @@ const premium = async () => {
 
   // const [searchValue, setSearchValue] = useState<string>("");
 
-    const premiumCompany = await axios.get("https://electronix.today/api/admin/premium-companies")
-    const totalInterviewers = await axios.get("https://electronix.today/api/admin/getdata/?role=interviewer");
-    const totalInterviewees = await axios.get("https://electronix.today/api/admin/getdata/?role=interviewee");
-    const companyList = await axios.get("https://electronix.today/api/admin/getdata/?role=company");
+    const premiumCompany = await axiosInstance.get("/api/admin/premium-companies")
+    const totalInterviewers = await axiosInstance.get("/api/admin/getdata/?role=interviewer");
+    const totalInterviewees = await axiosInstance.get("/api/admin/getdata/?role=interviewee");
+    const companyList = await axiosInstance.get("/api/admin/getdata/?role=company");
 
     dispatch(setPremiumCompanies(premiumCompany.data));
     dispatch(setInterviewerData(totalInterviewers.data));

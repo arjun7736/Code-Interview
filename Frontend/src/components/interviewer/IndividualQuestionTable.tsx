@@ -14,12 +14,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import axios from "axios";
 import { toast } from "sonner";
 import { useState } from "react";
 import UpdateIndividualQuestionSet from "@/components/interviewer/UpdateIndividualQuestionSet"
 import AddMultiChoiceQuestions from "./AddMultiChoiceQuestions";
 import { Light } from "@/lib/Color";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const IndividualQuestionTable = ({ questionsData, select }: { questionsData: any, select: any }) => {
   const[showAddQuestions,setShowAddQuestions]=useState(false)
@@ -27,7 +27,7 @@ const IndividualQuestionTable = ({ questionsData, select }: { questionsData: any
   const [editItem, setEditItem] = useState(null);
  const handleDelete=async(id:string)=>{
   try{
-    await axios.delete(`https://electronix.today/api/interviewer/deleteQuestion/${id}`)
+    await axiosInstance.delete(`/api/interviewer/deleteQuestion/${id}`)
     select(null)
     toast("Question Deleted")
   }catch{

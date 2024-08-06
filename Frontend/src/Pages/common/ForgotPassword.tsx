@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { setUserRole } from "@/redux/slices/tempSlice";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const ForgotPassword = () => {
   const dispatch =useDispatch()
@@ -38,8 +39,8 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     try {
-      await axios
-        .post("https://electronix.today/api/auth/forgotPassword", formData)
+      await axiosInstance
+        .post("/api/auth/forgotPassword", formData)
         .then(() => {
           dispatch(setUserRole({ role: formData.role, email: formData.email }));
           navigate("/forgotPassword-otp");

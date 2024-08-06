@@ -9,11 +9,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RootState } from "@/redux/store";
-import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const ChangePassword = () => {
 const{userRole}=useSelector((state:RootState)=>state.temp)
@@ -26,7 +26,7 @@ const{userRole}=useSelector((state:RootState)=>state.temp)
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
-      await axios.patch("https://electronix.today/api/auth/changePassword", { ...formData, ...userRole });
+      await axiosInstance.patch("/api/auth/changePassword", { ...formData, ...userRole });
       toast("Password Reset Successfully");
       navigate("/")
       } catch (error) {

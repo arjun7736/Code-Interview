@@ -3,9 +3,9 @@ import { Button } from "../ui/button";
 import { TableBody, TableCell, TableRow } from "../ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const InterviewersList = ({
   interviewers,
@@ -15,8 +15,8 @@ const InterviewersList = ({
   const [data, setData] = useState([]);
   const { companyData } = useSelector((state: RootState) => state.company);
   const getMeetingLinks = async () => {
-    const links = await axios.get(
-      `https://electronix.today/api/company/getMeetingLink/${companyData?._id}`
+    const links = await axiosInstance.get(
+      `/api/company/getMeetingLink/${companyData?._id}`
     );
     setData(links.data);
   };

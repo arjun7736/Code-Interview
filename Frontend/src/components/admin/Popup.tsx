@@ -5,6 +5,8 @@ import { logout } from '@/redux/slices/adminSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { MainBackGround } from '@/lib/Color';
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
+
 
 
 const Popup: React.FC<PopupProps> = ({ isOpen, onClose, message, id, role,fun }) => {
@@ -13,7 +15,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose, message, id, role,fun })
 
   const handleAction = async (message: string, id:string|null, role: string|null): Promise<void> => {
     try {
-      const response = await axios.post(`https://electronix.today/api/admin/${message}`, { id, role });
+      const response = await axiosInstance.post(`/api/admin/${message}`, { id, role });
       toast(response.data.message); 
       fun()
     } catch (error) {

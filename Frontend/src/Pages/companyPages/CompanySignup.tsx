@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
 import { toast } from "sonner";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const CompanySignup = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const CompanySignup = () => {
     e.preventDefault();
     dispatch(signupStart());
     try {
-      await axios.post("https://electronix.today/api/auth/signup", { ...formData, role: "company" }).then(()=>{
+      await axiosInstance.post("/api/auth/signup", { ...formData, role: "company" }).then(()=>{
         dispatch(signupSuccess());
         toast("OTP Sent to the Registered E-mail");
         dispatch(setUserRole({role:"company",email:formData.email}))

@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import { useNavigate } from 'react-router-dom';
 import { ThirdBG } from "@/lib/Color";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 
 const CompanyList = () => {
@@ -22,8 +23,8 @@ const CompanyList = () => {
   const navigate =useNavigate()
 
   const getCompanyData = async ():Promise<void> => {
-    await axios
-      .get("https://electronix.today/api/admin/getdata/?role=company")
+    await axiosInstance
+      .get("/api/admin/getdata/?role=company")
       .then((data) => {
         dispatch(setCompanyData(data.data));
       })

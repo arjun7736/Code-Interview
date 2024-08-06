@@ -12,9 +12,10 @@ import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { AdminState } from "@/interface/userStateInterface";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";  
 import { toast } from "sonner";
-import axios from "axios";
+import axios from "axios"
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 import { logout } from "@/redux/slices/adminSlice";
 import { MainBackGround } from "@/lib/Color";
 import Cookies from 'js-cookie';
@@ -37,7 +38,7 @@ useEffect(() => {
 const handleLogout = async (): Promise<void> => {
   try {
     dispatch(logout())
-    await axios.get('https://electronix.today/api/auth/logout'); 
+    await axiosInstance.get('/api/auth/logout'); 
     Cookies.remove('admin_token', { sameSite: 'Lax' });
     toast('Logout Successful');
     navigate('/');

@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
 import { toast } from "sonner";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const IntervieweeSignup = () => {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ const IntervieweeSignup = () => {
     e.preventDefault();
     dispatch(signupStart());
     try {
-       await axios.post("https://electronix.today/api/auth/signup", {
+       await axiosInstance.post("/api/auth/signup", {
         ...formData,
         role: "interviewee",
       });
@@ -71,8 +72,8 @@ const IntervieweeSignup = () => {
     e.preventDefault();
     try {
       const result: UserCredential = await signInWithPopup(auth, provider);
-      const response = await axios.post(
-        "https://electronix.today/api/auth/google-signin",
+      const response = await axiosInstance.post(
+        "/api/auth/google-signin",
         result.user.providerData[0]
       );
       toast("Login Successfully");

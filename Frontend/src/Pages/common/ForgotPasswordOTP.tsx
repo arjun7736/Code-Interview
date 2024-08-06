@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
 import { toast } from "sonner";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const ForgotPasswordOTP = () => {
   const { error, loading, userRole } = useSelector(
@@ -39,7 +40,7 @@ const ForgotPasswordOTP = () => {
     dispatch(otpVerificationStart());
 
     try {
-       await axios.post("https://electronix.today/api/auth/verify-forgotPassword-otp", {
+       await axiosInstance.post("/api/auth/verify-forgotPassword-otp", {
         otp,
         ...userRole,
       });
@@ -71,7 +72,7 @@ const ForgotPasswordOTP = () => {
 
   const resentOTP = async () => {
     try {
-      await axios.post("https://electronix.today/api/auth/resent-otp", userRole);
+      await axiosInstance.post("/api/auth/resent-otp", userRole);
     } catch (error) {
       toast("An error occurred. Please try again later.");
     }

@@ -9,10 +9,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import axios from "axios"
 import { toast } from "sonner"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 
 const DateAndTime = ({email, selectedOption}: { email: string, selectedOption: string }) => {
@@ -25,7 +25,7 @@ const DateAndTime = ({email, selectedOption}: { email: string, selectedOption: s
     };
     const handleButtonClick = async() => {
         try {
-          await axios.post(`https://electronix.today/api/company/createMeeting`,{intervieweeEmail:email,interviewerEmail:selectedOption,date:date,time:time,id:companyData?._id})
+          await axiosInstance.post(`/api/company/createMeeting`,{intervieweeEmail:email,interviewerEmail:selectedOption,date:date,time:time,id:companyData?._id})
           toast("Link Sent Successfully")
         } catch (error) {
           toast("Error While Sending Link")

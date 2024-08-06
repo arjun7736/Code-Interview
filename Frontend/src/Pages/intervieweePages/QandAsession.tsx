@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ThirdBG,Light } from "@/lib/Color";
 import { RootState } from "@/redux/store";
-import axios from "axios";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -37,8 +37,8 @@ const QandAsession = () => {
   const { questionId } = useParams<{ questionId: string }>();
 
   useEffect(() => {
-    axios
-      .get(`https://electronix.today/api/interviewee/getQAQuestions/${questionId}`)
+    axiosInstance
+      .get(`/api/interviewee/getQAQuestions/${questionId}`)
       .then((response) => {
         setData(response.data);
         setQuestionLength(response.data.questions.length);
@@ -118,20 +118,20 @@ const QandAsession = () => {
   const handleNavigation = async () => {
     if (correctCount >= Math.floor(questionsLength / 2)) {
       try {
-        await axios.post("https://electronix.today/api/interviewee/updateQuestionSet", {
+        await axiosInstance.post("/api/interviewee/updateQuestionSet", {
           result: "Pass",
           questionSet: questionId,
           interviewee: intervieweeData?._id,
         });
-        const link = await axios.get(
-          `https://electronix.today/api/interviewee/getMeetingLink/${questionId}`
+        const link = await axiosInstance.get(
+          `/api/interviewee/getMeetingLink/${questionId}`
         );
         navigate(`/videocall/${link?.data?.meetingLink}`);
       } catch (error) {
         toast("Failed to get meeting link");
       }
     } else {
-      await axios.post("https://electronix.today/api/interviewee/updateQuestionSet", {
+      await axiosInstance.post("/api/interviewee/updateQuestionSet", {
         result: "Fail",
         questionSet: questionId,
         interviewee: intervieweeData?._id,

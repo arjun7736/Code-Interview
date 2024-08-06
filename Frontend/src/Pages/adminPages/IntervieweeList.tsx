@@ -9,20 +9,20 @@ import {
 import UsersTable from "@/components/admin/UsersTable";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import axios from "axios";
 import { logout, setIntervieweeData } from "@/redux/slices/adminSlice";
 import { toast } from "sonner";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ThirdBG } from "@/lib/Color";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 const IntervieweeList = () => {
 const dispatch =useDispatch()
 const navigate =useNavigate()
 
   const getIntervieweeData = async ():Promise<void> => {
-    await axios
-      .get("https://electronix.today/api/admin/getdata/?role=interviewee")
+    await axiosInstance
+      .get("/api/admin/getdata/?role=interviewee")
       .then((data) => {
         dispatch(setIntervieweeData(data.data));
       })

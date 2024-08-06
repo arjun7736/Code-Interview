@@ -9,8 +9,8 @@ import {
 } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import axios from "axios";
 import { toast } from "sonner";
+import axiosInstance from "../../intersepters/axiosBackendIntersepter";
 
 interface MultiChoiceProps {
   onClose: any,
@@ -58,7 +58,7 @@ const UpdateIndividualQuestionSet: React.FC<MultiChoiceProps> = ({
       id: data._id,
     };
     try {
-      await axios.put("https://electronix.today/api/interviewer/updateQuestionSet", updatedData);
+      await axiosInstance.put("/api/interviewer/updateQuestionSet", updatedData);
       toast("Question Updated Successfully");
       select(null)
     } catch (err) {
