@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/card";
 import { logout, setCompanyData } from "@/redux/slices/adminSlice";
 import { RootState } from "@/redux/store";
-import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
