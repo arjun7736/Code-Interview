@@ -10,7 +10,7 @@ const URI: string | undefined = process.env.MONGO_URI;
 const PORT: string | undefined = process.env.PORT;
 
 const corsOptions = {
-  origin: 'https://codeinterview-nu.vercel.app',
+  origin: ['https://codeinterview-nu.vercel.app',"http://localhost:5173/"],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
